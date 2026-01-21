@@ -9,12 +9,14 @@ public class Usuario {
     private String nome;
     private String email;
     private DadosAutenticacao autenticacao;
+    private PerfilUsuario perfilUsuario;
 
-    public Usuario(UUID id, String name, String email, DadosAutenticacao autenticacao) {
+    public Usuario(UUID id, String name, String email, DadosAutenticacao autenticacao, PerfilUsuario perfilUsuario) {
         this.id = id;
         this.nome = name;
         this.email = email;
         this.autenticacao = autenticacao;
+        this.perfilUsuario = perfilUsuario;
         this.validar();
     }
 
@@ -24,14 +26,17 @@ public class Usuario {
         }
     }
 
-    public static Usuario criarNovo(String nome, String email, DadosAutenticacao auth) {
-        ValidadorUsuario.validarCadastro(nome, email, auth);
-        return new Usuario(UUID.randomUUID(), nome, email, auth);
+    public static Usuario criarNovo(String nome, String email, DadosAutenticacao autenticacao, PerfilUsuario perfilUsuario) {
+        ValidadorUsuario.validarCadastro(nome, email, autenticacao);
+        if (perfilUsuario == null) {
+            perfilUsuario = PerfilUsuario.USUARIO;
+        }
+        return new Usuario(UUID.randomUUID(), nome, email, autenticacao, perfilUsuario);
     }
 
 
-    public static Usuario restaurar(UUID id, String nome, String email, DadosAutenticacao auth) {
-        return new Usuario(id, nome, email, auth);
+    public static Usuario restaurar(UUID id, String nome, String email, DadosAutenticacao autenticacao, PerfilUsuario perfilUsuario) {
+        return new Usuario(id, nome, email, autenticacao, perfilUsuario);
     }
 
 
@@ -68,5 +73,9 @@ public class Usuario {
 
     public String getEmail() {
         return email;
+    }
+
+    public PerfilUsuario getPerfilUsuario() {
+        return perfilUsuario;
     }
 }

@@ -9,7 +9,7 @@ public class UsuarioTest {
     void deveCriarUsuarioValido() {
         DadosAutenticacao auth = new DadosAutenticacao("jessica.dev", "senha123");
 
-        Usuario usuario = Usuario.criarNovo("Jessica", "jessica@email.com", auth);
+        Usuario usuario = Usuario.criarNovo("Jessica", "jessica@email.com", auth, PerfilUsuario.ADMINISTRADOR);
 
         Assertions.assertNotNull(usuario.getId()); // Garante que gerou ID
         Assertions.assertEquals("Jessica", usuario.getNome());
@@ -21,7 +21,7 @@ public class UsuarioTest {
         DadosAutenticacao auth = new DadosAutenticacao("jessica.dev", "senha123");
 
         IllegalArgumentException erro = Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            Usuario.criarNovo("", "jessica@email.com", auth);
+            Usuario.criarNovo("", "jessica@email.com", auth, PerfilUsuario.USUARIO);
         });
 
         Assertions.assertEquals("Nome não pode ser vazio", erro.getMessage());
@@ -32,7 +32,7 @@ public class UsuarioTest {
         DadosAutenticacao auth = new DadosAutenticacao("user", "123456");
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            Usuario.criarNovo("Teste", null, auth); // Email nulo
+            Usuario.criarNovo("Teste", null, auth, PerfilUsuario.GERENTE); // Email nulo
         });
     }
 
@@ -40,7 +40,7 @@ public class UsuarioTest {
     void deveAtualizarNomeEEmailCorretamente() {
 
         DadosAutenticacao auth = new DadosAutenticacao("login", "senha123");
-        Usuario usuario = Usuario.criarNovo("Nome Antigo", "old@email.com", auth);
+        Usuario usuario = Usuario.criarNovo("Nome Antigo", "old@email.com", auth, PerfilUsuario.USUARIO);
 
         usuario.atualizar("Nome Novo", "new@email.com");
 
@@ -51,7 +51,7 @@ public class UsuarioTest {
     @Test
     void naoDeveAtualizarParaNomeVazio() {
         DadosAutenticacao auth = new DadosAutenticacao("login", "senha123");
-        Usuario usuario = Usuario.criarNovo("Jessica", "email@email.com", auth);
+        Usuario usuario = Usuario.criarNovo("Jessica", "email@email.com", auth, PerfilUsuario.USUARIO);
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             usuario.atualizar("", "novo@email.com");

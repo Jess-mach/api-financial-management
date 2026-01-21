@@ -9,7 +9,6 @@ public class ValidadorUsuario {
         if (email == null || email.isBlank()) {
             throw new IllegalArgumentException("Email não pode ser vazio");
         }
-
     }
 
     public static void validarAtualizacao(String novoNome, String novoEmail) {
