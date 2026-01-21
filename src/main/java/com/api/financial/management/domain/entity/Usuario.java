@@ -58,4 +58,15 @@ public class Usuario {
         return autenticacao.login();
     }
 
+    public UUID getId() {
+        return id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getEmail() {
+        return email;
+    }
 }
