@@ -24,6 +24,22 @@ public class Usuario {
         }
     }
 
+    public static Usuario criarNovo(String nome, String email, DadosAutenticacao auth) {
+        ValidadorUsuario.validarCadastro(nome, email, auth);
+        return new Usuario(UUID.randomUUID(), nome, email, auth);
+    }
+
+
+    public static Usuario restaurar(UUID id, String nome, String email, DadosAutenticacao auth) {
+        return new Usuario(id, nome, email, auth);
+    }
+
+
+    public void atualizar(String novoNome, String novoEmail) {
+        ValidadorUsuario.validarAtualizacao(novoNome, novoEmail);
+        this.nome = novoNome;
+        this.email = novoEmail;
+    }
 
     @Override
     public boolean equals(Object obj) {
