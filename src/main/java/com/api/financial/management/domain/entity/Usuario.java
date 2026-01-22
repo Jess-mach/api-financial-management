@@ -1,6 +1,6 @@
 package com.api.financial.management.domain.entity;
 
-import com.api.financial.management.application.dto.DadosCadastroUsuario;
+import com.api.financial.management.infra.controller.dto.DadosCadastroUsuario;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -31,7 +31,6 @@ public class Usuario {
     }
 
     public static Usuario criarNovo(String nome, String email, String login, String senha, PerfilUsuario perfilUsuario) {
-        DadosCadastroUsuario cadastroUsuario = new DadosCadastroUsuario(nome, email, login, senha, perfilUsuario);
         if (perfilUsuario == null) {
             perfilUsuario = PerfilUsuario.USUARIO;
         }
@@ -43,11 +42,11 @@ public class Usuario {
         return new Usuario(id, nome, email, login, senha, perfilUsuario);
     }
 
-
-    public void atualizar(String novoNome, String novoEmail) {
-        ValidadorUsuario.validarAtualizacao(novoNome, novoEmail);
-        this.nome = novoNome;
-        this.email = novoEmail;
+    public static Usuario atualizarUsuario(String id, String nome, String email, String senha, PerfilUsuario perfilUsuario) {
+        if (perfilUsuario == null) {
+            perfilUsuario = PerfilUsuario.USUARIO;
+        }
+        return new Usuario(UUID.fromString(id), nome, email, null, senha, perfilUsuario);
     }
 
     @Override
@@ -86,4 +85,6 @@ public class Usuario {
     public String getSenha() {
         return senha;
     }
+
+
 }

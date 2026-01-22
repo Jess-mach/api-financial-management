@@ -1,5 +1,6 @@
 package com.api.financial.management.infra.config;
 
+import com.api.financial.management.application.usecase.AtualizarUsuario;
 import com.api.financial.management.application.usecase.CriarUsuario;
 import com.api.financial.management.application.usecase.ListarUsuario;
 import com.api.financial.management.domain.repository.UsuarioRepository;
@@ -17,6 +18,11 @@ public class UsuarioConfig {
     @Bean
     public ListarUsuario listarUsuario(UsuarioRepository usuarioRepository) {
         return new ListarUsuario(usuarioRepository);
+    }
+
+    @Bean
+    public AtualizarUsuario atualizarUsuario(UsuarioRepository usuarioRepository) {
+        return new AtualizarUsuario(usuarioRepository);
     }
 
 }

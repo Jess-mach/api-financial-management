@@ -1,4 +1,4 @@
-package com.api.financial.management.application.dto;
+package com.api.financial.management.infra.controller.dto;
 
 import com.api.financial.management.domain.entity.PerfilUsuario;
 import jakarta.validation.constraints.Email;

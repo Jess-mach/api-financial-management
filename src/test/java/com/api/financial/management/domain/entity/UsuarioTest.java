@@ -5,9 +5,6 @@ import org.junit.jupiter.api.Test;
 
 public class UsuarioTest {
 
-    private final ValidadorUsuario validador = new ValidadorUsuario();
-
-
     @Test
     void deveCriarUsuarioValido() {
         Usuario usuario = Usuario.criarNovo(
@@ -16,8 +13,6 @@ public class UsuarioTest {
                 "jessica.dev",
                 "SenhaForte@123",
                 PerfilUsuario.ADMINISTRADOR);
-
-        Assertions.assertDoesNotThrow(()-> validador.validar(usuario));
 
         Assertions.assertNotNull(usuario.getId());
         Assertions.assertEquals("Jessica", usuario.getNome());
@@ -61,7 +56,12 @@ public class UsuarioTest {
                 "SenhaForte@123",
                 PerfilUsuario.USUARIO);
 
-        usuario.atualizar("Nome Novo", "new@email.com");
+        usuario.atualizarUsuario(
+                "Nome Novo",
+                "new@email.com",
+                "login",
+                "SenhaForte@123",
+                PerfilUsuario.USUARIO);
 
         Assertions.assertEquals("Nome Novo", usuario.getNome());
         Assertions.assertEquals("new@email.com", usuario.getEmail());
@@ -73,11 +73,16 @@ public class UsuarioTest {
                 "Jessica",
                 "email@email.com",
                 "login",
-                "senha123",
+                "SenhaForte@123",
                 PerfilUsuario.USUARIO);
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            usuario.atualizar("", "novo@email.com");
+            usuario.atualizarUsuario("",
+                    "novo@email.com",
+                    "login",
+                    "SenhaForte@123",
+                    PerfilUsuario.USUARIO
+            );
         });
 
         Assertions.assertEquals("Jessica", usuario.getNome());
@@ -85,17 +90,16 @@ public class UsuarioTest {
 
     @Test
     void naoDeveCriarUsuarioComSenhaFraca() {
-        Usuario usuario = Usuario.criarNovo(
-                "Jessica",
-                "email@email.com",
-                "login",
-                "123",
-                PerfilUsuario.USUARIO
-        );
-
         IllegalArgumentException erro = Assertions.assertThrows
                 (IllegalArgumentException.class,
-                        () -> validador.validar(usuario));
+                        () -> Usuario.criarNovo(
+                                "Jessica",
+                                "email@email.com",
+                                "login",
+                                "123",
+                                PerfilUsuario.USUARIO
+                        ));
+
 
         Assertions.assertEquals("A senha deve conter pelo menos 8 caracteres, uma letra maiúscula," +
                 "\"uma letra minúscula, um número e um caractere especial", erro.getMessage());
@@ -113,4 +117,3 @@ public class UsuarioTest {
     }
 
 }
-
