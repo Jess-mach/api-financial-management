@@ -78,4 +78,8 @@ public class Usuario {
     public PerfilUsuario getPerfilUsuario() {
         return perfilUsuario;
     }
+
+    public String getSenha() {
+        return autenticacao.senha();
+    }
 }
