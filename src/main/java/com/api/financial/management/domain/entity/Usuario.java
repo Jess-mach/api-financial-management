@@ -1,6 +1,6 @@
 package com.api.financial.management.domain.entity;
 
-import com.api.financial.management.infra.controller.dto.DadosCadastroUsuario;
+import com.api.financial.management.domain.PerfilUsuario;
 
 import java.util.Objects;
 import java.util.UUID;

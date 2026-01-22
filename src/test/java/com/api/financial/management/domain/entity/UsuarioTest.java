@@ -1,5 +1,6 @@
 package com.api.financial.management.domain.entity;
 
+import com.api.financial.management.domain.PerfilUsuario;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

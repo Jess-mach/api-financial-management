@@ -1,7 +1,7 @@
 package com.api.financial.management.infra.persistence;
 
 import com.api.financial.management.domain.entity.Usuario;
-import com.api.financial.management.domain.repository.UsuarioRepository;
+import com.api.financial.management.application.gateways.UsuarioRepository;
 import com.api.financial.management.infra.persistence.entity.UsuarioJpaEntity;
 import com.api.financial.management.infra.persistence.mapper.UsuarioMapper;
 import com.api.financial.management.infra.persistence.repository.RepositoryJpa;
@@ -51,6 +51,10 @@ public class UsuarioRepositoryInfra implements UsuarioRepository {
 
     @Override
     public void deleteById(UUID id) {
-
+        if (repositoryJpa.existsById(id)) {
+            repositoryJpa.deleteById(id);
+        } else {
+            throw new IllegalArgumentException("Usuário não encontrado");
+        }
     }
 }

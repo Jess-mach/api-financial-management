@@ -1,6 +1,6 @@
 package com.api.financial.management.infra.persistence.entity;
 
-import com.api.financial.management.domain.entity.PerfilUsuario;
+import com.api.financial.management.domain.PerfilUsuario;
 import jakarta.persistence.*;
 
 import java.util.UUID;

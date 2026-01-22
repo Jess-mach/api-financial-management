@@ -1,7 +1,7 @@
 package com.api.financial.management.application.usecase;
 
 import com.api.financial.management.domain.entity.Usuario;
-import com.api.financial.management.domain.repository.UsuarioRepository;
+import com.api.financial.management.application.gateways.UsuarioRepository;
 
 public class CriarUsuario {
 

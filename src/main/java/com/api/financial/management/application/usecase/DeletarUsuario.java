@@ -1,19 +1,18 @@
 package com.api.financial.management.application.usecase;
 
-import com.api.financial.management.domain.entity.Usuario;
 import com.api.financial.management.application.gateways.UsuarioRepository;
 
-import java.util.List;
+import java.util.UUID;
 
-public class ListarUsuario {
+public class DeletarUsuario {
 
     private final UsuarioRepository usuarioRepository;
 
-    public ListarUsuario(UsuarioRepository usuarioRepository) {
+    public DeletarUsuario(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public List<Usuario> executar(){
-        return usuarioRepository.findAll();
+    public void executar(UUID id) {
+        usuarioRepository.deleteById(id);
     }
 }

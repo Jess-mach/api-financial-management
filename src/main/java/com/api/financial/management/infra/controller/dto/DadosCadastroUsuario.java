@@ -1,6 +1,6 @@
 package com.api.financial.management.infra.controller.dto;
 
-import com.api.financial.management.domain.entity.PerfilUsuario;
+import com.api.financial.management.domain.PerfilUsuario;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

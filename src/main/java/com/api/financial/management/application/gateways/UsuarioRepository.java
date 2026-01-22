@@ -1,4 +1,4 @@
-package com.api.financial.management.domain.repository;
+package com.api.financial.management.application.gateways;
 
 import com.api.financial.management.domain.entity.Usuario;
 

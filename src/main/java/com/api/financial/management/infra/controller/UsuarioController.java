@@ -2,6 +2,7 @@ package com.api.financial.management.infra.controller;
 
 import com.api.financial.management.application.usecase.AtualizarUsuario;
 import com.api.financial.management.application.usecase.CriarUsuario;
+import com.api.financial.management.application.usecase.DeletarUsuario;
 import com.api.financial.management.application.usecase.ListarUsuario;
 import com.api.financial.management.domain.entity.Usuario;
 import com.api.financial.management.infra.controller.dto.DadosAtualizacaoUsuario;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -20,12 +22,15 @@ public class UsuarioController {
     private final CriarUsuario criarUsuario;
     private final ListarUsuario listarUsuario;
     private final AtualizarUsuario atualizarUsuario;
+    private final DeletarUsuario deletarUsuario;
 
 
-    public UsuarioController(CriarUsuario criarUsuario, ListarUsuario listarUsuario, AtualizarUsuario atualizarUsuario) {
+
+    public UsuarioController(CriarUsuario criarUsuario, ListarUsuario listarUsuario, AtualizarUsuario atualizarUsuario, DeletarUsuario deletarUsuario) {
         this.criarUsuario = criarUsuario;
         this.listarUsuario = listarUsuario;
         this.atualizarUsuario = atualizarUsuario;
+        this.deletarUsuario = deletarUsuario;
     }
 
     @PostMapping
@@ -63,5 +68,12 @@ public class UsuarioController {
 
         return ResponseEntity.ok(usuario);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable UUID id) {
+        deletarUsuario.executar(id);
+        return ResponseEntity.noContent().build();
+    }
+
 
 }

@@ -1,4 +1,4 @@
-package com.api.financial.management.domain.entity;
+package com.api.financial.management.domain;
 
 public enum PerfilUsuario {
 
