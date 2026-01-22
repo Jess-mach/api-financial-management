@@ -1,6 +1,5 @@
 package com.api.financial.management.infra.persistence.mapper;
 
-import com.api.financial.management.domain.entity.DadosAutenticacao;
 import com.api.financial.management.domain.entity.Usuario;
 import com.api.financial.management.infra.persistence.entity.UsuarioJpaEntity;
 import org.springframework.stereotype.Component;
@@ -24,7 +23,8 @@ public class UsuarioMapper {
                 entity.getId(),
                 entity.getNome(),
                 entity.getEmail(),
-                new DadosAutenticacao(entity.getLogin(), entity.getSenha()),
+                entity.getLogin(),
+                null,
                 entity.getPerfilUsuario()
         );
     }

@@ -32,7 +32,8 @@ public class UsuarioRepositoryInfra implements UsuarioRepository {
 
     @Override
     public Optional<Usuario> findById(UUID id) {
-        return Optional.empty();
+        return repositoryJpa.findById(id)
+                .map(mapper::toDomain);
     }
 
     @Override
@@ -42,7 +43,10 @@ public class UsuarioRepositoryInfra implements UsuarioRepository {
 
     @Override
     public List<Usuario> findAll() {
-        return List.of();
+        return repositoryJpa.findAll()
+                .stream()
+                .map(mapper::toDomain)
+                .toList();
     }
 
     @Override
