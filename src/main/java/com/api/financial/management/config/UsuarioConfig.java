@@ -17,6 +17,11 @@ public class UsuarioConfig {
     }
 
     @Bean
+    public CriarUsuario criarUsuario(UsuarioRepository usuarioRepository){
+        return new CriarUsuario(usuarioRepository);
+    }
+
+    @Bean
     public ListarUsuario listarUsuario(UsuarioRepository usuarioRepository) {
         return new ListarUsuario(usuarioRepository);
     }

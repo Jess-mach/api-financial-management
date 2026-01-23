@@ -1,9 +1,11 @@
 package com.api.financial.management.application.usecase;
 
 import com.api.financial.management.application.gateways.UsuarioRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+@Service
 public class DeletarUsuario {
 
     private final UsuarioRepository usuarioRepository;

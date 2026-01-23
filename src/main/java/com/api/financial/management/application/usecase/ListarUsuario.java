@@ -5,6 +5,7 @@ import com.api.financial.management.application.gateways.UsuarioRepository;
 
 import java.util.List;
 
+
 public class ListarUsuario {
 
     private final UsuarioRepository usuarioRepository;
