@@ -1,76 +1,78 @@
 package br.com.alura.codechella.domain.entities.transacao;
 
-import br.com.alura.codechella.domain.Endereco;
+import br.com.alura.codechella.domain.StatusTransacao;
+import br.com.alura.codechella.domain.TipoTransacao;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class Transacao {
-    private String cpf;
-    private String nome;
-    private LocalDate nascimento;
-    private String email;
 
-    private Endereco endereco;
+    private UUID id;
+    private UUID usuarioId;
+    private BigDecimal valor;
+    private TipoTransacao tipo;
+    private StatusTransacao status;
+    private LocalDateTime dataHoraSolicitacao;
+    private LocalDateTime dataHoraFinalizacao;
+    private String moeda;
+    private BigDecimal taxaCambio;
+    private String descricao;
 
-    public Endereco getEndereco() {
-        return endereco;
+
+    public Transacao(UUID id, UUID usuarioId, BigDecimal valor, TipoTransacao tipo, StatusTransacao status, LocalDateTime dataHoraSolicitacao, LocalDateTime dataHoraFinalizacao, String moeda, BigDecimal taxaCambio, String descricao) {
+        this.id = id;
+        this.usuarioId = usuarioId;
+        this.valor = valor;
+        this.tipo = tipo;
+        this.status = status;
+        this.dataHoraSolicitacao = dataHoraSolicitacao;
+        this.dataHoraFinalizacao = dataHoraFinalizacao;
+        this.moeda = moeda;
+        this.taxaCambio = taxaCambio;
+        this.descricao = descricao;
     }
 
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
+
+    public UUID getId() {
+        return id;
     }
 
-    public Transacao(String cpf, String nome, LocalDate nascimento, String email) {
-        if (cpf == null || !cpf.matches("\\d{3}\\.\\d{3}\\.\\d{3}\\-\\d{2}")) {
-            throw new IllegalArgumentException("Cpf no padrão incorreto!");
-        }
-
-        this.cpf = cpf;
-        this.nome = nome;
-        this.nascimento = nascimento;
-        this.email = email;
+    public UUID getUsuarioId() {
+        return usuarioId;
     }
 
-    public String getCpf() {
-        return cpf;
+    public BigDecimal getValor() {
+        return valor;
     }
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
+    public TipoTransacao getTipo() {
+        return tipo;
     }
 
-    public String getNome() {
-        return nome;
+    public StatusTransacao getStatus() {
+        return status;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public LocalDateTime getDataHoraSolicitacao() {
+        return dataHoraSolicitacao;
     }
 
-    public LocalDate getNascimento() {
-        return nascimento;
+    public LocalDateTime getDataHoraFinalizacao() {
+        return dataHoraFinalizacao;
     }
 
-    public void setNascimento(LocalDate nascimento) {
-        this.nascimento = nascimento;
+    public String getMoeda() {
+        return moeda;
     }
 
-    public String getEmail() {
-        return email;
+    public BigDecimal getTaxaCambio() {
+        return taxaCambio;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    @Override
-    public String toString() {
-        return "Usuario{" +
-                "cpf='" + cpf + '\'' +
-                ", nome='" + nome + '\'' +
-                ", nascimento=" + nascimento +
-                ", email='" + email + '\'' +
-                ", endereco=" + endereco +
-                '}';
+    public String getDescricao() {
+        return descricao;
     }
 }
