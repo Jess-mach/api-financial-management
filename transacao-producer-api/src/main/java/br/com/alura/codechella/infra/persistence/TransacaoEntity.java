@@ -7,13 +7,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
-@Table(name = "usuarios")
+@Table(name = "transacao")
 public class TransacaoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
     private String cpf;
     private String nome;
     private LocalDate nascimento;
