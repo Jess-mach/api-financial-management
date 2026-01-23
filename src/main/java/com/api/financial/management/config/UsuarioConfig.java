@@ -12,13 +12,8 @@ import org.springframework.context.annotation.Configuration;
 public class UsuarioConfig {
 
     @Bean
-    public CriarUsuario criarUsuario(UsuarioRepository usuarioRepository){
-        return new CriarUsuario(usuarioRepository);
-    }
-
-    @Bean
-    public CriarUsuario criarUsuario(UsuarioRepository usuarioRepository){
-        return new CriarUsuario(usuarioRepository);
+    public CriarUsuario criarUsuario(UsuarioRepository usuarioRepository, PasswordService passwordService){
+        return new CriarUsuario(usuarioRepository, passwordService);
     }
 
     @Bean
@@ -27,8 +22,8 @@ public class UsuarioConfig {
     }
 
     @Bean
-    public AtualizarUsuario atualizarUsuario(UsuarioRepository usuarioRepository) {
-        return new AtualizarUsuario(usuarioRepository);
+    public AtualizarUsuario atualizarUsuario(UsuarioRepository usuarioRepository, PasswordService passwordService) {
+        return new AtualizarUsuario(usuarioRepository, passwordService);
     }
 
     @Bean

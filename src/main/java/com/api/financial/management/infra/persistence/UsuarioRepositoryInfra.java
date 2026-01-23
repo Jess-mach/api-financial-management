@@ -24,8 +24,8 @@ public class UsuarioRepositoryInfra implements UsuarioRepository {
 
 
     @Override
-    public Usuario save(Usuario usuario) {
-        UsuarioJpaEntity entity = mapper.toEntity(usuario);
+    public Usuario save(Usuario usuario, String senhaHash) {
+        UsuarioJpaEntity entity = mapper.toEntity(usuario, senhaHash);
         UsuarioJpaEntity salva = repositoryJpa.save(entity);
         return mapper.toDomain(salva);
     }

@@ -22,6 +22,6 @@ public class CriarUsuario {
 
         String senhaHash = passwordService.encode(novoUsuario.getSenha());
 
-        return usuarioRepository.save(novoUsuario);
+        return usuarioRepository.save(novoUsuario, senhaHash);
     }
 }

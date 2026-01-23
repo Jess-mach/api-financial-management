@@ -1,7 +1,13 @@
 package com.api.financial.management.infra.service;
 
 import com.api.financial.management.domain.entity.Usuario;
+import com.api.financial.management.infra.persistence.entity.UsuarioJpaEntity;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 import com.auth0.jwt.JWT;
@@ -20,7 +26,10 @@ public class TokenService {
     @Value("${api.security.token.secret}")
     private String secret;
 
-    public String gerarToken(Usuario usuario) {
+    @Autowired
+    private AuthenticationManager manager;
+
+    public String gerarToken(UsuarioJpaEntity usuario) {
         try {
             var algorithm = Algorithm.HMAC256(secret);
             return JWT.create()
@@ -52,4 +61,12 @@ public class TokenService {
     }
 
 
+    public String gerarToken(String login, String senha) {
+        var authenticationToken = new UsernamePasswordAuthenticationToken(login, senha);
+        var authentication = manager.authenticate(authenticationToken);
+
+        var tokenJWT = gerarToken((UsuarioJpaEntity) authentication.getPrincipal());
+
+        return tokenJWT;
+    }
 }

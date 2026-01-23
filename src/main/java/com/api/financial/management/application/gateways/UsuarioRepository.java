@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface UsuarioRepository {
 
-    Usuario save (Usuario usuario);
+    Usuario save (Usuario usuario, String senhaHash);
     Optional<Usuario> findById(UUID id);
     boolean existsByEmail(String email);
     List<Usuario> findAll();

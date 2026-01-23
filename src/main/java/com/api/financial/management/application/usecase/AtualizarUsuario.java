@@ -5,7 +5,7 @@ import com.api.financial.management.domain.entity.Usuario;
 import com.api.financial.management.application.gateways.UsuarioRepository;
 import org.springframework.stereotype.Service;
 
-@Service
+
 public class AtualizarUsuario {
 
     private final UsuarioRepository usuarioRepository;
@@ -23,6 +23,6 @@ public class AtualizarUsuario {
 
         String senhaHash = passwordService.encode(usuarioAtualizacao.getSenha());
 
-        return usuarioRepository.save(usuarioEntidade);
+        return usuarioRepository.save(usuarioEntidade, senhaHash);
     }
 }
