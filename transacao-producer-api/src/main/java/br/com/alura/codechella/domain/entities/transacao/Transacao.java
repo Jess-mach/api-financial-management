@@ -4,7 +4,6 @@ import br.com.alura.codechella.domain.StatusTransacao;
 import br.com.alura.codechella.domain.TipoTransacao;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 

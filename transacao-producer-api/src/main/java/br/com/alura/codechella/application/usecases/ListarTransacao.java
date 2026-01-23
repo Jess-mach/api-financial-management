@@ -13,7 +13,8 @@ public class ListarTransacao {
         this.repositorio = repositorio;
     }
 
-    public List<Transacao> obterTodosUsuario(){
+    public List<Transacao> obterTodostransacao(){
         return this.repositorio.listarTodos();
     }
 }
+

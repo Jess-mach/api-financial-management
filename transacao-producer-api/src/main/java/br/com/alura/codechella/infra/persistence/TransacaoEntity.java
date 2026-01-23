@@ -1,12 +1,11 @@
 package br.com.alura.codechella.infra.persistence;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import br.com.alura.codechella.domain.StatusTransacao;
+import br.com.alura.codechella.domain.TipoTransacao;
+import jakarta.persistence.*;
 
-import java.time.LocalDate;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -15,56 +14,95 @@ public class TransacaoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;
-    private String cpf;
-    private String nome;
-    private LocalDate nascimento;
-    private String email;
+    private UUID usuarioId;
+    private BigDecimal valor;
+    private TipoTransacao tipo;
+    private StatusTransacao status;
+    private LocalDateTime dataHoraSolicitacao;
+    private LocalDateTime dataHoraFinalizacao;
+    private String moeda;
+    private BigDecimal taxaCambio;
+    private String descricao;
 
-    public TransacaoEntity() {}
-    public TransacaoEntity(String cpf, String nome, LocalDate nascimento, String email) {
-        this.cpf = cpf;
-        this.nome = nome;
-        this.nascimento = nascimento;
-        this.email = email;
-    }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    public String getCpf() {
-        return cpf;
+    public UUID getUsuarioId() {
+        return usuarioId;
     }
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
+    public void setUsuarioId(UUID usuarioId) {
+        this.usuarioId = usuarioId;
     }
 
-    public String getNome() {
-        return nome;
+    public BigDecimal getValor() {
+        return valor;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setValor(BigDecimal valor) {
+        this.valor = valor;
     }
 
-    public LocalDate getNascimento() {
-        return nascimento;
+    public TipoTransacao getTipo() {
+        return tipo;
     }
 
-    public void setNascimento(LocalDate nascimento) {
-        this.nascimento = nascimento;
+    public void setTipo(TipoTransacao tipo) {
+        this.tipo = tipo;
     }
 
-    public String getEmail() {
-        return email;
+    public StatusTransacao getStatus() {
+        return status;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setStatus(StatusTransacao status) {
+        this.status = status;
     }
+
+    public LocalDateTime getDataHoraSolicitacao() {
+        return dataHoraSolicitacao;
+    }
+
+    public void setDataHoraSolicitacao(LocalDateTime dataHoraSolicitacao) {
+        this.dataHoraSolicitacao = dataHoraSolicitacao;
+    }
+
+    public LocalDateTime getDataHoraFinalizacao() {
+        return dataHoraFinalizacao;
+    }
+
+    public void setDataHoraFinalizacao(LocalDateTime dataHoraFinalizacao) {
+        this.dataHoraFinalizacao = dataHoraFinalizacao;
+    }
+
+    public String getMoeda() {
+        return moeda;
+    }
+
+    public void setMoeda(String moeda) {
+        this.moeda = moeda;
+    }
+
+    public BigDecimal getTaxaCambio() {
+        return taxaCambio;
+    }
+
+    public void setTaxaCambio(BigDecimal taxaCambio) {
+        this.taxaCambio = taxaCambio;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
 }

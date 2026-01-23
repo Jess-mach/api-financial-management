@@ -6,12 +6,12 @@ import br.com.alura.codechella.infra.persistence.TransacaoEntity;
 public class TransacaoEntityMapper {
 
     public TransacaoEntity toEntity(Transacao transacao){
-        return new TransacaoEntity(transacao.getCpf(), transacao.getNome(),
+        return new TransacaoEntity(transacao.getUsuarioId(), transacao.getNome(),
                 transacao.getNascimento(), transacao.getEmail());
     }
 
     public Transacao toDomain(TransacaoEntity entity){
-        return new Transacao(entity.getCpf(), entity.getNome(), entity.getNascimento(),
+        return new Transacao(entity.getUsuarioId(), entity.getNome(), entity.getNascimento(),
                 entity.getEmail());
     }
 }

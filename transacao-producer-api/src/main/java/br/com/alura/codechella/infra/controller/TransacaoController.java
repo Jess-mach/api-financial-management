@@ -25,22 +25,22 @@ public class TransacaoController {
     }
 
     @PostMapping
-    public TransacaoDto cadastrarUsuario(@RequestBody TransacaoDto dto) {
-        Transacao novoTransacao = new Transacao(dto.cpf(),
+    public TransacaoDto cadastrarTransacao(@RequestBody TransacaoDto dto) {
+        Transacao novoTransacao = new Transacao(dto.usuarioId(),
                 dto.nome(),
                 dto.nascimento(),
                 dto.email());
 
         Transacao salvo = criarTransacao.cadastrarUsuario(novoTransacao);
 
-        return new TransacaoDto(salvo.getCpf(), salvo.getNome(), salvo.getNascimento(), salvo.getEmail());
+        return new TransacaoDto(salvo.getUsuarioId(), salvo.getNome(), salvo.getNascimento(), salvo.getEmail());
 
     }
 
     @GetMapping
     public List<TransacaoDto> listarUsuarios() {
         return listarTransacao.obterTodosUsuario().stream()
-                .map(u -> new TransacaoDto(u.getCpf(), u.getNome(), u.getNascimento(), u.getEmail()))
+                .map(u -> new TransacaoDto(u.getUsuarioId(), u.getNome(), u.getNascimento(), u.getEmail()))
                 .collect(Collectors.toList());
     }
 }

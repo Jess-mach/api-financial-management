@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 public class TransacaoTest {
     @Test
-    public void naoDeveCadastrarUsuarioComCpfNoFormatoInvalido(){
+    public void naoDeveCadastrarUsuarioComUsuarioIdNoFormatoInvalido(){
         Assertions.assertThrows(IllegalArgumentException.class,
                 () -> new Transacao("123456.789-99", "Jacque", LocalDate.parse("1990-09-08"), "email@email.com"));
 
@@ -23,7 +23,7 @@ public class TransacaoTest {
     @Test
     public void deveCriarUsuarioUsandoFabricaDeUsuario(){
         FabricaDeTransacao fabrica = new FabricaDeTransacao();
-        Transacao transacao = fabrica.comNomeCpfNascimento("Emily", "654.123.897-88",
+        Transacao transacao = fabrica.comNomeUsuarioIdNascimento("Emily", "654.123.897-88",
                 LocalDate.parse("2000-10-01"));
 
         Assertions.assertEquals("Emily", transacao.getNome());

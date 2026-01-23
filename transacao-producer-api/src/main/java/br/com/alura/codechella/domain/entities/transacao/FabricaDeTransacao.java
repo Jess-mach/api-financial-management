@@ -7,8 +7,8 @@ import java.time.LocalDate;
 public class FabricaDeTransacao {
     private Transacao transacao;
 
-    public Transacao comNomeCpfNascimento(String nome, String cpf, LocalDate nascimento){
-        this.transacao = new Transacao(cpf, nome, nascimento, "");
+    public Transacao comNomeUsuarioIdNascimento(String nome, String usuarioId, LocalDate nascimento){
+        this.transacao = new Transacao(usuarioId, nome, nascimento, "");
         return this.transacao;
     }
 
