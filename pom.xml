@@ -12,7 +12,7 @@
 	<artifactId>financial.management</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>financial.management</name>
-	<description>API de Gestão Finaceira</description>
+	<description>API de Gestão Usuarios</description>
 	<url/>
 	<licenses>
 		<license/>

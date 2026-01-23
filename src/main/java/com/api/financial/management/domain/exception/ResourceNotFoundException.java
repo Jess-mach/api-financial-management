@@ -1,4 +1,4 @@
-package com.api.financial.management.infra.exception;
+package com.api.financial.management.domain.exception;
 
 class ResourceNotFoundException extends RuntimeException {
     public ResourceNotFoundException(String message) {

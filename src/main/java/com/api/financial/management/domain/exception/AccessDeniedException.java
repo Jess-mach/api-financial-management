@@ -1,4 +1,4 @@
-package com.api.financial.management.infra.exception;
+package com.api.financial.management.domain.exception;
 
 public class AccessDeniedException extends RuntimeException {
     public AccessDeniedException(String message) {
