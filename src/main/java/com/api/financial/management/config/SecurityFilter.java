@@ -2,26 +2,33 @@ package com.api.financial.management.config;
 
 import com.api.financial.management.infra.persistence.repository.RepositoryJpa;
 import com.api.financial.management.infra.service.TokenService;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 
+@Slf4j
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
 
-    private final TokenService tokenService;
+    @Value("${api.security.token.secret}")
+    private String secret;
 
     private final RepositoryJpa repository;
 
-    public SecurityFilter(TokenService tokenService, RepositoryJpa repository) {
-        this.tokenService = tokenService;
+    public SecurityFilter(RepositoryJpa repository) {
         this.repository = repository;
     }
 
@@ -35,36 +42,48 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         if (tokenJWT != null) {
             try {
-                System.out.println("Token encontrado, validando...");
-                var subject = tokenService.getSubject(tokenJWT);
+                var subject = getSubject(tokenJWT);
                 var usuario = repository.findByLogin(subject);
 
                 if (usuario != null) {
                     var authentication = new UsernamePasswordAuthenticationToken(
                             usuario, null, usuario.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authentication);
-                    System.out.println("✅ Usuário autenticado: " + subject);
                 } else {
-                    System.out.println("❌ Usuário não encontrado: " + subject);
+                    logger.warn("❌ Usuário não encontrado: " + subject);
                 }
             } catch (Exception e) {
-                System.out.println("❌ Erro ao validar token: " + e.getMessage());
+                logger.error("❌ Erro ao validar token: "+ e.getMessage(), e);
+                throw new AccessDeniedException("Acesso negado");
             }
         } else {
-            System.out.println("Nenhum token encontrado na requisição");
+            logger.warn("Nenhum token encontrado na requisição");
         }
         filterChain.doFilter(request, response);
     }
 
     private String recuperarToken(HttpServletRequest request) {
         var authorizationHeader = request.getHeader("Authorization");
-        System.out.println("Authorization Header: " + authorizationHeader);
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             return authorizationHeader.replace("Bearer ", "").trim();
         }
 
         return null;
+    }
+
+    private String getSubject(String tokenJWT) {
+        try {
+            var algorithm = Algorithm.HMAC256(secret);
+            return JWT.require(algorithm)
+                    .withIssuer("API Financial.anagement")
+                    .build()
+                    .verify(tokenJWT)
+                    .getSubject();
+        } catch (JWTVerificationException exception) {
+            log.error("Token JWT inválido ou expirado: ", exception);
+            throw new RuntimeException("Token JWT inválido ou expirado");
+        }
     }
 
 }

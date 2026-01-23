@@ -20,13 +20,9 @@ public class AutenticacaoController {
 
     @PostMapping
     public ResponseEntity<DadosToken> efetuarLogin(@RequestBody @Valid DadosAutenticacao dados) {
-        try {
-            var tokenJWT = tokenService.gerarToken(dados.login(), dados.senha());
+        var tokenJWT = tokenService.gerarToken(dados.login(), dados.senha());
 
-            return ResponseEntity.ok(new DadosToken(tokenJWT));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(null);        }
+        return ResponseEntity.ok(new DadosToken(tokenJWT));
     }
 
 }
