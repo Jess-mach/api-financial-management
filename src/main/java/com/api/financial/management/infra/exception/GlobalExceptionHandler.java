@@ -23,7 +23,6 @@ import java.util.Set;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // Captura exceções de validação em Request Body (@RequestBody)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationExceptions(
             MethodArgumentNotValidException ex, WebRequest request) {
@@ -43,7 +42,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    // Captura exceções de validação em Path Variables e Request Parameters
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorResponse> handleConstraintViolationException(
             ConstraintViolationException ex, WebRequest request) {
@@ -69,7 +67,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    // Captura exceções de método HTTP não suportado
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<ErrorResponse> handleMethodNotSupportedException(
             HttpRequestMethodNotSupportedException ex, WebRequest request) {
@@ -89,7 +86,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.METHOD_NOT_ALLOWED);
     }
 
-    // Captura exceções de recursos não encontrados
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleResourceNotFoundException(
             ResourceNotFoundException ex, WebRequest request) {
@@ -105,7 +101,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
-    // Captura exceções de negócio customizadas
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ErrorResponse> handleBusinessException(
             BusinessException ex, WebRequest request) {
@@ -121,7 +116,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
-    // Captura exceções de acesso negado
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorResponse> handleAccessDeniedException(
             AccessDeniedException ex, WebRequest request) {
@@ -137,7 +131,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
     }
 
-    // Captura exceções de argumentos ilegais
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleIllegalArgumentException(
             IllegalArgumentException ex, WebRequest request) {
@@ -153,7 +146,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    // Captura todas as outras exceções não tratadas
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGlobalException(
             Exception ex, WebRequest request) {
@@ -193,7 +185,6 @@ public class GlobalExceptionHandler {
         String fieldName = null;
         Map<String, String> errors = new HashMap<>();
 
-        // Tenta extrair informação mais específica da exceção
         if (ex.getCause() != null && ex.getCause().getMessage() != null) {
             String cause = ex.getCause().getMessage();
 
@@ -209,7 +200,6 @@ public class GlobalExceptionHandler {
             }
         }
 
-        // Se conseguiu identificar o campo, adiciona no mapa de erros
         if (fieldName != null) {
             errors.put(fieldName, errorMessage);
         }
@@ -226,9 +216,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
 
-    // Métodos auxiliares para extrair o nome do campo
     private String extractFieldFromDuplicateError(String message) {
-        // Exemplo: "Duplicate entry 'valor' for key 'uk_email'"
         if (message.contains("for key")) {
             String[] parts = message.split("for key '");
             if (parts.length > 1) {
@@ -239,9 +227,8 @@ public class GlobalExceptionHandler {
     }
 
     private String extractFieldFromForeignKeyError(String message) {
-        // Exemplo: "Cannot add or update a child row: a foreign key constraint fails"
         if (message.contains("FOREIGN KEY")) {
-            // Lógica para extrair o nome da coluna da constraint
+
             String[] parts = message.split("FOREIGN KEY \\(`");
             if (parts.length > 1) {
                 return parts[1].split("`")[0];
@@ -251,7 +238,6 @@ public class GlobalExceptionHandler {
     }
 
     private String extractFieldFromNullError(String message) {
-        // Exemplo: "Column 'nome' cannot be null"
         if (message.contains("Column '")) {
             String[] parts = message.split("Column '");
             if (parts.length > 1) {

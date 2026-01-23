@@ -1,9 +1,8 @@
 package com.api.financial.management.application.usecase;
 
+import com.api.financial.management.application.gateways.UsuarioRepository;
 import com.api.financial.management.config.PasswordService;
 import com.api.financial.management.domain.entity.Usuario;
-import com.api.financial.management.application.gateways.UsuarioRepository;
-import org.springframework.stereotype.Service;
 
 
 public class AtualizarUsuario {

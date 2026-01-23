@@ -1,9 +1,6 @@
 package com.api.financial.management.config;
 
-import com.api.financial.management.application.usecase.AtualizarUsuario;
-import com.api.financial.management.application.usecase.CriarUsuario;
-import com.api.financial.management.application.usecase.DeletarUsuario;
-import com.api.financial.management.application.usecase.ListarUsuario;
+import com.api.financial.management.application.usecase.*;
 import com.api.financial.management.application.gateways.UsuarioRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +11,11 @@ public class UsuarioConfig {
     @Bean
     public CriarUsuario criarUsuario(UsuarioRepository usuarioRepository, PasswordService passwordService){
         return new CriarUsuario(usuarioRepository, passwordService);
+    }
+
+    @Bean
+    public ArquivoUsuario uploadUsuario(CriarUsuario criarUsuario){
+        return new ArquivoUsuario(criarUsuario);
     }
 
     @Bean

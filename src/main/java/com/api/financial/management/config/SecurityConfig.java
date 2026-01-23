@@ -20,7 +20,7 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll() // MÁGICA AQUI: Permite TUDO sem senha
+                        .anyRequest().permitAll()
                 )
                 .build();
     }
