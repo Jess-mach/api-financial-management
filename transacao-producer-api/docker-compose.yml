@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  db-transacoes:
+    image: postgres:16-alpine
+    container_name: transacoes-db
+    environment:
+      POSTGRES_DB: transacoes_db
+      POSTGRES_USER: db_user
+      POSTGRES_PASSWORD: db_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+#  transacoes:
+#    build: .
+#    container_name: transacao-producer-api
+#    depends_on:
+#      - db-transacoes
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5433/transacoes_db
+#      SPRING_DATASOURCE_USERNAME: db_user
+#      SPRING_DATASOURCE_PASSWORD: db_password
+#      SPRING_PROFILES_ACTIVE: docker
+#    ports:
+#      - "8081:8081"
+
+volumes:
+  pgdata:
