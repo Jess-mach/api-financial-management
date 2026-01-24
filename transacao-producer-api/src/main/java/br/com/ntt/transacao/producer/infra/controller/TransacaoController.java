@@ -7,6 +7,7 @@ import br.com.ntt.transacao.producer.domain.TipoTransacao;
 import br.com.ntt.transacao.producer.domain.entities.transacao.Transacao;
 import br.com.ntt.transacao.producer.infra.controller.dto.DadosNovaTransacao;
 import br.com.ntt.transacao.producer.infra.controller.dto.TransacaoDto;
+import br.com.ntt.transacao.producer.infra.controller.mapper.TransacaoDtoMapper;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,40 +26,26 @@ public class TransacaoController {
 
     private final CriarTransacao criarTransacao;
     private final ListarTransacao listarTransacao;
+    private final TransacaoDtoMapper transacaoDtoMapper;
 
-    public TransacaoController(CriarTransacao criarTransacao, ListarTransacao listarTransacao) {
+    public TransacaoController(CriarTransacao criarTransacao, ListarTransacao listarTransacao, TransacaoDtoMapper transacaoDtoMapper) {
         this.criarTransacao = criarTransacao;
         this.listarTransacao = listarTransacao;
+        this.transacaoDtoMapper = transacaoDtoMapper;
     }
 
     @PostMapping
     public TransacaoDto executar(@RequestBody @Valid DadosNovaTransacao dados) {
-        Transacao novoTransacao = new Transacao(
-                UUID.randomUUID(),
-                dados.usuarioId(),
-                dados.valor(),
-                TipoTransacao.valueOf(dados.tipo()),
-                StatusTransacao.PENDENTE,
-                LocalDateTime.now(),
-                null,
-                dados.moeda(),
-                null,
-                dados.descricao());
-
+        Transacao novoTransacao = transacaoDtoMapper.toDomain(dados);
         Transacao salvo = criarTransacao.executar(novoTransacao);
 
-        return new TransacaoDto(salvo.getId(), salvo.getUsuarioId(),
-                salvo.getValor(), salvo.getTipo(), salvo.getStatus(), salvo.getDataHoraSolicitacao(),
-                salvo.getDataHoraFinalizacao(), salvo.getMoeda(), salvo.getTaxaCambio(), salvo.getDescricao());
-
+        return transacaoDtoMapper.toDto(salvo);
     }
 
     @GetMapping
     public List<TransacaoDto> listarUsuarios() {
         return listarTransacao.listarTodos().stream()
-                .map(salvo -> new TransacaoDto(salvo.getId(), salvo.getUsuarioId(),
-                        salvo.getValor(), salvo.getTipo(), salvo.getStatus(), salvo.getDataHoraSolicitacao(),
-                        salvo.getDataHoraFinalizacao(), salvo.getMoeda(), salvo.getTaxaCambio(), salvo.getDescricao()))
+                .map(salvo -> transacaoDtoMapper.toDto(salvo))
                 .collect(Collectors.toList());
     }
 }
