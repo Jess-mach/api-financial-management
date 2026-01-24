@@ -74,4 +74,5 @@ public class Transacao {
     public String getDescricao() {
         return descricao;
     }
+
 }

@@ -1,6 +1,7 @@
 package br.com.ntt.transacao.producer.config;
 
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao;
+import br.com.ntt.transacao.producer.application.usecases.BuscarTransacaoPorId;
 import br.com.ntt.transacao.producer.application.usecases.CriarTransacao;
 import br.com.ntt.transacao.producer.application.usecases.ListarTransacao;
 import br.com.ntt.transacao.producer.infra.controller.mapper.TransacaoDtoMapper;
@@ -36,5 +37,10 @@ public class TransacaoConfig {
     @Bean
     TransacaoEntityMapper retornaMapper(){
         return new TransacaoEntityMapper();
+    }
+
+    @Bean
+    BuscarTransacaoPorId buscarTransacaoPorId(RepositorioDeTransacao repositorioDeTransacao){
+        return new BuscarTransacaoPorId(repositorioDeTransacao);
     }
 }

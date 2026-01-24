@@ -1,21 +1,15 @@
 package br.com.ntt.transacao.producer.infra.controller;
 
+import br.com.ntt.transacao.producer.application.usecases.BuscarTransacaoPorId;
 import br.com.ntt.transacao.producer.application.usecases.CriarTransacao;
 import br.com.ntt.transacao.producer.application.usecases.ListarTransacao;
-import br.com.ntt.transacao.producer.domain.StatusTransacao;
-import br.com.ntt.transacao.producer.domain.TipoTransacao;
 import br.com.ntt.transacao.producer.domain.entities.transacao.Transacao;
 import br.com.ntt.transacao.producer.infra.controller.dto.DadosNovaTransacao;
 import br.com.ntt.transacao.producer.infra.controller.dto.TransacaoDto;
 import br.com.ntt.transacao.producer.infra.controller.mapper.TransacaoDtoMapper;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -27,11 +21,13 @@ public class TransacaoController {
     private final CriarTransacao criarTransacao;
     private final ListarTransacao listarTransacao;
     private final TransacaoDtoMapper transacaoDtoMapper;
+    private final BuscarTransacaoPorId buscarTransacaoPorId;
 
-    public TransacaoController(CriarTransacao criarTransacao, ListarTransacao listarTransacao, TransacaoDtoMapper transacaoDtoMapper) {
+    public TransacaoController(CriarTransacao criarTransacao, ListarTransacao listarTransacao, TransacaoDtoMapper transacaoDtoMapper, BuscarTransacaoPorId buscarTransacaoPorId) {
         this.criarTransacao = criarTransacao;
         this.listarTransacao = listarTransacao;
         this.transacaoDtoMapper = transacaoDtoMapper;
+        this.buscarTransacaoPorId = buscarTransacaoPorId;
     }
 
     @PostMapping
@@ -50,8 +46,14 @@ public class TransacaoController {
     }
 
 
+    @GetMapping("/{id}")
+    public TransacaoDto buscarPorId(@PathVariable UUID id) {
+        Transacao transacao  = buscarTransacaoPorId.buscarPorId(id);
 
-    //    /Consulta de Transações: Endpoint GET /transactions/{id} para consultar o status atual (PENDING, APPROVED, REJECTED).
+        TransacaoDto dto = transacaoDtoMapper.toDto(transacao);
+
+        return dto;
+    }
 
     //Relatórios: Rota para baixar relatório em PDF ou Excel com o resumo das transações.
 
