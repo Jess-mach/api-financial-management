@@ -10,6 +10,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class RepositorioDeTransacaoJpa implements RepositorioDeTransacao {
+
     private final TransacaoRepository repositorio;
     private final TransacaoEntityMapper mapper;
 

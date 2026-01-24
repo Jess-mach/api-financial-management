@@ -3,6 +3,7 @@ package br.com.ntt.transacao.producer.config;
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao;
 import br.com.ntt.transacao.producer.application.usecases.CriarTransacao;
 import br.com.ntt.transacao.producer.application.usecases.ListarTransacao;
+import br.com.ntt.transacao.producer.infra.controller.mapper.TransacaoDtoMapper;
 import br.com.ntt.transacao.producer.infra.gateways.RepositorioDeTransacaoJpa;
 import br.com.ntt.transacao.producer.infra.gateways.TransacaoEntityMapper;
 import br.com.ntt.transacao.producer.infra.persistence.TransacaoRepository;
@@ -13,12 +14,17 @@ import org.springframework.context.annotation.Configuration;
 public class TransacaoConfig {
 
     @Bean
-    CriarTransacao criarUsuario(RepositorioDeTransacao repositorioDeTransacao){
+    TransacaoDtoMapper mapper(){
+        return new TransacaoDtoMapper();
+    }
+
+    @Bean
+    CriarTransacao criarTransacao(RepositorioDeTransacao repositorioDeTransacao){
         return new CriarTransacao(repositorioDeTransacao);
     }
 
     @Bean
-    ListarTransacao listarUsuarios(RepositorioDeTransacao repositorioDeTransacao){
+    ListarTransacao listarTransacao(RepositorioDeTransacao repositorioDeTransacao){
         return new ListarTransacao(repositorioDeTransacao);
     }
 
