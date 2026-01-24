@@ -4,7 +4,7 @@ import br.com.ntt.transacao.producer.domain.entities.transacao.Transacao;
 
 public interface RepositorioProdutorDeTransacao {
 
-    Transacao publicarTransacao(Transacao transacao);
+    void publicarTransacao(Transacao transacao);
 
 
 }

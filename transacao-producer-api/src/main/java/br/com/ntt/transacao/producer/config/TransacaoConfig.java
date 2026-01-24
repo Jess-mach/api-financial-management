@@ -5,7 +5,7 @@ import br.com.ntt.transacao.producer.application.gateways.RepositorioProdutorDeT
 import br.com.ntt.transacao.producer.application.usecases.BuscarTransacaoPorId;
 import br.com.ntt.transacao.producer.application.usecases.CriarTransacao;
 import br.com.ntt.transacao.producer.application.usecases.ListarTransacao;
-import br.com.ntt.transacao.producer.application.usecases.PublicarTransacao;
+import br.com.ntt.transacao.producer.infra.gateways.RepositorioDeTransacaoKafka;
 import br.com.ntt.transacao.producer.domain.entities.transacao.Transacao;
 import br.com.ntt.transacao.producer.infra.controller.mapper.TransacaoDtoMapper;
 import br.com.ntt.transacao.producer.infra.gateways.RepositorioDeTransacaoJpa;
@@ -51,7 +51,7 @@ public class TransacaoConfig {
     }
 
     @Bean
-    PublicarTransacao publicarTransacao(RepositorioProdutorDeTransacao repositorioProdutorDeTransacao, KafkaTemplate<UUID, Transacao> kafkaTemplate){
-        return new PublicarTransacao(repositorioProdutorDeTransacao, kafkaTemplate);
+    RepositorioDeTransacaoKafka publicarTransacao( KafkaTemplate<UUID, Transacao> kafkaTemplate){
+        return new RepositorioDeTransacaoKafka(kafkaTemplate);
     }
 }

@@ -15,7 +15,7 @@ public class RepositorioDeTransacaoEmArquivo {
     }
 
     public List<Transacao> listarTodos() {
-        return this.transacaos;
+       return this.transacaos;
     }
 
     public void gravaEmArquivo(String nomeArquivo) {
