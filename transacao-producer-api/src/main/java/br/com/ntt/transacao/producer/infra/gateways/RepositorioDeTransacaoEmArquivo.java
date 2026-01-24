@@ -1,6 +1,5 @@
 package br.com.ntt.transacao.producer.infra.gateways;
 
-import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao;
 import br.com.ntt.transacao.producer.domain.entities.transacao.Transacao;
 
 import java.io.FileWriter;
