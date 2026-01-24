@@ -7,11 +7,13 @@ public class CriarTransacao {
 
     private final RepositorioDeTransacao repositorio;
 
+
     public CriarTransacao(RepositorioDeTransacao repositorio) {
         this.repositorio = repositorio;
+
     }
 
-    public Transacao cadastrarTransacao(Transacao transacao) {
+    public Transacao executar(Transacao transacao) {
         return repositorio.cadastrarTransacao(transacao);
     }
 }

@@ -6,6 +6,7 @@ import br.com.ntt.transacao.producer.infra.persistence.TransacaoEntity;
 import br.com.ntt.transacao.producer.infra.persistence.TransacaoRepository;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class RepositorioDeTransacaoJpa implements RepositorioDeTransacao {
@@ -18,7 +19,7 @@ public class RepositorioDeTransacaoJpa implements RepositorioDeTransacao {
     }
 
     @Override
-    public Transacao cadastrarUsuario(Transacao transacao) {
+    public Transacao cadastrarTransacao(Transacao transacao) {
         TransacaoEntity entity = mapper.toEntity(transacao);
         repositorio.save(entity);
         return mapper.toDomain(entity);
@@ -29,5 +30,10 @@ public class RepositorioDeTransacaoJpa implements RepositorioDeTransacao {
         return repositorio.findAll().stream()
                 .map(mapper::toDomain)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Transacao busacarPorId(UUID id) {
+        return null;
     }
 }

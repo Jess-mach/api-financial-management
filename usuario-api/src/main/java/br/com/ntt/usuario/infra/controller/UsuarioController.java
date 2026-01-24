@@ -1,7 +1,6 @@
 package br.com.ntt.usuario.infra.controller;
 
 import br.com.ntt.usuario.application.usecase.*;
-import com.api.financial.management.application.usecase.*;
 import br.com.ntt.usuario.domain.entity.Usuario;
 import br.com.ntt.usuario.infra.controller.dto.DadosAtualizacaoUsuario;
 import br.com.ntt.usuario.infra.controller.dto.DadosCadastroUsuario;

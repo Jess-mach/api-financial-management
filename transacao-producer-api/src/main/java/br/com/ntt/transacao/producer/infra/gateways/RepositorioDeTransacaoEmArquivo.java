@@ -8,16 +8,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RepositorioDeTransacaoEmArquivo implements RepositorioDeTransacao {
+public class RepositorioDeTransacaoEmArquivo {
     List<Transacao> transacaos = new ArrayList<>();
-
-    @Override
     public Transacao cadastrarUsuario(Transacao transacao) {
         this.transacaos.add(transacao);
         return transacao;
     }
 
-    @Override
     public List<Transacao> listarTodos() {
         return this.transacaos;
     }
