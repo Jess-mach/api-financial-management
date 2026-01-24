@@ -48,4 +48,12 @@ public class TransacaoController {
                 .map(salvo -> transacaoDtoMapper.toDto(salvo))
                 .collect(Collectors.toList());
     }
+
+
+
+    //    /Consulta de Transações: Endpoint GET /transactions/{id} para consultar o status atual (PENDING, APPROVED, REJECTED).
+
+    //Relatórios: Rota para baixar relatório em PDF ou Excel com o resumo das transações.
+
+    //Análise de Despesas: Endpoint para visualização de resumo de gastos, categorizados por dia ou mês.
 }

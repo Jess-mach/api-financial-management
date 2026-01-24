@@ -22,6 +22,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
+@TestPropertySource(properties = {
+        "spring.flyway.enabled=false",
+        "spring.datasource.url=jdbc:postgresql://localhost:5433/transacoes_db",
+        "spring.datasource.username=TEST",
+        "spring.datasource.password=TEST",
+        "spring.datasource.driver-class-name=org.postgresql.Driver",
+        "spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect",
+        "hibernate.dialect=org.hibernate.dialect.HSQLDialect"
+})
 class TransacaoControllerTest {
 
     @Autowired
