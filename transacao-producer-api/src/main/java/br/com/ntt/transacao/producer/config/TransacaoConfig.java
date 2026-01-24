@@ -1,15 +1,21 @@
 package br.com.ntt.transacao.producer.config;
 
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao;
+import br.com.ntt.transacao.producer.application.gateways.RepositorioProdutorDeTransacao;
 import br.com.ntt.transacao.producer.application.usecases.BuscarTransacaoPorId;
 import br.com.ntt.transacao.producer.application.usecases.CriarTransacao;
 import br.com.ntt.transacao.producer.application.usecases.ListarTransacao;
+import br.com.ntt.transacao.producer.application.usecases.PublicarTransacao;
+import br.com.ntt.transacao.producer.domain.entities.transacao.Transacao;
 import br.com.ntt.transacao.producer.infra.controller.mapper.TransacaoDtoMapper;
 import br.com.ntt.transacao.producer.infra.gateways.RepositorioDeTransacaoJpa;
 import br.com.ntt.transacao.producer.infra.gateways.TransacaoEntityMapper;
 import br.com.ntt.transacao.producer.infra.persistence.TransacaoRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.core.KafkaTemplate;
+
+import java.util.UUID;
 
 @Configuration
 public class TransacaoConfig {
@@ -20,8 +26,8 @@ public class TransacaoConfig {
     }
 
     @Bean
-    CriarTransacao criarTransacao(RepositorioDeTransacao repositorioDeTransacao){
-        return new CriarTransacao(repositorioDeTransacao);
+    CriarTransacao criarTransacao(RepositorioDeTransacao repositorioDeTransacao,RepositorioProdutorDeTransacao repositorioProdutorDeTransacao){
+        return new CriarTransacao(repositorioDeTransacao, repositorioProdutorDeTransacao);
     }
 
     @Bean
@@ -42,5 +48,10 @@ public class TransacaoConfig {
     @Bean
     BuscarTransacaoPorId buscarTransacaoPorId(RepositorioDeTransacao repositorioDeTransacao){
         return new BuscarTransacaoPorId(repositorioDeTransacao);
+    }
+
+    @Bean
+    PublicarTransacao publicarTransacao(RepositorioProdutorDeTransacao repositorioProdutorDeTransacao, KafkaTemplate<UUID, Transacao> kafkaTemplate){
+        return new PublicarTransacao(repositorioProdutorDeTransacao, kafkaTemplate);
     }
 }
