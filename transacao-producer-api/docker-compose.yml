@@ -43,6 +43,21 @@ services:
     networks:
       - rede-sistema
 
+  kafka-setup:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka-setup
+    depends_on:
+      - kafka
+    networks:
+      - rede-sistema
+    command: >
+      bash -c "
+      echo 'Aguardando o Kafka subir...'
+      cub kafka-ready -b kafka:29092 1 30 && \
+      kafka-topics --create --if-not-exists --bootstrap-server kafka:29092 --partitions 1 --replication-factor 1 --topic TRANSACAO-TOPIC && \
+      echo 'Tópico criado com sucesso!'"
+
+
   transacoes-api:
     build: .
     container_name: transacoes-api
