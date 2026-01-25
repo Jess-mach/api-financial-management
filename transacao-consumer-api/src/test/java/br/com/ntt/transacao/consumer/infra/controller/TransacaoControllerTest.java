@@ -1,6 +1,8 @@
 package br.com.ntt.transacao.consumer.infra.controller;
 
-import br.com.ntt.transacao.consumer.infra.consumer.dto.DadosNovaTransacao;
+import br.com.ntt.transacao.consumer.domain.StatusTransacao;
+import br.com.ntt.transacao.consumer.domain.TipoTransacao;
+import br.com.ntt.transacao.consumer.infra.consumer.dto.TransacaoDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,6 +15,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -46,12 +49,17 @@ class TransacaoControllerTest {
     @DisplayName("Deve criar transação com sucesso (Status 202) mesmo sem token real")
     void deveCriarTransacaoComSucesso() throws Exception {
 
-        DadosNovaTransacao request = new DadosNovaTransacao(
+        TransacaoDto request = new TransacaoDto(
+                UUID.randomUUID(),
                 UUID.randomUUID(),
                 new BigDecimal("100.50"),
-                "DEPOSITO", // Use as Strings exatas do seu Enum
-                "Almoço de domingo",
-                "BRL"
+                TipoTransacao.DEPOSITO,
+StatusTransacao.PENDENTE,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                "BRL",
+                new BigDecimal("100.50"),
+                "Teste"
         );
 
 //        doNothing().when(publicadorTransacao).publicarSolicitacao(any(Transacao.class));
@@ -68,17 +76,23 @@ class TransacaoControllerTest {
     @Test
     @DisplayName("Deve falhar se valor for negativo (Teste de Validação)")
     void deveFalharComValorNegativo() throws Exception {
-        DadosNovaTransacao requestInvalido = new DadosNovaTransacao(
+        TransacaoDto request = new TransacaoDto(
                 UUID.randomUUID(),
-                new BigDecimal("-50.00"),
-                "SAQUE",
-                "Erro",
-                "BRL"
+                UUID.randomUUID(),
+                new BigDecimal("-100.50"),
+                TipoTransacao.DEPOSITO,
+                StatusTransacao.PENDENTE,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                "BRL",
+                new BigDecimal("100.50"),
+                "Teste"
         );
+
 
         mockMvc.perform(post("/transacoes")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(requestInvalido)))
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
     }
 }
