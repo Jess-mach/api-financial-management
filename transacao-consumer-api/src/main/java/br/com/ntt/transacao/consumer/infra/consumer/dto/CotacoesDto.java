@@ -10,5 +10,5 @@ public record CotacoesDto(
         BigDecimal cotacao_compra,
         BigDecimal cotacao_venda,
         String data_hora_cotacao,
-        TipoBoletim tipo_boletim) {
+        String tipo_boletim) {
 }

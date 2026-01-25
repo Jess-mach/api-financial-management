@@ -4,7 +4,6 @@ import br.com.ntt.transacao.consumer.application.gateways.RepositorioConversaoMo
 import br.com.ntt.transacao.consumer.domain.entities.moeda.ConversorMoeda;
 import br.com.ntt.transacao.consumer.infra.consumer.dto.ConversorMoedaDto;
 import br.com.ntt.transacao.consumer.infra.consumer.mapper.ConversorMoedaMapper;
-import br.com.ntt.transacao.consumer.infra.consumer.mapper.CotacaoDtoMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,7 +50,7 @@ public class RepositorioConversaoMoedaHttp implements RepositorioConversaoMoeda 
             HttpResponse<String> response = client
                     .send(request, HttpResponse.BodyHandlers.ofString());
 
-            if(response.statusCode() != 200)
+            if (response.statusCode() != 200)
                 throw new IllegalArgumentException("Falha ao converter moeda");
 
             ConversorMoedaDto dto = objectMapper.readValue(response.body(), ConversorMoedaDto.class);

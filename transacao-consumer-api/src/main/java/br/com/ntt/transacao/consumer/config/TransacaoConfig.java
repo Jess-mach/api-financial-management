@@ -6,6 +6,7 @@ import br.com.ntt.transacao.consumer.application.gateways.RepositorioDeTransacao
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioProdutorDeTransacao;
 import br.com.ntt.transacao.consumer.application.usecases.ProcessarTransacao;
 import br.com.ntt.transacao.consumer.infra.consumer.dto.SaldoContaDto;
+import br.com.ntt.transacao.consumer.infra.consumer.mapper.ConversorMoedaMapper;
 import br.com.ntt.transacao.consumer.infra.consumer.mapper.SaldoDtoMapper;
 import br.com.ntt.transacao.consumer.infra.gateways.RepositorioDeTransacaoKafka;
 import br.com.ntt.transacao.consumer.domain.entities.transacao.Transacao;
@@ -66,5 +67,10 @@ public class TransacaoConfig {
     @Bean
     SaldoDtoMapper saldoDtoMapper(){
         return new SaldoDtoMapper();
+    }
+
+    @Bean
+    ConversorMoedaMapper conversorMoedaMapper(){
+        return new ConversorMoedaMapper();
     }
 }
