@@ -59,19 +59,48 @@ br.com.ntt.transacao.consumer.infra.gateways.http ou br.com.ntt.transacao.consum
             SaldoConta saldoConta = repositorioSaldoCliente.buscarPorId(getValidAccountId());
             ConversorMoeda conversorMoeda  = repositorioConversaoMoeda.conversaoMoeda(transacao.getMoeda(), transacao.getDataHoraSolicitacao());
 
-            BigDecimal valorDoSaldo = saldoConta.getSaldo();
-            BigDecimal valorDaTransacao = transacao.getValor();
-            BigDecimal valorTaxaDeCambio = conversorMoeda.getCotacoes().get(0).getCotacaoVenda();
+            Double valorDoSaldo = saldoConta.getSaldo().doubleValue();
+            Double valorDaTransacao = transacao.getValor().doubleValue();
+            Double valorTaxaDeCambio = conversorMoeda.getCotacoes().get(0).getCotacaoVenda().doubleValue();
+
+            if(transacao.getTipo().equals(TipoTransacao.SAQUE)){
+                if(!transacao.getMoeda().equals("BRL")){
+                    transacao.atualizaTaxaDeCambio(valorTaxaDeCambio);
+                }
+                if(valorTaxaDeCambio > 0) {
+                    valorDaTransacao = valorDaTransacao * valorTaxaDeCambio;
+                }
+                if(valorDaTransacao <= valorDoSaldo)
+                    transacao.atualizaStatus(StatusTransacao.REJEITADO);
+                transacao.atualizaStatus(StatusTransacao.AUTORIZADO);
+            }
 
             if(transacao.getTipo().equals(TipoTransacao.DEPOSITO)){
                 if(!transacao.getMoeda().equals("BRL")){
                     transacao.atualizaTaxaDeCambio(valorTaxaDeCambio);
                 }
+                transacao.atualizaStatus(StatusTransacao.AUTORIZADO);
+            }
 
+            if (transacao.getTipo().equals(TipoTransacao.COMPRA)){
+                if(!transacao.getMoeda().equals("BRL")){
+                    transacao.atualizaTaxaDeCambio(valorTaxaDeCambio);
+                }
                 if(valorTaxaDeCambio > 0)
                     valorDaTransacao = valorDaTransacao * valorTaxaDeCambio;
-
+                if(valorDaTransacao <= valorDoSaldo)
+                    transacao.atualizaStatus(StatusTransacao.REJEITADO);
                 transacao.atualizaStatus(StatusTransacao.AUTORIZADO);
+            }
+
+            if (transacao.getTipo().equals(TipoTransacao.TRANSFERENCIA)){
+                if (!transacao.getMoeda().equals("BRL")){
+                    transacao.atualizaTaxaDeCambio(valorTaxaDeCambio);
+                }
+                if(valorTaxaDeCambio > 0)
+                    valorDaTransacao = valorDaTransacao * valorTaxaDeCambio;
+                if(valorDaTransacao <= valorDoSaldo)
+                    transacao.atualizaStatus(StatusTransacao.REJEITADO);
             }
 
             transacao.atualizaStatus(StatusTransacao.REJEITADO);
@@ -79,8 +108,6 @@ br.com.ntt.transacao.consumer.infra.gateways.http ou br.com.ntt.transacao.consum
 
             transacaoSalva = repositorio.atualizarTransacao(transacao);
         } catch (Exception e) {
-            //**Tratamento de Erros (DLQ):** Gerencia erros irrecuperáveis enviando para um tópico de Dead Letter Queue (`transaction.dlq`).
-
             repositorioProdutorDeTransacao.publicarTransacao(transacao); //TODO no topico de DLQ
         }
         return transacaoSalva;

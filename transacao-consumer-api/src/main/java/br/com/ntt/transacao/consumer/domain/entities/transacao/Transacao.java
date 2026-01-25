@@ -79,7 +79,8 @@ public class Transacao {
         this.status = statusTransacao;
     }
 
-    public void atualizaTaxaDeCambio(BigDecimal cotacaoVenda) {
-        this.taxaCambio = cotacaoVenda;
+    public void atualizaTaxaDeCambio(Double cotacaoVenda) {
+        this.taxaCambio = BigDecimal.valueOf(cotacaoVenda);
+
     }
 }
