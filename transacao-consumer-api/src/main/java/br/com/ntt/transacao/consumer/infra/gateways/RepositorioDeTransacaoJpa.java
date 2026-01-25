@@ -26,14 +26,8 @@ public class RepositorioDeTransacaoJpa implements RepositorioDeTransacao {
         return mapper.toDomain(entity);
     }
 
-    @Override
-    public List<Transacao> listarTodos() {
-        return repositorio.findAll().stream()
-                .map(mapper::toDomain)
-                .collect(Collectors.toList());
-    }
 
-    @Override
+    //    @Override
     public Transacao busacarPorId(UUID id) {
         TransacaoEntity entity = repositorio.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Transação não encontrado"));

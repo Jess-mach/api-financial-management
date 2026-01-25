@@ -1,6 +1,6 @@
 package br.com.ntt.transacao.consumer.infra.controller;
 
-import br.com.ntt.transacao.consumer.infra.controller.dto.DadosNovaTransacao;
+import br.com.ntt.transacao.consumer.infra.consumer.dto.DadosNovaTransacao;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

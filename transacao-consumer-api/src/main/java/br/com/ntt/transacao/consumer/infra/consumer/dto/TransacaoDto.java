@@ -1,4 +1,4 @@
-package br.com.ntt.transacao.consumer.infra.controller.dto;
+package br.com.ntt.transacao.consumer.infra.consumer.dto;
 
 import br.com.ntt.transacao.consumer.domain.StatusTransacao;
 import br.com.ntt.transacao.consumer.domain.TipoTransacao;

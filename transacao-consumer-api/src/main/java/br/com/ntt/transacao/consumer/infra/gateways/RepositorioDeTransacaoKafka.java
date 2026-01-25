@@ -17,7 +17,7 @@ public class RepositorioDeTransacaoKafka implements RepositorioProdutorDeTransac
 
     @Override
     public void publicarTransacao(Transacao transacao){
-        kafkaTemplate.send("TRANSACAO-TOPIC", transacao.getId(), transacao);
+        kafkaTemplate.send("TRANSACAO-TOPIC-DLQ", transacao.getId(), transacao);
 
     }
 }
