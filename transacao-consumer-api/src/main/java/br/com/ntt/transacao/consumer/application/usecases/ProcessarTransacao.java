@@ -69,7 +69,7 @@ br.com.ntt.transacao.consumer.infra.gateways.http ou br.com.ntt.transacao.consum
         return transacaoSalva;
     }
 
-    private static validarTransacao(Transacao transacao, SaldoConta saldoConta, ConversorMoeda conversorMoeda) {
+    private static Transacao validarTransacao(Transacao transacao, SaldoConta saldoConta, ConversorMoeda conversorMoeda) {
         Double valorDoSaldo = saldoConta.getSaldo().doubleValue();
         Double valorDaTransacao = transacao.getValor().doubleValue();
         Double valorTaxaDeCambio = conversorMoeda.getCotacoes().get(0).getCotacaoVenda().doubleValue();
