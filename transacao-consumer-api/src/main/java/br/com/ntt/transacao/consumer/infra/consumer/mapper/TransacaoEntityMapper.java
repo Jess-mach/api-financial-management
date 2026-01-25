@@ -1,4 +1,4 @@
-package br.com.ntt.transacao.consumer.infra.gateways;
+package br.com.ntt.transacao.consumer.infra.consumer.mapper;
 
 import br.com.ntt.transacao.consumer.domain.StatusTransacao;
 import br.com.ntt.transacao.consumer.domain.entities.transacao.Transacao;

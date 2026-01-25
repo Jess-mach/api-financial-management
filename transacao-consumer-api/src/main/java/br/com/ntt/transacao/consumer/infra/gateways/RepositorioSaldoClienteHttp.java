@@ -3,6 +3,7 @@ package br.com.ntt.transacao.consumer.infra.gateways;
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioSaldoCliente;
 import br.com.ntt.transacao.consumer.domain.entities.SaldoConta;
 import br.com.ntt.transacao.consumer.infra.consumer.dto.SaldoContaDto;
+import br.com.ntt.transacao.consumer.infra.consumer.mapper.SaldoDtoMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,8 @@ public class RepositorioSaldoClienteHttp implements RepositorioSaldoCliente {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
+    private final SaldoDtoMapper mapper;
+
     @Override
     public SaldoConta buscarPorId(Long id) {
         URI uri = URI.create(endpointConsultaSaldo + id);
@@ -39,14 +42,8 @@ public class RepositorioSaldoClienteHttp implements RepositorioSaldoCliente {
 
             SaldoContaDto dto = objectMapper.readValue(response.body(), SaldoContaDto.class);
 
+            return mapper.toDomain(dto);
 
-            return new SaldoConta(
-                    dto.name(),
-                    dto.conta(),
-                    dto.saldo(),
-                    dto.routingNumber(),
-                    dto.id()
-            );
         } catch (Exception e) {
             log.error("falha na requisição", e.getMessage());
             throw new IllegalArgumentException("Falha ao consultar saldo");

@@ -8,7 +8,7 @@ import br.com.ntt.transacao.consumer.infra.gateways.RepositorioDeTransacaoKafka;
 import br.com.ntt.transacao.consumer.domain.entities.transacao.Transacao;
 import br.com.ntt.transacao.consumer.infra.consumer.mapper.TransacaoDtoMapper;
 import br.com.ntt.transacao.consumer.infra.gateways.RepositorioDeTransacaoJpa;
-import br.com.ntt.transacao.consumer.infra.gateways.TransacaoEntityMapper;
+import br.com.ntt.transacao.consumer.infra.consumer.mapper.TransacaoEntityMapper;
 import br.com.ntt.transacao.consumer.infra.persistence.TransacaoRepository;
 
 import org.springframework.beans.factory.annotation.Value;

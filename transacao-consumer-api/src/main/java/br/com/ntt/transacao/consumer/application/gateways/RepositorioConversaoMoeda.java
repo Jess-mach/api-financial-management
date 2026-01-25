@@ -2,8 +2,8 @@ package br.com.ntt.transacao.consumer.application.gateways;
 
 import br.com.ntt.transacao.consumer.domain.entities.SaldoConta;
 
-public interface RepositorioSaldoCliente {
+public interface RepositorioConversaoMoeda {
 
-    SaldoConta buscarPorId(Long id);
+    SaldoConta conversaoMoeda(String moeda);
 
 }

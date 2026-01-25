@@ -1,7 +1,6 @@
 package br.com.ntt.transacao.consumer.infra.consumer.dto;
 
 public record SaldoContaDto(
-        String createdAt,
         String name,
         String conta,
         Double saldo,
