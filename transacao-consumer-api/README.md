@@ -10,3 +10,5 @@ DATASOURCE_PASSWORD=db_password DATASOURCE_URL=jdbc:postgresql://localhost:5433/
 ´´´shell
 docker exec -it kafka kafka-topics --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic TRANSACAO-TOPIC
 ´´´
+
+mvn clean install

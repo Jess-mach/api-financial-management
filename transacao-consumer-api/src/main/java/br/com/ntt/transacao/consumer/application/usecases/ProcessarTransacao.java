@@ -1,9 +1,11 @@
 package br.com.ntt.transacao.consumer.application.usecases;
 
+import br.com.ntt.transacao.consumer.application.gateways.RepositorioConversaoMoeda;
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioSaldoCliente;
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioDeTransacao;
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioProdutorDeTransacao;
-import br.com.ntt.transacao.consumer.domain.entities.SaldoConta;
+import br.com.ntt.transacao.consumer.domain.entities.conta.SaldoConta;
+import br.com.ntt.transacao.consumer.domain.entities.moeda.ConversorMoeda;
 import br.com.ntt.transacao.consumer.domain.entities.transacao.Transacao;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,10 +20,13 @@ public class ProcessarTransacao {
 
     private final RepositorioSaldoCliente repositorioSaldoCliente;
 
-    public ProcessarTransacao(RepositorioDeTransacao repositorio, RepositorioProdutorDeTransacao repositorioProdutorDeTransacao, RepositorioSaldoCliente repositorioSaldoCliente) {
+    private final RepositorioConversaoMoeda repositorioConversaoMoeda;
+
+    public ProcessarTransacao(RepositorioDeTransacao repositorio, RepositorioProdutorDeTransacao repositorioProdutorDeTransacao, RepositorioSaldoCliente repositorioSaldoCliente, RepositorioConversaoMoeda repositorioConversaoMoeda) {
         this.repositorio = repositorio;
         this.repositorioProdutorDeTransacao = repositorioProdutorDeTransacao;
         this.repositorioSaldoCliente = repositorioSaldoCliente;
+        this.repositorioConversaoMoeda = repositorioConversaoMoeda;
     }
 
     public Transacao executar(Transacao transacao) {
@@ -31,28 +36,16 @@ public class ProcessarTransacao {
             //1 - **Integração com Mock API:** Consulta a API externa (MockAPI) para validar saldo, conta e limites do usuário.
             //**Regras de Negócio Complexas:** Aplica as validações de saldo suficiente e limites.
             SaldoConta saldoConta = repositorioSaldoCliente.buscarPorId(getValidAccountId());
+            ConversorMoeda conversorMoeda  = repositorioConversaoMoeda.conversaoMoeda(transacao.getMoeda(), transacao.getDataHoraSolicitacao());
 
             /*
-            Realizar uma chamada  para  https://6974ba31265838bbea95be42.mockapi.io/api/becca/v1/saldo
-
-            usando  HttpClient ... => Response
-            Capturar o retorno para processar no passo 3
-
-            RepositorioDeConsultaDeSaldo
             Dentro de infra, você pode criar um pacote para gateways ou clients para organizar melhor. Por exemplo:
 br.com.ntt.transacao.consumer.infra.gateways.http ou br.com.ntt.transacao.consumer.infra.clients.http
 
              */
-
-
-
-
-
             //2 - **Integração com Câmbio:** Consome a API pública (Brasil API) para converter valores e registrar a taxa de câmbio da operação.
 
             /*
-
-            RepositorioDeConsultaDeTaxaDeCambio
             * https://brasilapi.com.br/api/cambio/v1/cotacao/EUR/2025-11-01
             * Salvar a taxa de Cambio - Deposito EUR -
             *
@@ -60,6 +53,10 @@ br.com.ntt.transacao.consumer.infra.gateways.http ou br.com.ntt.transacao.consum
 
 
             //3 - **Atualização de Status:** Atualiza a transação no banco para `APPROVED` ou `REJECTED` com os detalhes.
+
+            // transacao.valor x taxaCambio ee saldo > transacao. valor  transacao = APPROVADE else REJECTE
+
+            if (transacao.getValor().compareTo(saldoConta.getSaldo()) > 0 )
 
 
             transacaoSalva = repositorio.atualizarTransacao(transacao);

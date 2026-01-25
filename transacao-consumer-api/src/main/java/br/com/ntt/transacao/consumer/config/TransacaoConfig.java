@@ -1,9 +1,12 @@
 package br.com.ntt.transacao.consumer.config;
 
+import br.com.ntt.transacao.consumer.application.gateways.RepositorioConversaoMoeda;
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioSaldoCliente;
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioDeTransacao;
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioProdutorDeTransacao;
 import br.com.ntt.transacao.consumer.application.usecases.ProcessarTransacao;
+import br.com.ntt.transacao.consumer.infra.consumer.dto.SaldoContaDto;
+import br.com.ntt.transacao.consumer.infra.consumer.mapper.SaldoDtoMapper;
 import br.com.ntt.transacao.consumer.infra.gateways.RepositorioDeTransacaoKafka;
 import br.com.ntt.transacao.consumer.domain.entities.transacao.Transacao;
 import br.com.ntt.transacao.consumer.infra.consumer.mapper.TransacaoDtoMapper;
@@ -25,26 +28,28 @@ public class TransacaoConfig {
     private String endpointConsultaSaldo;
 
     @Bean
-    TransacaoDtoMapper mapper(){
+    TransacaoDtoMapper mapper() {
         return new TransacaoDtoMapper();
     }
 
     @Bean
     ProcessarTransacao criarTransacao(RepositorioDeTransacao repositorioDeTransacao,
                                       RepositorioProdutorDeTransacao repositorioProdutorDeTransacao,
-                                      RepositorioSaldoCliente repositorioSaldoCliente){
-        return new ProcessarTransacao(repositorioDeTransacao, repositorioProdutorDeTransacao, repositorioSaldoCliente);
+                                      RepositorioSaldoCliente repositorioSaldoCliente,
+                                      RepositorioConversaoMoeda repositorioConversaoMoeda) {
+        return new ProcessarTransacao(repositorioDeTransacao, repositorioProdutorDeTransacao,
+                repositorioSaldoCliente, repositorioConversaoMoeda);
     }
 
 
-
     @Bean
-    RepositorioDeTransacaoJpa criarRepositorioJpa(TransacaoRepository repositorio, TransacaoEntityMapper mapper){
+    RepositorioDeTransacaoJpa criarRepositorioJpa(TransacaoRepository repositorio,
+                                                  TransacaoEntityMapper mapper) {
         return new RepositorioDeTransacaoJpa(repositorio, mapper);
     }
 
     @Bean
-    TransacaoEntityMapper retornaMapper(){
+    TransacaoEntityMapper retornaMapper() {
         return new TransacaoEntityMapper();
     }
 //
@@ -54,12 +59,12 @@ public class TransacaoConfig {
 //    }
 
     @Bean
-    RepositorioDeTransacaoKafka publicarTransacao( KafkaTemplate<UUID, Transacao> kafkaTemplate){
+    RepositorioDeTransacaoKafka publicarTransacao(KafkaTemplate<UUID, Transacao> kafkaTemplate) {
         return new RepositorioDeTransacaoKafka(kafkaTemplate);
     }
 
-//    @Bean
-//    RepositorioContaClienteHttp buscarPorId(String endpointConsultaSaldo){
-//        return new RepositorioContaClienteHttp(endpointConsultaSaldo);
-//    }
+    @Bean
+    SaldoDtoMapper saldoDtoMapper(){
+        return new SaldoDtoMapper();
+    }
 }

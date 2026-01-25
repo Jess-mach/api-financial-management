@@ -1,7 +1,7 @@
 package br.com.ntt.transacao.consumer.infra.controller;
 
-import br.com.ntt.transacao.consumer.domain.StatusTransacao;
-import br.com.ntt.transacao.consumer.domain.TipoTransacao;
+import br.com.ntt.transacao.consumer.domain.model.StatusTransacao;
+import br.com.ntt.transacao.consumer.domain.model.TipoTransacao;
 import br.com.ntt.transacao.consumer.infra.consumer.dto.TransacaoDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;

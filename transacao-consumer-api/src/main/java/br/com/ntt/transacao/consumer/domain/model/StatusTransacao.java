@@ -1,4 +1,4 @@
-package br.com.ntt.transacao.consumer.domain;
+package br.com.ntt.transacao.consumer.domain.model;
 
 public enum StatusTransacao {
 
