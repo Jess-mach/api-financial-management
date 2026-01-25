@@ -7,8 +7,11 @@ import br.com.ntt.transacao.consumer.application.gateways.RepositorioProdutorDeT
 import br.com.ntt.transacao.consumer.domain.entities.conta.SaldoConta;
 import br.com.ntt.transacao.consumer.domain.entities.moeda.ConversorMoeda;
 import br.com.ntt.transacao.consumer.domain.entities.transacao.Transacao;
+import br.com.ntt.transacao.consumer.domain.model.StatusTransacao;
+import br.com.ntt.transacao.consumer.domain.model.TipoTransacao;
 import lombok.extern.slf4j.Slf4j;
 
+import java.math.BigDecimal;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
@@ -56,7 +59,22 @@ br.com.ntt.transacao.consumer.infra.gateways.http ou br.com.ntt.transacao.consum
             SaldoConta saldoConta = repositorioSaldoCliente.buscarPorId(getValidAccountId());
             ConversorMoeda conversorMoeda  = repositorioConversaoMoeda.conversaoMoeda(transacao.getMoeda(), transacao.getDataHoraSolicitacao());
 
+            BigDecimal valorDoSaldo = saldoConta.getSaldo();
+            BigDecimal valorDaTransacao = transacao.getValor();
+            BigDecimal valorTaxaDeCambio = conversorMoeda.getCotacoes().get(0).getCotacaoVenda();
 
+            if(transacao.getTipo().equals(TipoTransacao.DEPOSITO)){
+                if(!transacao.getMoeda().equals("BRL")){
+                    transacao.atualizaTaxaDeCambio(valorTaxaDeCambio);
+                }
+
+                if(valorTaxaDeCambio > 0)
+                    valorDaTransacao = valorDaTransacao * valorTaxaDeCambio;
+
+                transacao.atualizaStatus(StatusTransacao.AUTORIZADO);
+            }
+
+            transacao.atualizaStatus(StatusTransacao.REJEITADO);
 
 
             transacaoSalva = repositorio.atualizarTransacao(transacao);

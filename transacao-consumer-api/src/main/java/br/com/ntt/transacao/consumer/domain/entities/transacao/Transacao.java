@@ -75,4 +75,11 @@ public class Transacao {
         return descricao;
     }
 
+    public void atualizaStatus(StatusTransacao statusTransacao) {
+        this.status = statusTransacao;
+    }
+
+    public void atualizaTaxaDeCambio(BigDecimal cotacaoVenda) {
+        this.taxaCambio = cotacaoVenda;
+    }
 }

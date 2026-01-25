@@ -1,6 +1,7 @@
 package br.com.ntt.transacao.consumer.infra.gateways;
 
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioConversaoMoeda;
+import br.com.ntt.transacao.consumer.domain.entities.cotacao.Cotacao;
 import br.com.ntt.transacao.consumer.domain.entities.moeda.ConversorMoeda;
 import br.com.ntt.transacao.consumer.infra.consumer.dto.ConversorMoedaDto;
 import br.com.ntt.transacao.consumer.infra.consumer.mapper.ConversorMoedaMapper;
@@ -10,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -18,6 +20,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -38,7 +41,8 @@ public class RepositorioConversaoMoedaHttp implements RepositorioConversaoMoeda 
     public ConversorMoeda conversaoMoeda(String moeda, LocalDateTime dataHoraSolicitacao) {
 
         if (moeda.equals("BRL"))
-            return new ConversorMoeda(moeda, dataHoraSolicitacao.toLocalDate().toString(), new ArrayList<>());
+            return new ConversorMoeda(moeda, dataHoraSolicitacao.toLocalDate().toString(),
+                    List.of(new Cotacao(BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO,"", "")));
 
         String str = endpointConversorMoeda + moeda + "/" + ajustarParaUltimoDiaUtil(dataHoraSolicitacao.toLocalDate());
         URI uri = URI.create(str);
