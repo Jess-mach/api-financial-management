@@ -1,8 +1,9 @@
 package br.com.ntt.transacao.consumer.application.usecases;
 
-import br.com.ntt.transacao.consumer.application.gateways.RepositorioContaCliente;
+import br.com.ntt.transacao.consumer.application.gateways.RepositorioSaldoCliente;
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioDeTransacao;
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioProdutorDeTransacao;
+import br.com.ntt.transacao.consumer.domain.entities.SaldoConta;
 import br.com.ntt.transacao.consumer.domain.entities.transacao.Transacao;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,12 +16,12 @@ public class ProcessarTransacao {
 
     private final RepositorioProdutorDeTransacao repositorioProdutorDeTransacao;
 
-    private final RepositorioContaCliente repositorioContaCliente;
+    private final RepositorioSaldoCliente repositorioSaldoCliente;
 
-    public ProcessarTransacao(RepositorioDeTransacao repositorio, RepositorioProdutorDeTransacao repositorioProdutorDeTransacao, RepositorioContaCliente repositorioContaCliente) {
+    public ProcessarTransacao(RepositorioDeTransacao repositorio, RepositorioProdutorDeTransacao repositorioProdutorDeTransacao, RepositorioSaldoCliente repositorioSaldoCliente) {
         this.repositorio = repositorio;
         this.repositorioProdutorDeTransacao = repositorioProdutorDeTransacao;
-        this.repositorioContaCliente = repositorioContaCliente;
+        this.repositorioSaldoCliente = repositorioSaldoCliente;
     }
 
     public Transacao executar(Transacao transacao) {
@@ -29,7 +30,7 @@ public class ProcessarTransacao {
             //Passar fixo o id da conta pra testar
             //1 - **Integração com Mock API:** Consulta a API externa (MockAPI) para validar saldo, conta e limites do usuário.
             //**Regras de Negócio Complexas:** Aplica as validações de saldo suficiente e limites.
-            repositorioContaCliente.buscarPorId(getValidAccountId());
+            SaldoConta saldoConta = repositorioSaldoCliente.buscarPorId(getValidAccountId());
 
             /*
             Realizar uma chamada  para  https://6974ba31265838bbea95be42.mockapi.io/api/becca/v1/saldo
