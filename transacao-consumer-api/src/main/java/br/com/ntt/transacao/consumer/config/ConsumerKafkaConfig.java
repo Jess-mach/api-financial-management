@@ -1,8 +1,8 @@
 package br.com.ntt.transacao.consumer.config;
 
+import br.com.ntt.transacao.consumer.infra.consumer.dto.TransacaoDto;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.UUIDDeserializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -24,7 +24,7 @@ public class ConsumerKafkaConfig {
     private String bootstrapAddress;
 
     @Bean
-    public ConsumerFactory<UUID, String> consumerFactory() {
+    public ConsumerFactory<UUID, TransacaoDto> consumerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(
                 ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
@@ -32,25 +32,35 @@ public class ConsumerKafkaConfig {
         props.put(
                 ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
                 UUIDDeserializer.class);
-        props.put(
-                ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
-                KafkaAvroDeserializer.class);
-        props.put(
-                "schema.registry.url",
-                "http://localhost:8081");
-        props.put(
-                JsonDeserializer.TRUSTED_PACKAGES,
-                "*");
-        return new DefaultKafkaConsumerFactory<>(props);
+//        props.put(
+//                ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
+//                KafkaAvroDeserializer.class);
+//        props.put(
+//                "schema.registry.url",
+//                "http://localhost:8082");
+//        props.put(
+//                JsonDeserializer.TRUSTED_PACKAGES,
+//                "*");
+//        return new DefaultKafkaConsumerFactory<>(props);
+
+        JsonDeserializer<TransacaoDto> jsonDeserializer = new JsonDeserializer<>(TransacaoDto.class);
+        jsonDeserializer.addTrustedPackages("*");
+
+        jsonDeserializer.setRemoveTypeHeaders(false);
+        jsonDeserializer.setUseTypeHeaders(false);
+
+        return new DefaultKafkaConsumerFactory<>(props, new UUIDDeserializer(), jsonDeserializer);
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<UUID, String>
+    public ConcurrentKafkaListenerContainerFactory<UUID, TransacaoDto>
     kafkaListenerContainerFactory() {
 
-        ConcurrentKafkaListenerContainerFactory<UUID, String> factory =
+        ConcurrentKafkaListenerContainerFactory<UUID, TransacaoDto> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         return factory;
     }
+
+
 }

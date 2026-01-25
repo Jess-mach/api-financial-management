@@ -20,7 +20,7 @@ public class RepositorioDeTransacaoJpa implements RepositorioDeTransacao {
     }
 
     @Override
-    public Transacao cadastrarTransacao(Transacao transacao) {
+    public Transacao atualizarTransacao(Transacao transacao) {
         TransacaoEntity entity = mapper.toEntity(transacao);
         repositorio.save(entity);
         return mapper.toDomain(entity);

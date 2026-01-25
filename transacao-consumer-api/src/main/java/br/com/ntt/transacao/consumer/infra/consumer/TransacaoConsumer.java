@@ -25,18 +25,14 @@ public class TransacaoConsumer {
     }
 
     @KafkaListener(topics = "TRANSACAO-TOPIC", groupId = "group-1")
-    public void process(GenericData.Record data) throws JsonProcessingException {
-
+    public void process(TransacaoDto dto) throws JsonProcessingException {
         log.info("message processor step=start");
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.findAndRegisterModules();
-
-        TransacaoDto dto = objectMapper.readValue(data.get("after").toString(), TransacaoDto.class);
 
         Transacao transacao = mapper.toDomain(dto);
 
         processarTransacao.executar(transacao);
+
+        log.info("message processor step=end");
     }
 
 }

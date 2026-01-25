@@ -4,6 +4,6 @@ import br.com.ntt.transacao.consumer.domain.entities.transacao.Transacao;
 
 public interface RepositorioDeTransacao {
 
-    Transacao cadastrarTransacao(Transacao transacao);
+    Transacao atualizarTransacao(Transacao transacao);
 
 }

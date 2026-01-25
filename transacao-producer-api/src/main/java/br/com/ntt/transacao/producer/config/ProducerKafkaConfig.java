@@ -2,7 +2,6 @@ package br.com.ntt.transacao.producer.config;
 
 import br.com.ntt.transacao.producer.domain.entities.transacao.Transacao;
 import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.serialization.StringSerializer;
 import org.apache.kafka.common.serialization.UUIDSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
