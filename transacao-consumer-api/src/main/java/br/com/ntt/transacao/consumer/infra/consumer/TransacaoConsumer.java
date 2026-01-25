@@ -6,10 +6,12 @@ import br.com.ntt.transacao.consumer.infra.consumer.dto.TransacaoDto;
 import br.com.ntt.transacao.consumer.infra.consumer.mapper.TransacaoDtoMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.generic.GenericData;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class TransacaoConsumer {
 
@@ -25,6 +27,8 @@ public class TransacaoConsumer {
     @KafkaListener(topics = "TRANSACAO-TOPIC", groupId = "group-1")
     public void process(GenericData.Record data) throws JsonProcessingException {
 
+        log.info("message processor step=start");
+
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.findAndRegisterModules();
 
@@ -32,10 +36,7 @@ public class TransacaoConsumer {
 
         Transacao transacao = mapper.toDomain(dto);
 
-
         processarTransacao.executar(transacao);
-
-
     }
 
 }
