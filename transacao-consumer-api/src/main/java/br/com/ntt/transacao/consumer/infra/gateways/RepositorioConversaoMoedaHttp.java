@@ -31,7 +31,7 @@ public class RepositorioConversaoMoedaHttp implements RepositorioConversaoMoeda 
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    private ConversorMoedaMapper mapper;
+    private final ConversorMoedaMapper mapper;
 
 
     @Override

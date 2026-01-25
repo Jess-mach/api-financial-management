@@ -2,6 +2,7 @@ package br.com.ntt.transacao.consumer.infra.consumer.mapper;
 
 import br.com.ntt.transacao.consumer.domain.entities.cotacao.Cotacao;
 import br.com.ntt.transacao.consumer.domain.entities.moeda.ConversorMoeda;
+import br.com.ntt.transacao.consumer.domain.model.TipoBoletim;
 import br.com.ntt.transacao.consumer.infra.consumer.dto.ConversorMoedaDto;
 import br.com.ntt.transacao.consumer.infra.consumer.dto.CotacoesDto;
 
@@ -25,7 +26,8 @@ public class ConversorMoedaMapper {
                 dto.cotacao_compra(),
                 dto.cotacao_venda(),
                 dto.data_hora_cotacao(),
-                dto.tipo_boletim());
+                TipoBoletim.valueOf(dto.tipo_boletim())
+                );
     }
 
 }
