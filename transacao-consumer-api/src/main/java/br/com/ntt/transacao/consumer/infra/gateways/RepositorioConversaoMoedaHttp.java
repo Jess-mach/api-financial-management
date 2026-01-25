@@ -3,6 +3,7 @@ package br.com.ntt.transacao.consumer.infra.gateways;
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioConversaoMoeda;
 import br.com.ntt.transacao.consumer.domain.entities.moeda.ConversorMoeda;
 import br.com.ntt.transacao.consumer.infra.consumer.dto.ConversorMoedaDto;
+import br.com.ntt.transacao.consumer.infra.consumer.mapper.ConversorMoedaMapper;
 import br.com.ntt.transacao.consumer.infra.consumer.mapper.CotacaoDtoMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ public class RepositorioConversaoMoedaHttp implements RepositorioConversaoMoeda 
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    private CotacaoDtoMapper mapper;
+    private ConversorMoedaMapper mapper;
 
 
     @Override
