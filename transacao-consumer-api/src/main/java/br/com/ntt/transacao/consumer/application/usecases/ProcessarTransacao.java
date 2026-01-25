@@ -35,8 +35,6 @@ public class ProcessarTransacao {
             //Passar fixo o id da conta pra testar
             //1 - **Integração com Mock API:** Consulta a API externa (MockAPI) para validar saldo, conta e limites do usuário.
             //**Regras de Negócio Complexas:** Aplica as validações de saldo suficiente e limites.
-            SaldoConta saldoConta = repositorioSaldoCliente.buscarPorId(getValidAccountId());
-            ConversorMoeda conversorMoeda  = repositorioConversaoMoeda.conversaoMoeda(transacao.getMoeda(), transacao.getDataHoraSolicitacao());
 
             /*
             Dentro de infra, você pode criar um pacote para gateways ou clients para organizar melhor. Por exemplo:
@@ -55,8 +53,10 @@ br.com.ntt.transacao.consumer.infra.gateways.http ou br.com.ntt.transacao.consum
             //3 - **Atualização de Status:** Atualiza a transação no banco para `APPROVED` ou `REJECTED` com os detalhes.
 
             // transacao.valor x taxaCambio ee saldo > transacao. valor  transacao = APPROVADE else REJECTE
+            SaldoConta saldoConta = repositorioSaldoCliente.buscarPorId(getValidAccountId());
+            ConversorMoeda conversorMoeda  = repositorioConversaoMoeda.conversaoMoeda(transacao.getMoeda(), transacao.getDataHoraSolicitacao());
 
-            if (transacao.getValor().compareTo(saldoConta.getSaldo()) > 0 )
+
 
 
             transacaoSalva = repositorio.atualizarTransacao(transacao);

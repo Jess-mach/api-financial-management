@@ -1,7 +1,5 @@
 package br.com.ntt.transacao.consumer.infra.consumer.dto;
 
-import br.com.ntt.transacao.consumer.domain.model.TipoBoletim;
-
 import java.math.BigDecimal;
 
 public record CotacoesDto(

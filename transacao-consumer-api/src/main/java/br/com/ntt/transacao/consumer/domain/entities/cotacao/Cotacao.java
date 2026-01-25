@@ -1,7 +1,5 @@
 package br.com.ntt.transacao.consumer.domain.entities.cotacao;
 
-import br.com.ntt.transacao.consumer.domain.model.TipoBoletim;
-
 import java.math.BigDecimal;
 
 public class Cotacao {
@@ -11,9 +9,9 @@ public class Cotacao {
     private BigDecimal cotacaoCompra;
     private BigDecimal cotacaoVenda;
     private String dataHoraCotacao;
-    private TipoBoletim tipoBoletim;
+    private String tipoBoletim;
 
-    public Cotacao(BigDecimal paridadeCompra, BigDecimal paridadeVenda, BigDecimal cotacaoCompra, BigDecimal cotacaoVenda, String dataHoraCotacao, TipoBoletim tipoBoletim) {
+    public Cotacao(BigDecimal paridadeCompra, BigDecimal paridadeVenda, BigDecimal cotacaoCompra, BigDecimal cotacaoVenda, String dataHoraCotacao, String tipoBoletim) {
         this.paridadeCompra = paridadeCompra;
         this.paridadeVenda = paridadeVenda;
         this.cotacaoCompra = cotacaoCompra;
@@ -42,7 +40,7 @@ public class Cotacao {
         return dataHoraCotacao;
     }
 
-    public TipoBoletim getTipoBoletim() {
+    public String getTipoBoletim() {
         return tipoBoletim;
     }
 }
