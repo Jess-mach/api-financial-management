@@ -18,6 +18,7 @@ import java.net.http.HttpResponse;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 @Slf4j
 @Component
@@ -38,7 +39,7 @@ public class RepositorioConversaoMoedaHttp implements RepositorioConversaoMoeda 
     public ConversorMoeda conversaoMoeda(String moeda, LocalDateTime dataHoraSolicitacao) {
 
         if (moeda.equals("BRL"))
-            return new ConversorMoeda(moeda, dataHoraSolicitacao.toLocalDate().toString());
+            return new ConversorMoeda(moeda, dataHoraSolicitacao.toLocalDate().toString(), new ArrayList<>());
 
         String str = endpointConversorMoeda + moeda + "/" + ajustarParaUltimoDiaUtil(dataHoraSolicitacao.toLocalDate());
         URI uri = URI.create(str);
