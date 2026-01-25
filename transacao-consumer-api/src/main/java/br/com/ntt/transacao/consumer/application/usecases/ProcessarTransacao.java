@@ -1,9 +1,9 @@
 package br.com.ntt.transacao.consumer.application.usecases;
 
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioConversaoMoeda;
-import br.com.ntt.transacao.consumer.application.gateways.RepositorioSaldoCliente;
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioDeTransacao;
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioProdutorDeTransacao;
+import br.com.ntt.transacao.consumer.application.gateways.RepositorioSaldoCliente;
 import br.com.ntt.transacao.consumer.domain.entities.conta.SaldoConta;
 import br.com.ntt.transacao.consumer.domain.entities.moeda.ConversorMoeda;
 import br.com.ntt.transacao.consumer.domain.entities.transacao.Transacao;
@@ -11,7 +11,6 @@ import br.com.ntt.transacao.consumer.domain.model.StatusTransacao;
 import br.com.ntt.transacao.consumer.domain.model.TipoTransacao;
 import lombok.extern.slf4j.Slf4j;
 
-import java.math.BigDecimal;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
@@ -59,59 +58,68 @@ br.com.ntt.transacao.consumer.infra.gateways.http ou br.com.ntt.transacao.consum
             SaldoConta saldoConta = repositorioSaldoCliente.buscarPorId(getValidAccountId());
             ConversorMoeda conversorMoeda  = repositorioConversaoMoeda.conversaoMoeda(transacao.getMoeda(), transacao.getDataHoraSolicitacao());
 
-            Double valorDoSaldo = saldoConta.getSaldo().doubleValue();
-            Double valorDaTransacao = transacao.getValor().doubleValue();
-            Double valorTaxaDeCambio = conversorMoeda.getCotacoes().get(0).getCotacaoVenda().doubleValue();
-
-            if(transacao.getTipo().equals(TipoTransacao.SAQUE)){
-                if(!transacao.getMoeda().equals("BRL")){
-                    transacao.atualizaTaxaDeCambio(valorTaxaDeCambio);
-                }
-                if(valorTaxaDeCambio > 0) {
-                    valorDaTransacao = valorDaTransacao * valorTaxaDeCambio;
-                }
-                if(valorDaTransacao <= valorDoSaldo)
-                    transacao.atualizaStatus(StatusTransacao.REJEITADO);
-                transacao.atualizaStatus(StatusTransacao.AUTORIZADO);
-            }
-
-            if(transacao.getTipo().equals(TipoTransacao.DEPOSITO)){
-                if(!transacao.getMoeda().equals("BRL")){
-                    transacao.atualizaTaxaDeCambio(valorTaxaDeCambio);
-                }
-                transacao.atualizaStatus(StatusTransacao.AUTORIZADO);
-            }
-
-            if (transacao.getTipo().equals(TipoTransacao.COMPRA)){
-                if(!transacao.getMoeda().equals("BRL")){
-                    transacao.atualizaTaxaDeCambio(valorTaxaDeCambio);
-                }
-                if(valorTaxaDeCambio > 0)
-                    valorDaTransacao = valorDaTransacao * valorTaxaDeCambio;
-                if(valorDaTransacao <= valorDoSaldo)
-                    transacao.atualizaStatus(StatusTransacao.REJEITADO);
-                transacao.atualizaStatus(StatusTransacao.AUTORIZADO);
-            }
-
-            if (transacao.getTipo().equals(TipoTransacao.TRANSFERENCIA)){
-                if (!transacao.getMoeda().equals("BRL")){
-                    transacao.atualizaTaxaDeCambio(valorTaxaDeCambio);
-                }
-                if(valorTaxaDeCambio > 0)
-                    valorDaTransacao = valorDaTransacao * valorTaxaDeCambio;
-                if(valorDaTransacao <= valorDoSaldo)
-                    transacao.atualizaStatus(StatusTransacao.REJEITADO);
-            }
-
-            transacao.atualizaStatus(StatusTransacao.REJEITADO);
+            validarTransacao(transacao, saldoConta, conversorMoeda);
 
 
             transacaoSalva = repositorio.atualizarTransacao(transacao);
+
         } catch (Exception e) {
             repositorioProdutorDeTransacao.publicarTransacao(transacao); //TODO no topico de DLQ
         }
         return transacaoSalva;
     }
+
+    private static validarTransacao(Transacao transacao, SaldoConta saldoConta, ConversorMoeda conversorMoeda) {
+        Double valorDoSaldo = saldoConta.getSaldo().doubleValue();
+        Double valorDaTransacao = transacao.getValor().doubleValue();
+        Double valorTaxaDeCambio = conversorMoeda.getCotacoes().get(0).getCotacaoVenda().doubleValue();
+
+
+        if(transacao.getTipo().equals(TipoTransacao.SAQUE)){
+            if(!transacao.getMoeda().equals("BRL")){
+                transacao.atualizaTaxaDeCambio(valorTaxaDeCambio);
+            }
+            if(valorTaxaDeCambio > 0) {
+                valorDaTransacao = valorDaTransacao * valorTaxaDeCambio;
+            }
+            if(valorDaTransacao <= valorDoSaldo)
+                transacao.atualizaStatus(StatusTransacao.REJEITADO);
+            transacao.atualizaStatus(StatusTransacao.AUTORIZADO);
+        }
+
+        if(transacao.getTipo().equals(TipoTransacao.DEPOSITO)){
+            if(!transacao.getMoeda().equals("BRL")){
+                transacao.atualizaTaxaDeCambio(valorTaxaDeCambio);
+            }
+            transacao.atualizaStatus(StatusTransacao.AUTORIZADO);
+        }
+
+        if (transacao.getTipo().equals(TipoTransacao.COMPRA)){
+            if(!transacao.getMoeda().equals("BRL")){
+                transacao.atualizaTaxaDeCambio(valorTaxaDeCambio);
+            }
+            if(valorTaxaDeCambio > 0)
+                valorDaTransacao = valorDaTransacao * valorTaxaDeCambio;
+            if(valorDaTransacao <= valorDoSaldo)
+                transacao.atualizaStatus(StatusTransacao.REJEITADO);
+            transacao.atualizaStatus(StatusTransacao.AUTORIZADO);
+        }
+
+        if (transacao.getTipo().equals(TipoTransacao.TRANSFERENCIA)){
+            if (!transacao.getMoeda().equals("BRL")){
+                transacao.atualizaTaxaDeCambio(valorTaxaDeCambio);
+            }
+            if(valorTaxaDeCambio > 0)
+                valorDaTransacao = valorDaTransacao * valorTaxaDeCambio;
+            if(valorDaTransacao <= valorDoSaldo)
+                transacao.atualizaStatus(StatusTransacao.REJEITADO);
+        }
+
+        transacao.atualizaStatus(StatusTransacao.REJEITADO);
+
+        return transacao;
+    }
+
 
     public Long getValidAccountId() {
         return ThreadLocalRandom.current().nextLong(1, 51);
