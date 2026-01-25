@@ -1,8 +1,10 @@
 package br.com.ntt.transacao.consumer.config;
 
+import br.com.ntt.transacao.consumer.application.gateways.RepositorioContaCliente;
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioDeTransacao;
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioProdutorDeTransacao;
 import br.com.ntt.transacao.consumer.application.usecases.ProcessarTransacao;
+import br.com.ntt.transacao.consumer.infra.gateways.RepositorioContaClienteHttp;
 import br.com.ntt.transacao.consumer.infra.gateways.RepositorioDeTransacaoKafka;
 import br.com.ntt.transacao.consumer.domain.entities.transacao.Transacao;
 import br.com.ntt.transacao.consumer.infra.consumer.mapper.TransacaoDtoMapper;
@@ -24,8 +26,10 @@ public class TransacaoConfig {
     }
 
     @Bean
-    ProcessarTransacao criarTransacao(RepositorioDeTransacao repositorioDeTransacao, RepositorioProdutorDeTransacao repositorioProdutorDeTransacao){
-        return new ProcessarTransacao(repositorioDeTransacao, repositorioProdutorDeTransacao);
+    ProcessarTransacao criarTransacao(RepositorioDeTransacao repositorioDeTransacao,
+                                      RepositorioProdutorDeTransacao repositorioProdutorDeTransacao,
+                                      RepositorioContaCliente repositorioContaCliente){
+        return new ProcessarTransacao(repositorioDeTransacao, repositorioProdutorDeTransacao, repositorioContaCliente);
     }
 
 
@@ -48,5 +52,10 @@ public class TransacaoConfig {
     @Bean
     RepositorioDeTransacaoKafka publicarTransacao( KafkaTemplate<UUID, Transacao> kafkaTemplate){
         return new RepositorioDeTransacaoKafka(kafkaTemplate);
+    }
+
+    @Bean
+    RepositorioContaClienteHttp buscarPorId(){
+        return new RepositorioContaClienteHttp();
     }
 }

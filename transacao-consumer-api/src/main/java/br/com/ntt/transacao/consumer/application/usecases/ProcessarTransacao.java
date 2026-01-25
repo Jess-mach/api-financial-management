@@ -1,5 +1,6 @@
 package br.com.ntt.transacao.consumer.application.usecases;
 
+import br.com.ntt.transacao.consumer.application.gateways.RepositorioContaCliente;
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioDeTransacao;
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioProdutorDeTransacao;
 import br.com.ntt.transacao.consumer.domain.entities.transacao.Transacao;
@@ -14,11 +15,12 @@ public class ProcessarTransacao {
 
     private final RepositorioProdutorDeTransacao repositorioProdutorDeTransacao;
 
+    private final RepositorioContaCliente repositorioContaCliente;
 
-    public ProcessarTransacao(RepositorioDeTransacao repositorio, RepositorioProdutorDeTransacao repositorioProdutorDeTransacao) {
+    public ProcessarTransacao(RepositorioDeTransacao repositorio, RepositorioProdutorDeTransacao repositorioProdutorDeTransacao, RepositorioContaCliente repositorioContaCliente) {
         this.repositorio = repositorio;
-
         this.repositorioProdutorDeTransacao = repositorioProdutorDeTransacao;
+        this.repositorioContaCliente = repositorioContaCliente;
     }
 
     public Transacao executar(Transacao transacao) {
@@ -27,8 +29,33 @@ public class ProcessarTransacao {
             //Passar fixo o id da conta pra testar
             //1 - **Integração com Mock API:** Consulta a API externa (MockAPI) para validar saldo, conta e limites do usuário.
             //**Regras de Negócio Complexas:** Aplica as validações de saldo suficiente e limites.
+            repositorioContaCliente.buscarPorId(getValidAccountId());
+
+            /*
+            Realizar uma chamada  para  https://6974ba31265838bbea95be42.mockapi.io/api/becca/v1/saldo
+
+            usando  HttpClient ... => Response
+            Capturar o retorno para processar no passo 3
+
+            RepositorioDeConsultaDeSaldo
+            Dentro de infra, você pode criar um pacote para gateways ou clients para organizar melhor. Por exemplo:
+br.com.ntt.transacao.consumer.infra.gateways.http ou br.com.ntt.transacao.consumer.infra.clients.http
+
+             */
+
+
+
+
 
             //2 - **Integração com Câmbio:** Consome a API pública (Brasil API) para converter valores e registrar a taxa de câmbio da operação.
+
+            /*
+
+            RepositorioDeConsultaDeTaxaDeCambio
+            * https://brasilapi.com.br/api/cambio/v1/cotacao/EUR/2025-11-01
+            * Salvar a taxa de Cambio - Deposito EUR -
+            *
+            * */
 
 
             //3 - **Atualização de Status:** Atualiza a transação no banco para `APPROVED` ou `REJECTED` com os detalhes.
