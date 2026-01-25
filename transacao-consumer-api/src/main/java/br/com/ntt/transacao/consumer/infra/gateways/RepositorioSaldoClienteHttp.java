@@ -1,7 +1,7 @@
 package br.com.ntt.transacao.consumer.infra.gateways;
 
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioSaldoCliente;
-import br.com.ntt.transacao.consumer.domain.entities.SaldoConta;
+import br.com.ntt.transacao.consumer.domain.entities.conta.SaldoConta;
 import br.com.ntt.transacao.consumer.infra.consumer.dto.SaldoContaDto;
 import br.com.ntt.transacao.consumer.infra.consumer.mapper.SaldoDtoMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,10 +40,12 @@ public class RepositorioSaldoClienteHttp implements RepositorioSaldoCliente {
             HttpResponse<String> response = client
                     .send(request, HttpResponse.BodyHandlers.ofString());
 
+            if(response.statusCode() != 200)
+                throw new IllegalArgumentException("Falha ao consultar saldo");
+
             SaldoContaDto dto = objectMapper.readValue(response.body(), SaldoContaDto.class);
 
             return mapper.toDomain(dto);
-
         } catch (Exception e) {
             log.error("falha na requisição", e.getMessage());
             throw new IllegalArgumentException("Falha ao consultar saldo");

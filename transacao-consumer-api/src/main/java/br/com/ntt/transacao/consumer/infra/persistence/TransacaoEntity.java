@@ -1,7 +1,7 @@
 package br.com.ntt.transacao.consumer.infra.persistence;
 
-import br.com.ntt.transacao.consumer.domain.StatusTransacao;
-import br.com.ntt.transacao.consumer.domain.TipoTransacao;
+import br.com.ntt.transacao.consumer.domain.model.StatusTransacao;
+import br.com.ntt.transacao.consumer.domain.model.TipoTransacao;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;

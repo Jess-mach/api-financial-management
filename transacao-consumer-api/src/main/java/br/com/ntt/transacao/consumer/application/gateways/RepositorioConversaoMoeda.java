@@ -1,9 +1,11 @@
 package br.com.ntt.transacao.consumer.application.gateways;
 
-import br.com.ntt.transacao.consumer.domain.entities.SaldoConta;
+import br.com.ntt.transacao.consumer.domain.entities.moeda.ConversorMoeda;
+
+import java.time.LocalDateTime;
 
 public interface RepositorioConversaoMoeda {
 
-    SaldoConta conversaoMoeda(String moeda);
+    ConversorMoeda conversaoMoeda(String moeda, LocalDateTime dataHoraSolicitacao);
 
 }
