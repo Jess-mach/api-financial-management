@@ -5,7 +5,6 @@ import br.com.ntt.transacao.consumer.application.gateways.RepositorioSaldoClient
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioDeTransacao;
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioProdutorDeTransacao;
 import br.com.ntt.transacao.consumer.application.usecases.ProcessarTransacao;
-import br.com.ntt.transacao.consumer.infra.consumer.dto.SaldoContaDto;
 import br.com.ntt.transacao.consumer.infra.consumer.mapper.ConversorMoedaMapper;
 import br.com.ntt.transacao.consumer.infra.consumer.mapper.SaldoDtoMapper;
 import br.com.ntt.transacao.consumer.infra.gateways.RepositorioDeTransacaoKafka;
