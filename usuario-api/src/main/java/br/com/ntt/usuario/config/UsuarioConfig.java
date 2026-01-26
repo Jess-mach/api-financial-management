@@ -1,7 +1,6 @@
 package br.com.ntt.usuario.config;
 
 import br.com.ntt.usuario.application.usecase.*;
-import com.api.financial.management.application.usecase.*;
 import br.com.ntt.usuario.application.gateways.UsuarioRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

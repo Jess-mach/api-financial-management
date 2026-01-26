@@ -8,6 +8,7 @@ import br.com.ntt.transacao.consumer.application.service.ValidadorDeTransacao;
 import br.com.ntt.transacao.consumer.domain.entities.conta.SaldoConta;
 import br.com.ntt.transacao.consumer.domain.entities.moeda.ConversorMoeda;
 import br.com.ntt.transacao.consumer.domain.entities.transacao.Transacao;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -37,19 +38,18 @@ public class ProcessarTransacao {
         this.validadorDeTransacao = validadorDeTransacao;
     }
 
-    public Transacao executar(Transacao transacao) {
+    public Transacao executar(Transacao transacao) throws JsonProcessingException {
         Transacao transacaoSalva = null;
-        try {
-            SaldoConta saldoConta = repositorioSaldoCliente.buscarPorId(getValidAccountId());
-            ConversorMoeda conversorMoeda  = repositorioConversaoMoeda.conversaoMoeda(transacao.getMoeda(), transacao.getDataHoraSolicitacao());
 
-            Transacao transacaoValidada = validadorDeTransacao.validarTransacao(transacao, saldoConta, conversorMoeda);
+        SaldoConta saldoConta = repositorioSaldoCliente.buscarPorId(getValidAccountId());
+        ConversorMoeda conversorMoeda = repositorioConversaoMoeda.conversaoMoeda(transacao.getMoeda(), transacao.getDataHoraSolicitacao());
 
-            transacaoSalva = repositorio.atualizarTransacao(transacaoValidada);
+        Transacao transacaoValidada = validadorDeTransacao.validarTransacao(transacao, saldoConta, conversorMoeda);
 
-        } catch (Exception e) {
-            repositorioProdutorDeTransacao.publicarTransacao(transacao); //TODO no topico de DLQ
-        }
+        transacaoSalva = repositorio.atualizarTransacao(transacaoValidada);
+
+        repositorioSaldoCliente.atualizarSaldo(saldoConta, transacao);
+
         return transacaoSalva;
     }
 

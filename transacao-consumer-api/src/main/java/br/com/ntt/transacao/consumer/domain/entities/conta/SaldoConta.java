@@ -37,5 +37,9 @@ public class SaldoConta {
     public String getId() {
         return id;
     }
+
+    public void saldoAtualizado(BigDecimal valor) {
+        this.saldo = valor;
+    }
 }
 
