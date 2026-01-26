@@ -1,26 +1,19 @@
 package br.com.ntt.transacao.consumer.config;
 
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioConversaoMoeda;
-import br.com.ntt.transacao.consumer.application.gateways.RepositorioSaldoCliente;
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioDeTransacao;
-import br.com.ntt.transacao.consumer.application.gateways.RepositorioProdutorDeTransacao;
+import br.com.ntt.transacao.consumer.application.gateways.RepositorioSaldoCliente;
 import br.com.ntt.transacao.consumer.application.service.ValidadorDeTransacao;
 import br.com.ntt.transacao.consumer.application.usecases.ProcessarTransacao;
 import br.com.ntt.transacao.consumer.infra.consumer.mapper.ConversorMoedaMapper;
 import br.com.ntt.transacao.consumer.infra.consumer.mapper.SaldoDtoMapper;
-import br.com.ntt.transacao.consumer.infra.gateways.RepositorioDeTransacaoKafka;
-import br.com.ntt.transacao.consumer.domain.entities.transacao.Transacao;
 import br.com.ntt.transacao.consumer.infra.consumer.mapper.TransacaoDtoMapper;
-import br.com.ntt.transacao.consumer.infra.gateways.RepositorioDeTransacaoJpa;
 import br.com.ntt.transacao.consumer.infra.consumer.mapper.TransacaoEntityMapper;
+import br.com.ntt.transacao.consumer.infra.gateways.RepositorioDeTransacaoJpa;
 import br.com.ntt.transacao.consumer.infra.persistence.TransacaoRepository;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.kafka.core.KafkaTemplate;
-
-import java.util.UUID;
 
 @Configuration
 public class TransacaoConfig {
@@ -35,12 +28,11 @@ public class TransacaoConfig {
 
     @Bean
     ProcessarTransacao atualizarTransacao(RepositorioDeTransacao repositorioDeTransacao,
-                                          RepositorioProdutorDeTransacao repositorioProdutorDeTransacao,
                                           RepositorioSaldoCliente repositorioSaldoCliente,
                                           RepositorioConversaoMoeda repositorioConversaoMoeda,
                                           ValidadorDeTransacao validadorDeTransacao) {
 
-        return new ProcessarTransacao(repositorioDeTransacao, repositorioProdutorDeTransacao,
+        return new ProcessarTransacao(repositorioDeTransacao,
                 repositorioSaldoCliente, repositorioConversaoMoeda, validadorDeTransacao);
     }
 
@@ -56,21 +48,18 @@ public class TransacaoConfig {
         return new TransacaoEntityMapper();
     }
 
-
     @Bean
-    RepositorioDeTransacaoKafka publicarTransacao(KafkaTemplate<UUID, Transacao> kafkaTemplate) {
-        return new RepositorioDeTransacaoKafka(kafkaTemplate);
+    SaldoDtoMapper saldoDtoMapper() {
+        return new SaldoDtoMapper();
     }
 
     @Bean
-    SaldoDtoMapper saldoDtoMapper() { return new SaldoDtoMapper();
+    ConversorMoedaMapper conversorMoedaMapper() {
+        return new ConversorMoedaMapper();
     }
 
     @Bean
-    ConversorMoedaMapper conversorMoedaMapper() { return new ConversorMoedaMapper();
-    }
-
-    @Bean
-    ValidadorDeTransacao validadorDeTransacao() {return new ValidadorDeTransacao();
+    ValidadorDeTransacao validadorDeTransacao() {
+        return new ValidadorDeTransacao();
     }
 }

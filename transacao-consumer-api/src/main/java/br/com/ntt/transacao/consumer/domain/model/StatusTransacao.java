@@ -4,6 +4,7 @@ public enum StatusTransacao {
 
     PENDENTE,
     AUTORIZADO,
-    REJEITADO
+    REJEITADO,
+    ERRO_PROCESSAMENTO
 
 }

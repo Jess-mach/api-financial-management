@@ -6,7 +6,10 @@ import br.com.ntt.transacao.consumer.infra.consumer.dto.TransacaoDto;
 import br.com.ntt.transacao.consumer.infra.consumer.mapper.TransacaoDtoMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.annotation.KafkaHandler;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -31,6 +34,18 @@ public class TransacaoConsumer {
         processarTransacao.executar(transacao);
 
         log.info("message processor step=end");
+    }
+
+    @KafkaHandler
+    @KafkaListener(topics = "TRANSACAO-TOPIC-DLQ", groupId = "group-1")
+    public void processarDLQ(TransacaoDto mensagem) {
+        log.info("message processor DLQ step=start");
+
+        Transacao transacao = mapper.toDomain(mensagem);
+
+        processarTransacao.atualizarStatusErro(transacao);
+
+        log.info("message processor DLQ step=end");
     }
 
 }
