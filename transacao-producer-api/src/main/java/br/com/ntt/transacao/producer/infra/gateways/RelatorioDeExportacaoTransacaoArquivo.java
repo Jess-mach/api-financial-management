@@ -1,6 +1,7 @@
-package br.com.ntt.transacao.producer.infra.service;
+package br.com.ntt.transacao.producer.infra.gateways;
 
-import br.com.ntt.transacao.producer.application.usecases.ListarTransacao;
+import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao;
+import br.com.ntt.transacao.producer.application.gateways.RepositorioDeExportacao;
 import br.com.ntt.transacao.producer.domain.entities.transacao.Transacao;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -12,19 +13,20 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
-public class RelatorioTransacaoService {
+public class RelatorioDeExportacaoTransacaoArquivo implements RepositorioDeExportacao {
 
     private final DateTimeFormatter formatadorData = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
-    private final ListarTransacao listarTransacao;
+    private final RepositorioDeTransacao repositorioDeTransacao;
 
-    public RelatorioTransacaoService(ListarTransacao listarTransacao) {
-        this.listarTransacao = listarTransacao;
+    public RelatorioDeExportacaoTransacaoArquivo(RepositorioDeTransacao repositorioDeTransacao) {
+        this.repositorioDeTransacao = repositorioDeTransacao;
     }
 
+    @Override
     public ByteArrayInputStream gerarExcel() throws IOException {
 
-        List<Transacao> transacoes = listarTransacao.listarTodos();
+        List<Transacao> transacoes = repositorioDeTransacao.listarTodos();
 
         try (Workbook planilha = new XSSFWorkbook(); ByteArrayOutputStream saida = new ByteArrayOutputStream()) {
             Sheet aba = planilha.createSheet("Transações");

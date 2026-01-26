@@ -10,6 +10,7 @@ import br.com.ntt.transacao.consumer.domain.entities.transacao.Transacao;
 import br.com.ntt.transacao.consumer.domain.model.StatusTransacao;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -35,6 +36,7 @@ public class ProcessarTransacao {
         this.validadorDeTransacao = validadorDeTransacao;
     }
 
+    @Transactional
     public Transacao executar(Transacao transacao) throws JsonProcessingException {
         SaldoConta saldoConta = repositorioSaldoCliente.buscarPorId(getValidAccountId());
 

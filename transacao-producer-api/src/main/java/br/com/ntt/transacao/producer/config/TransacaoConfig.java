@@ -1,9 +1,11 @@
 package br.com.ntt.transacao.producer.config;
 
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao;
+import br.com.ntt.transacao.producer.application.gateways.RepositorioDeExportacao;
 import br.com.ntt.transacao.producer.application.gateways.RepositorioProdutorDeTransacao;
 import br.com.ntt.transacao.producer.application.usecases.BuscarTransacaoPorId;
 import br.com.ntt.transacao.producer.application.usecases.CriarTransacao;
+import br.com.ntt.transacao.producer.application.usecases.ExportarTransacao;
 import br.com.ntt.transacao.producer.application.usecases.ListarTransacao;
 import br.com.ntt.transacao.producer.infra.gateways.RepositorioDeTransacaoKafka;
 import br.com.ntt.transacao.producer.domain.entities.transacao.Transacao;
@@ -11,7 +13,7 @@ import br.com.ntt.transacao.producer.infra.controller.mapper.TransacaoDtoMapper;
 import br.com.ntt.transacao.producer.infra.gateways.RepositorioDeTransacaoJpa;
 import br.com.ntt.transacao.producer.infra.gateways.TransacaoEntityMapper;
 import br.com.ntt.transacao.producer.infra.persistence.TransacaoRepository;
-import br.com.ntt.transacao.producer.infra.service.RelatorioTransacaoService;
+import br.com.ntt.transacao.producer.infra.gateways.RelatorioDeExportacaoTransacaoArquivo;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -56,5 +58,14 @@ public class TransacaoConfig {
         return new RepositorioDeTransacaoKafka(kafkaTemplate);
     }
 
+    @Bean
+    RelatorioDeExportacaoTransacaoArquivo relatorioTransacaoService(RepositorioDeTransacao repositorioDeTransacao){
+        return new RelatorioDeExportacaoTransacaoArquivo(repositorioDeTransacao);
+    }
+
+    @Bean
+    ExportarTransacao gerarExcel(RepositorioDeExportacao repositorioDeExportacao){
+        return new ExportarTransacao(repositorioDeExportacao);
+    }
 
 }

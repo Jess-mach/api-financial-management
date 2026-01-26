@@ -55,9 +55,6 @@ public class TransacaoController {
         return dto;
     }
 
-
-    //Relatórios: Rota para baixar relatório em PDF ou Excel com o resumo das transações.
-
     //Análise de Despesas: Endpoint para visualização de resumo de gastos,
     // categorizados por dia ou mês.
 }
