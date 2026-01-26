@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  usuarios-db:
+    image: postgres:16-alpine
+    container_name: usuarios-db
+    environment:
+      POSTGRES_DB: usuarios_db
+      POSTGRES_USER: user_usr
+      POSTGRES_PASSWORD: password_usr
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata-usuarios:/var/lib/postgresql/data
+    networks:
+      - rede-sistema
+
+  usuarios-api:
+#    build: ./usuarios
+    build: .
+    container_name: usuarios-api
+    depends_on:
+      - usuarios-db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://usuarios-db:5432/usuarios_db
+      SPRING_DATASOURCE_USERNAME: user_usr
+      SPRING_DATASOURCE_PASSWORD: password_usr
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8080:8080"
+    networks:
+      - rede-sistema
+
+volumes:
+  pgdata-usuarios:
+
+networks:
+  rede-sistema:
+    name: rede-sistema
+    driver: bridge
