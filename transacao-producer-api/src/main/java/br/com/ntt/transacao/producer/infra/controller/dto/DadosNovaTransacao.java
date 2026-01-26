@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 public record DadosNovaTransacao(
-        @NotNull
+        @NotNull(message = "O ID do usuário é obrigatório")
         UUID usuarioId,
 
         @NotNull(message = "O valor é obrigatório")
@@ -21,7 +21,7 @@ public record DadosNovaTransacao(
         @NotBlank(message = "A descricao é obrigatória para análise de despesas")
         String descricao,
 
-        @NotBlank
+        @NotBlank(message = "A moeda é obrigatória")
         String moeda
 ) {
 }

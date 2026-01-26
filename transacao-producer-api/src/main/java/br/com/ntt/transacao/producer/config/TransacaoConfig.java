@@ -11,6 +11,7 @@ import br.com.ntt.transacao.producer.infra.controller.mapper.TransacaoDtoMapper;
 import br.com.ntt.transacao.producer.infra.gateways.RepositorioDeTransacaoJpa;
 import br.com.ntt.transacao.producer.infra.gateways.TransacaoEntityMapper;
 import br.com.ntt.transacao.producer.infra.persistence.TransacaoRepository;
+import br.com.ntt.transacao.producer.infra.service.RelatorioTransacaoService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -54,4 +55,6 @@ public class TransacaoConfig {
     RepositorioDeTransacaoKafka publicarTransacao( KafkaTemplate<UUID, Transacao> kafkaTemplate){
         return new RepositorioDeTransacaoKafka(kafkaTemplate);
     }
+
+
 }

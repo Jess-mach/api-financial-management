@@ -1,7 +1,9 @@
 package br.com.ntt.transacao.producer.infra.controller;
 
 import br.com.ntt.transacao.producer.application.usecases.ListarTransacao;
+import br.com.ntt.transacao.producer.domain.entities.transacao.Transacao;
 import br.com.ntt.transacao.producer.infra.controller.dto.TransacaoDto;
+import br.com.ntt.transacao.producer.infra.controller.mapper.TransacaoDtoMapper;
 import br.com.ntt.transacao.producer.infra.service.RelatorioTransacaoService;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -22,17 +24,18 @@ public class ExportacaoTransacaoController {
 
     private final RelatorioTransacaoService relatorioService;
     private final ListarTransacao listarTransacao;
+    private final TransacaoDtoMapper mapper;
 
-    // Injeção de dependência pelo construtor
-    public ExportacaoTransacaoController(RelatorioTransacaoService relatorioService, ListarTransacao listarTransacao) {
+    public ExportacaoTransacaoController(RelatorioTransacaoService relatorioService, ListarTransacao listarTransacao,
+                                         TransacaoDtoMapper mapper) {
         this.relatorioService = relatorioService;
         this.listarTransacao = listarTransacao;
+        this.mapper = mapper;
     }
 
     @GetMapping("/excel")
     public ResponseEntity<Resource> baixarExcel() throws IOException {
-        List<TransacaoDto> transacoes = listarTransacao.listarTodos();
-        ByteArrayInputStream fluxoDados = relatorioService.gerarExcel(transacoes);
+        ByteArrayInputStream fluxoDados = relatorioService.gerarExcel();
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=relatorio-transacoes.xlsx")

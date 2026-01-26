@@ -1,6 +1,7 @@
 package br.com.ntt.transacao.producer.infra.service;
 
-import br.com.ntt.transacao.producer.infra.controller.dto.TransacaoDto;
+import br.com.ntt.transacao.producer.application.usecases.ListarTransacao;
+import br.com.ntt.transacao.producer.domain.entities.transacao.Transacao;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -15,7 +16,16 @@ public class RelatorioTransacaoService {
 
     private final DateTimeFormatter formatadorData = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
-    public ByteArrayInputStream gerarExcel(List<TransacaoDto> transacoes) throws IOException {
+    private final ListarTransacao listarTransacao;
+
+    public RelatorioTransacaoService(ListarTransacao listarTransacao) {
+        this.listarTransacao = listarTransacao;
+    }
+
+    public ByteArrayInputStream gerarExcel() throws IOException {
+
+        List<Transacao> transacoes = listarTransacao.listarTodos();
+
         try (Workbook planilha = new XSSFWorkbook(); ByteArrayOutputStream saida = new ByteArrayOutputStream()) {
             Sheet aba = planilha.createSheet("Transações");
 
@@ -37,20 +47,22 @@ public class RelatorioTransacaoService {
             }
 
             int indiceLinha = 1;
-            for (TransacaoDto t : transacoes) {
+            for (Transacao t : transacoes) {
                 Row linha = aba.createRow(indiceLinha++);
 
-                linha.createCell(0).setCellValue(t.id().toString());
-                linha.createCell(1).setCellValue(t.usuarioId().toString());
-                linha.createCell(2).setCellValue(t.valor().doubleValue());
-                linha.createCell(3).setCellValue(t.tipo().toString());
-                linha.createCell(4).setCellValue(t.status().toString());
-                linha.createCell(5).setCellValue(t.dataHoraSolicitacao().format(formatadorData));
-                String dataFinal = (t.dataHoraFinalizacao() != null) ? t.dataHoraFinalizacao().format(formatadorData) : "-";
+                String dataFinal = (t.getDataHoraFinalizacao() != null) ? t.getDataHoraFinalizacao().format(formatadorData) : "-";
+                Double taxaDeCambio = (t.getTaxaCambio() != null) ? t.getTaxaCambio().doubleValue() : 0.0;
+
+                linha.createCell(0).setCellValue(t.getId().toString());
+                linha.createCell(1).setCellValue(t.getUsuarioId().toString());
+                linha.createCell(2).setCellValue(t.getValor().doubleValue());
+                linha.createCell(3).setCellValue(t.getTipo().toString());
+                linha.createCell(4).setCellValue(t.getStatus().toString());
+                linha.createCell(5).setCellValue(t.getDataHoraSolicitacao().format(formatadorData));
                 linha.createCell(6).setCellValue(dataFinal);
-                linha.createCell(7).setCellValue(t.moeda());
-                linha.createCell(8).setCellValue(t.taxaCambio().doubleValue());
-                linha.createCell(9).setCellValue(t.descricao());
+                linha.createCell(7).setCellValue(t.getMoeda());
+                linha.createCell(8).setCellValue(taxaDeCambio);
+                linha.createCell(9).setCellValue(t.getDescricao());
             }
 
             for (int i = 0; i < colunas.length; i++) {
@@ -58,6 +70,7 @@ public class RelatorioTransacaoService {
             }
 
             planilha.write(saida);
+
             return new ByteArrayInputStream(saida.toByteArray());
         }
     }
