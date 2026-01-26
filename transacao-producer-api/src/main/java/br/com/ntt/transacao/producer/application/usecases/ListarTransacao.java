@@ -3,7 +3,6 @@ package br.com.ntt.transacao.producer.application.usecases;
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao;
 import br.com.ntt.transacao.producer.domain.entities.transacao.Transacao;
 
-import java.util.Collection;
 import java.util.List;
 
 public class ListarTransacao {

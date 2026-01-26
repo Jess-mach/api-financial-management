@@ -11,4 +11,5 @@ public interface RepositorioDeTransacao {
     List<Transacao> listarTodos();
     Transacao busacarPorId (UUID id);
 
+
 }
