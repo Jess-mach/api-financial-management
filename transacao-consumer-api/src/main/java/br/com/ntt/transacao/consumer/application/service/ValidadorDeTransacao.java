@@ -7,7 +7,7 @@ import br.com.ntt.transacao.consumer.domain.model.StatusTransacao;
 
 public class ValidadorDeTransacao {
 
-    private static Transacao validarTransacao(Transacao transacao, SaldoConta saldoConta, ConversorMoeda conversorMoeda) {
+    public Transacao validarTransacao(Transacao transacao, SaldoConta saldoConta, ConversorMoeda conversorMoeda) {
         Double valorDoSaldo = saldoConta.getSaldo().doubleValue();
         Double valorDaTransacao = transacao.getValor().doubleValue();
         Double valorTaxaDeCambio = conversorMoeda.getCotacoes().get(0).getCotacaoVenda().doubleValue();

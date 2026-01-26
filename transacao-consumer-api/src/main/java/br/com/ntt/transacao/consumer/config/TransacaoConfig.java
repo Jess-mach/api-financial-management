@@ -4,6 +4,7 @@ import br.com.ntt.transacao.consumer.application.gateways.RepositorioConversaoMo
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioSaldoCliente;
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioDeTransacao;
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioProdutorDeTransacao;
+import br.com.ntt.transacao.consumer.application.service.ValidadorDeTransacao;
 import br.com.ntt.transacao.consumer.application.usecases.ProcessarTransacao;
 import br.com.ntt.transacao.consumer.infra.consumer.mapper.ConversorMoedaMapper;
 import br.com.ntt.transacao.consumer.infra.consumer.mapper.SaldoDtoMapper;
@@ -33,12 +34,14 @@ public class TransacaoConfig {
     }
 
     @Bean
-    ProcessarTransacao criarTransacao(RepositorioDeTransacao repositorioDeTransacao,
-                                      RepositorioProdutorDeTransacao repositorioProdutorDeTransacao,
-                                      RepositorioSaldoCliente repositorioSaldoCliente,
-                                      RepositorioConversaoMoeda repositorioConversaoMoeda) {
+    ProcessarTransacao atualizarTransacao(RepositorioDeTransacao repositorioDeTransacao,
+                                          RepositorioProdutorDeTransacao repositorioProdutorDeTransacao,
+                                          RepositorioSaldoCliente repositorioSaldoCliente,
+                                          RepositorioConversaoMoeda repositorioConversaoMoeda,
+                                          ValidadorDeTransacao validadorDeTransacao) {
+
         return new ProcessarTransacao(repositorioDeTransacao, repositorioProdutorDeTransacao,
-                repositorioSaldoCliente, repositorioConversaoMoeda);
+                repositorioSaldoCliente, repositorioConversaoMoeda, validadorDeTransacao);
     }
 
 
@@ -52,11 +55,7 @@ public class TransacaoConfig {
     TransacaoEntityMapper retornaMapper() {
         return new TransacaoEntityMapper();
     }
-//
-//    @Bean
-//    BuscarTransacaoPorId buscarTransacaoPorId(RepositorioDeTransacao repositorioDeTransacao){
-//        return new BuscarTransacaoPorId(repositorioDeTransacao);
-//    }
+
 
     @Bean
     RepositorioDeTransacaoKafka publicarTransacao(KafkaTemplate<UUID, Transacao> kafkaTemplate) {
@@ -64,12 +63,14 @@ public class TransacaoConfig {
     }
 
     @Bean
-    SaldoDtoMapper saldoDtoMapper(){
-        return new SaldoDtoMapper();
+    SaldoDtoMapper saldoDtoMapper() { return new SaldoDtoMapper();
     }
 
     @Bean
-    ConversorMoedaMapper conversorMoedaMapper(){
-        return new ConversorMoedaMapper();
+    ConversorMoedaMapper conversorMoedaMapper() { return new ConversorMoedaMapper();
+    }
+
+    @Bean
+    ValidadorDeTransacao validadorDeTransacao() {return new ValidadorDeTransacao();
     }
 }

@@ -4,6 +4,7 @@ import br.com.ntt.transacao.consumer.application.gateways.RepositorioConversaoMo
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioDeTransacao;
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioProdutorDeTransacao;
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioSaldoCliente;
+import br.com.ntt.transacao.consumer.application.service.ValidadorDeTransacao;
 import br.com.ntt.transacao.consumer.domain.entities.conta.SaldoConta;
 import br.com.ntt.transacao.consumer.domain.entities.moeda.ConversorMoeda;
 import br.com.ntt.transacao.consumer.domain.entities.transacao.Transacao;
@@ -22,48 +23,34 @@ public class ProcessarTransacao {
 
     private final RepositorioConversaoMoeda repositorioConversaoMoeda;
 
-    public ProcessarTransacao(RepositorioDeTransacao repositorio, RepositorioProdutorDeTransacao repositorioProdutorDeTransacao, RepositorioSaldoCliente repositorioSaldoCliente, RepositorioConversaoMoeda repositorioConversaoMoeda) {
+    private final ValidadorDeTransacao validadorDeTransacao;
+
+    public ProcessarTransacao(RepositorioDeTransacao repositorio,
+                              RepositorioProdutorDeTransacao repositorioProdutorDeTransacao,
+                              RepositorioSaldoCliente repositorioSaldoCliente,
+                              RepositorioConversaoMoeda repositorioConversaoMoeda,
+                              ValidadorDeTransacao validadorDeTransacao) {
         this.repositorio = repositorio;
         this.repositorioProdutorDeTransacao = repositorioProdutorDeTransacao;
         this.repositorioSaldoCliente = repositorioSaldoCliente;
         this.repositorioConversaoMoeda = repositorioConversaoMoeda;
+        this.validadorDeTransacao = validadorDeTransacao;
     }
 
     public Transacao executar(Transacao transacao) {
         Transacao transacaoSalva = null;
         try {
-            //Passar fixo o id da conta pra testar
-            //1 - **Integração com Mock API:** Consulta a API externa (MockAPI) para validar saldo, conta e limites do usuário.
-            //**Regras de Negócio Complexas:** Aplica as validações de saldo suficiente e limites.
-            /*
-            Dentro de infra, você pode criar um pacote para gateways ou clients para organizar melhor. Por exemplo:
-br.com.ntt.transacao.consumer.infra.gateways.http ou br.com.ntt.transacao.consumer.infra.clients.http
-             */
-            //2 - **Integração com Câmbio:** Consome a API pública (Brasil API) para converter valores e registrar a taxa de câmbio da operação.
-
-            /*
-            * https://brasilapi.com.br/api/cambio/v1/cotacao/EUR/2025-11-01
-            * Salvar a taxa de Cambio - Deposito EUR -
-            */
-            //3 - **Atualização de Status:** Atualiza a transação no banco para `APPROVED` ou `REJECTED` com os detalhes.
-            // transacao.valor x taxaCambio ee saldo > transacao. valor  transacao = APPROVADE else REJECTE
             SaldoConta saldoConta = repositorioSaldoCliente.buscarPorId(getValidAccountId());
             ConversorMoeda conversorMoeda  = repositorioConversaoMoeda.conversaoMoeda(transacao.getMoeda(), transacao.getDataHoraSolicitacao());
 
-            validarTransacao(transacao, saldoConta, conversorMoeda);
+            Transacao transacaoValidada = validadorDeTransacao.validarTransacao(transacao, saldoConta, conversorMoeda);
 
-
-            transacaoSalva = repositorio.atualizarTransacao(transacao);
+            transacaoSalva = repositorio.atualizarTransacao(transacaoValidada);
 
         } catch (Exception e) {
             repositorioProdutorDeTransacao.publicarTransacao(transacao); //TODO no topico de DLQ
         }
         return transacaoSalva;
-    }
-
-    private void validarTransacao(Transacao transacao, SaldoConta saldoConta,
-                                  ConversorMoeda conversorMoeda) {
-
     }
 
     public Long getValidAccountId() {
