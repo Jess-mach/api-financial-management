@@ -1,7 +1,7 @@
 package br.com.ntt.transacao.producer.infra.gateways;
 
-import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao;
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeExportacao;
+import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao;
 import br.com.ntt.transacao.producer.domain.entities.transacao.Transacao;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -28,7 +28,8 @@ public class RelatorioDeExportacaoTransacaoArquivo implements RepositorioDeExpor
 
         List<Transacao> transacoes = repositorioDeTransacao.listarTodos();
 
-        try (Workbook planilha = new XSSFWorkbook(); ByteArrayOutputStream saida = new ByteArrayOutputStream()) {
+        try (Workbook planilha = new XSSFWorkbook();
+            ByteArrayOutputStream saida = new ByteArrayOutputStream()) {
             Sheet aba = planilha.createSheet("Transações");
 
             Row linhaCabecalho = aba.createRow(0);
@@ -52,8 +53,10 @@ public class RelatorioDeExportacaoTransacaoArquivo implements RepositorioDeExpor
             for (Transacao t : transacoes) {
                 Row linha = aba.createRow(indiceLinha++);
 
-                String dataFinal = (t.getDataHoraFinalizacao() != null) ? t.getDataHoraFinalizacao().format(formatadorData) : "-";
-                Double taxaDeCambio = (t.getTaxaCambio() != null) ? t.getTaxaCambio().doubleValue() : 0.0;
+                String dataFinal = (t.getDataHoraFinalizacao() != null)
+                        ? t.getDataHoraFinalizacao().format(formatadorData) : "-";
+                Double taxaDeCambio = (t.getTaxaCambio() != null)
+                        ? t.getTaxaCambio().doubleValue() : 0.0;
 
                 linha.createCell(0).setCellValue(t.getId().toString());
                 linha.createCell(1).setCellValue(t.getUsuarioId().toString());
@@ -76,4 +79,8 @@ public class RelatorioDeExportacaoTransacaoArquivo implements RepositorioDeExpor
             return new ByteArrayInputStream(saida.toByteArray());
         }
     }
+
+    @Override
+    public ByteArrayInputStream gerarPdf() {return null;}
+
 }
