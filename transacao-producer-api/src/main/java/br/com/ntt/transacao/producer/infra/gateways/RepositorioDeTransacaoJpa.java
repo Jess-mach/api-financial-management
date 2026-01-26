@@ -5,6 +5,7 @@ import br.com.ntt.transacao.producer.domain.entities.transacao.Transacao;
 import br.com.ntt.transacao.producer.infra.persistence.TransacaoEntity;
 import br.com.ntt.transacao.producer.infra.persistence.TransacaoRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -34,7 +35,7 @@ public class RepositorioDeTransacaoJpa implements RepositorioDeTransacao {
     }
 
     @Override
-    public Transacao busacarPorId(UUID id) {
+    public Transacao buscarPorId(UUID id) {
         TransacaoEntity entity = repositorio.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Transação não encontrado"));
         return mapper.toDomain(entity);

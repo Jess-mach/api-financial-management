@@ -34,7 +34,7 @@ public class Usuario {
         if (perfilUsuario == null) {
             perfilUsuario = PerfilUsuario.USUARIO;
         }
-        return new Usuario(UUID.randomUUID(), nome, email, login, senha, perfilUsuario);
+        return new Usuario(null, nome, email, login, senha, perfilUsuario);
     }
 
 

@@ -15,7 +15,7 @@ public class BuscarTransacaoPorId {
     }
 
     public Transacao buscarPorId(UUID id){
-        return this.repositorio.busacarPorId(id);
+        return this.repositorio.buscarPorId(id);
     }
 
 }

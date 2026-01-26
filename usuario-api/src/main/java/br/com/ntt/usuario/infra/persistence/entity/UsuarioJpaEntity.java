@@ -2,6 +2,7 @@ package br.com.ntt.usuario.infra.persistence.entity;
 
 import br.com.ntt.usuario.domain.PerfilUsuario;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,10 +16,21 @@ import java.util.UUID;
 public class UsuarioJpaEntity implements UserDetails {
 
     @Id
+    @NotNull
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
+
+    @NotNull
     private String nome;
+
+    @NotNull
     private String email;
+
+    @NotNull
     private String login;
+
+    @NotNull
     private String senha;
 
     @Enumerated(EnumType.STRING)
