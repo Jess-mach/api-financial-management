@@ -1,7 +1,6 @@
 package br.com.ntt.transacao.producer.infra.gateways;
 
-import br.com.ntt.transacao.producer.domain.StatusTransacao;
-import br.com.ntt.transacao.producer.domain.TipoTransacao;
+import br.com.ntt.transacao.producer.domain.model.StatusTransacao;
 import br.com.ntt.transacao.producer.domain.entities.transacao.Transacao;
 import br.com.ntt.transacao.producer.infra.persistence.TransacaoEntity;
 
