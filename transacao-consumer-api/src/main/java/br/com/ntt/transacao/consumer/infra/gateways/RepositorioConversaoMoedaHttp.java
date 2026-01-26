@@ -54,19 +54,22 @@ public class RepositorioConversaoMoedaHttp implements RepositorioConversaoMoeda 
                     .send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() != 200)
-                throw new IllegalArgumentException("Falha ao converter moeda");
+                throw new IllegalArgumentException("Falha ao converter moeda ="+ response.body());
 
             ConversorMoedaDto dto = objectMapper.readValue(response.body(), ConversorMoedaDto.class);
 
             return mapper.toDomain(dto);
 
         } catch (Exception e) {
-            log.error("falha na requisição", e.getMessage());
+            log.error("falha na transação", e.getMessage());
             throw new IllegalArgumentException("Falha ao converter moeda");
         }
     }
 
     public static LocalDate ajustarParaUltimoDiaUtil(LocalDate data) {
+        if(data.equals(LocalDate.now()))
+            data = data.minusDays(1);
+
         DayOfWeek dia = data.getDayOfWeek();
 
         if (dia == DayOfWeek.SATURDAY) {
