@@ -1,7 +1,9 @@
 package br.com.ntt.transacao.producer.infra.gateways;
 
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao;
+import br.com.ntt.transacao.producer.domain.entities.transacao.AnaliseDeDespesa;
 import br.com.ntt.transacao.producer.domain.entities.transacao.Transacao;
+import br.com.ntt.transacao.producer.infra.persistence.AnaliseDeDespesaCampos;
 import br.com.ntt.transacao.producer.infra.persistence.TransacaoEntity;
 import br.com.ntt.transacao.producer.infra.persistence.TransacaoRepository;
 
@@ -39,5 +41,11 @@ public class RepositorioDeTransacaoJpa implements RepositorioDeTransacao {
         TransacaoEntity entity = repositorio.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Transação não encontrado"));
         return mapper.toDomain(entity);
+    }
+
+    @Override
+    public AnaliseDeDespesa visualizarGastosDia(UUID usuarioId) {
+        List<AnaliseDeDespesaCampos> analiseDeDespesa = repositorio.visualisarGastosDia(usuarioId);
+        return null;
     }
 }
