@@ -1,7 +1,10 @@
 package br.com.ntt.transacao.producer.infra.gateways;
 
+import br.com.ntt.transacao.producer.domain.entities.transacao.AnaliseDeDespesaItem;
 import br.com.ntt.transacao.producer.domain.model.StatusTransacao;
 import br.com.ntt.transacao.producer.domain.entities.transacao.Transacao;
+import br.com.ntt.transacao.producer.domain.model.TipoTransacao;
+import br.com.ntt.transacao.producer.infra.persistence.AnaliseDeDespesaCampos;
 import br.com.ntt.transacao.producer.infra.persistence.TransacaoEntity;
 
 import java.time.LocalDateTime;
@@ -35,5 +38,14 @@ public class TransacaoEntityMapper {
                 entity.getMoeda(),
                 entity.getTaxaCambio(),
                 entity.getDescricao());
+    }
+
+    public AnaliseDeDespesaItem toDomain(AnaliseDeDespesaCampos campos) {
+        return new AnaliseDeDespesaItem(
+                campos.getDataHoraSolicitacao(),
+                TipoTransacao.getDoCodigo(campos.getTipo()),
+                campos.getValor(),
+                campos.getQuantidade()
+        );
     }
 }

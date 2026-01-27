@@ -1,5 +1,6 @@
 package br.com.ntt.transacao.producer.infra.controller;
 
+import br.com.ntt.transacao.producer.application.usecases.AnaliseDespesaTransacao;
 import br.com.ntt.transacao.producer.application.usecases.BuscarTransacaoPorId;
 import br.com.ntt.transacao.producer.application.usecases.CriarTransacao;
 import br.com.ntt.transacao.producer.application.usecases.ListarTransacao;
@@ -8,7 +9,13 @@ import br.com.ntt.transacao.producer.domain.entities.transacao.Transacao;
 import br.com.ntt.transacao.producer.infra.controller.dto.DadosNovaTransacao;
 import br.com.ntt.transacao.producer.infra.controller.dto.TransacaoDto;
 import br.com.ntt.transacao.producer.infra.controller.mapper.TransacaoDtoMapper;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,21 +24,22 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/transacoes")
-public class TransacaoController {
+@Tag(name = "Animals", description = "API for managing animals in the veterinary clinic")
+class TransacaoController {
 
     private final CriarTransacao criarTransacao;
     private final ListarTransacao listarTransacao;
     private final TransacaoDtoMapper transacaoDtoMapper;
     private final BuscarTransacaoPorId buscarTransacaoPorId;
-    private final AnaliseDeDespesa analiseDespesaTRansacao;
+    private final AnaliseDespesaTransacao analiseDespesaTransacao;
 
 
-    public TransacaoController(CriarTransacao criarTransacao, ListarTransacao listarTransacao, TransacaoDtoMapper transacaoDtoMapper, BuscarTransacaoPorId buscarTransacaoPorId, AnaliseDeDespesa analiseDespesaTRansacao) {
+    public TransacaoController(CriarTransacao criarTransacao, ListarTransacao listarTransacao, TransacaoDtoMapper transacaoDtoMapper, BuscarTransacaoPorId buscarTransacaoPorId, AnaliseDespesaTransacao analiseDespesaTransacao) {
         this.criarTransacao = criarTransacao;
         this.listarTransacao = listarTransacao;
         this.transacaoDtoMapper = transacaoDtoMapper;
         this.buscarTransacaoPorId = buscarTransacaoPorId;
-        this.analiseDespesaTRansacao = analiseDespesaTRansacao;
+        this.analiseDespesaTransacao = analiseDespesaTransacao;
     }
 
     @PostMapping
@@ -59,20 +67,27 @@ public class TransacaoController {
         return dto;
     }
 
-    @GetMapping("/{id}/{gastosDia}")
-    public TransacaoDto visualizarGastosDia(@PathVariable UUID usuarioId){
+    @Operation(
+            summary = "Get consultation by ID",
+            description = "Retrieves a specific consultation by its ID"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Order created successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid data")
+    })
+    @GetMapping("/analise")
+    public ResponseEntity<AnaliseDeDespesa> visualizarGastosDia(@RequestParam("usuarioId") @NotNull UUID usuarioId){
         //Implementar uma funcionalidade que
         //permite aos usuários visualizar um resumo
         //e análise de suas despesas, categorizando
         //as transações, agrupando total gasto no
         //dia, mês.
 
-        AnaliseDeDespesa analiseDeDespesa = analiseDespesaTRansacao.visualizarGastosDia(usuarioId);
+        AnaliseDeDespesa analiseDeDespesa = analiseDespesaTransacao.visualizarGastos(usuarioId);
 
 
-        return null;
+        //DEVOLVER UM DTO - CONVERTER OBJETO - TODO
+
+        return ResponseEntity.ok(analiseDeDespesa);
     }
-
-    //Análise de Despesas: Endpoint para visualização de resumo de gastos,
-    // categorizados por dia ou mês.
 }

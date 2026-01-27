@@ -46,16 +46,20 @@ public class RepositorioDeTransacaoJpa implements RepositorioDeTransacao {
     }
 
     @Override
-    public AnaliseDeDespesa visualizarGastosDia(UUID usuarioId) {
-        List<AnaliseDeDespesaCampos> analiseDeDespesa = repositorio.visualisarGastosDia(usuarioId);
+    public List<AnaliseDeDespesaItem> visualizarGastosDia(UUID usuarioId) {
+        List<AnaliseDeDespesaCampos> despesasPorDia = repositorio.visualisarGastosDia(usuarioId);
 
-        List<AnaliseDeDespesaItem> despesas = analiseDeDespesa.stream()
+        return despesasPorDia.stream()
                 .map(campos -> mapper.toDomain(campos))
                 .collect(Collectors.toList());
+    }
 
-        AnaliseDeDespesaTotalizador dia = new AnaliseDeDespesaTotalizador(despesas, BigDecimal.TEN);
-        AnaliseDeDespesa resumo = new AnaliseDeDespesa(dia, dia);
+    @Override
+    public List<AnaliseDeDespesaItem>  visualizarGastosMes(UUID usuarioId) {
+        List<AnaliseDeDespesaCampos> despesasPorMes = repositorio.visualisarGastosMes(usuarioId);
 
-        return resumo;
+        return despesasPorMes.stream()
+                .map(campos -> mapper.toDomain(campos))
+                .collect(Collectors.toList());
     }
 }

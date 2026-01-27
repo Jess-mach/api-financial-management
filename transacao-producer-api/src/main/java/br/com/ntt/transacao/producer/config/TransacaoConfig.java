@@ -3,10 +3,7 @@ package br.com.ntt.transacao.producer.config;
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao;
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeExportacao;
 import br.com.ntt.transacao.producer.application.gateways.RepositorioProdutorDeTransacao;
-import br.com.ntt.transacao.producer.application.usecases.BuscarTransacaoPorId;
-import br.com.ntt.transacao.producer.application.usecases.CriarTransacao;
-import br.com.ntt.transacao.producer.application.usecases.ExportarTransacao;
-import br.com.ntt.transacao.producer.application.usecases.ListarTransacao;
+import br.com.ntt.transacao.producer.application.usecases.*;
 import br.com.ntt.transacao.producer.infra.gateways.RepositorioDeTransacaoKafka;
 import br.com.ntt.transacao.producer.domain.entities.transacao.Transacao;
 import br.com.ntt.transacao.producer.infra.controller.mapper.TransacaoDtoMapper;
@@ -66,6 +63,11 @@ public class TransacaoConfig {
     @Bean
     ExportarTransacao gerarExcel(RepositorioDeExportacao repositorioDeExportacao){
         return new ExportarTransacao(repositorioDeExportacao);
+    }
+
+    @Bean
+    AnaliseDespesaTransacao analiseDespesaTransacao(RepositorioDeTransacao repositorioDeTransacao){
+        return new AnaliseDespesaTransacao(repositorioDeTransacao);
     }
 
 }
