@@ -6,6 +6,7 @@ import br.com.ntt.transacao.producer.application.usecases.CriarTransacao;
 import br.com.ntt.transacao.producer.application.usecases.ListarTransacao;
 import br.com.ntt.transacao.producer.domain.entities.transacao.analise.AnaliseDeDespesa;
 import br.com.ntt.transacao.producer.domain.entities.transacao.transacao.Transacao;
+import br.com.ntt.transacao.producer.infra.controller.dto.AnaliseDespesaDto;
 import br.com.ntt.transacao.producer.infra.controller.dto.DadosNovaTransacao;
 import br.com.ntt.transacao.producer.infra.controller.dto.TransacaoDto;
 import br.com.ntt.transacao.producer.infra.controller.mapper.TransacaoDtoMapper;
@@ -81,9 +82,11 @@ class TransacaoController {
             @ApiResponse(responseCode = "400", description = "Data invalida")
     })
     @GetMapping("/analise")
-    public ResponseEntity<AnaliseDeDespesa> visualizarGastosDia(@RequestParam("usuarioId") @NotNull UUID usuarioId){
+    public ResponseEntity<AnaliseDespesaDto> visualizarGastosDia(@RequestParam("usuarioId") @NotNull UUID usuarioId){
         AnaliseDeDespesa analiseDeDespesa = analiseDespesaTransacao.visualizarGastos(usuarioId);
 
-        return ResponseEntity.ok(analiseDeDespesa);
+        AnaliseDespesaDto dto = transacaoDtoMapper.toDto(analiseDeDespesa);
+
+        return ResponseEntity.ok(dto);
     }
 }

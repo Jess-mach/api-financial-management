@@ -2,8 +2,8 @@ package br.com.ntt.transacao.producer.application.usecases;
 
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao;
 import br.com.ntt.transacao.producer.domain.entities.transacao.analise.AnaliseDeDespesa;
-import br.com.ntt.transacao.producer.domain.entities.transacao.analise.AnaliseDeDespesaItem;
-import br.com.ntt.transacao.producer.domain.entities.transacao.analise.AnaliseDeDespesaTotalizador;
+import br.com.ntt.transacao.producer.domain.entities.transacao.analise.RegistroDespesa;
+import br.com.ntt.transacao.producer.domain.entities.transacao.analise.TotalizadorDespesa;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -19,31 +19,31 @@ public class AnaliseDespesaTransacao {
 
     public AnaliseDeDespesa visualizarGastos(UUID usuarioId) {
 
-        AnaliseDeDespesaTotalizador dia = calcularGastosPorDia(usuarioId);
+        TotalizadorDespesa dia = calcularGastosPorDia(usuarioId);
 
-        AnaliseDeDespesaTotalizador mes = calcularGastosPorMes(usuarioId);
+        TotalizadorDespesa mes = calcularGastosPorMes(usuarioId);
 
         return new AnaliseDeDespesa(dia, mes);
     }
 
-    private AnaliseDeDespesaTotalizador calcularGastosPorMes(UUID usuarioId) {
-        List<AnaliseDeDespesaItem>  gastosPorMes = repositorioDeTransacao.visualizarGastosMes(usuarioId);
+    private TotalizadorDespesa calcularGastosPorMes(UUID usuarioId) {
+        List<RegistroDespesa>  gastosPorMes = repositorioDeTransacao.visualizarGastosMes(usuarioId);
         BigDecimal valorTotalMes = contabilizarValorTotal(gastosPorMes);
-        AnaliseDeDespesaTotalizador mes = new AnaliseDeDespesaTotalizador(gastosPorMes, valorTotalMes);
+        TotalizadorDespesa mes = new TotalizadorDespesa(gastosPorMes, valorTotalMes);
         return mes;
     }
 
-    private AnaliseDeDespesaTotalizador calcularGastosPorDia(UUID usuarioId) {
-        List<AnaliseDeDespesaItem>  gastosPorDia = repositorioDeTransacao.visualizarGastosDia(usuarioId);
+    private TotalizadorDespesa calcularGastosPorDia(UUID usuarioId) {
+        List<RegistroDespesa>  gastosPorDia = repositorioDeTransacao.visualizarGastosDia(usuarioId);
         BigDecimal valorTotalDia = contabilizarValorTotal(gastosPorDia);
-        AnaliseDeDespesaTotalizador dia = new AnaliseDeDespesaTotalizador(gastosPorDia, valorTotalDia);
+        TotalizadorDespesa dia = new TotalizadorDespesa(gastosPorDia, valorTotalDia);
         return dia;
     }
 
-    private static BigDecimal contabilizarValorTotal(List<AnaliseDeDespesaItem> gastos) {
+    private static BigDecimal contabilizarValorTotal(List<RegistroDespesa> gastos) {
         BigDecimal valorTotal = BigDecimal.ZERO;
 
-        for (AnaliseDeDespesaItem despesa : gastos) {
+        for (RegistroDespesa despesa : gastos) {
             if (despesa.getTipo().equals("DEPOSITO")) {
                 valorTotal = valorTotal.add(despesa.getValor());
             }else

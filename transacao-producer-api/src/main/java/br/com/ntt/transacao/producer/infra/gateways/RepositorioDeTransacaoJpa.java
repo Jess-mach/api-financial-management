@@ -1,7 +1,7 @@
 package br.com.ntt.transacao.producer.infra.gateways;
 
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao;
-import br.com.ntt.transacao.producer.domain.entities.transacao.analise.AnaliseDeDespesaItem;
+import br.com.ntt.transacao.producer.domain.entities.transacao.analise.RegistroDespesa;
 import br.com.ntt.transacao.producer.domain.entities.transacao.transacao.Transacao;
 import br.com.ntt.transacao.producer.infra.persistence.AnaliseDeDespesaCampos;
 import br.com.ntt.transacao.producer.infra.persistence.TransacaoEntity;
@@ -43,7 +43,7 @@ public class RepositorioDeTransacaoJpa implements RepositorioDeTransacao {
     }
 
     @Override
-    public List<AnaliseDeDespesaItem> visualizarGastosDia(UUID usuarioId) {
+    public List<RegistroDespesa> visualizarGastosDia(UUID usuarioId) {
         List<AnaliseDeDespesaCampos> despesasPorDia = repositorio.visualisarGastosDia(usuarioId);
 
         return despesasPorDia.stream()
@@ -52,7 +52,7 @@ public class RepositorioDeTransacaoJpa implements RepositorioDeTransacao {
     }
 
     @Override
-    public List<AnaliseDeDespesaItem>  visualizarGastosMes(UUID usuarioId) {
+    public List<RegistroDespesa>  visualizarGastosMes(UUID usuarioId) {
         List<AnaliseDeDespesaCampos> despesasPorMes = repositorio.visualisarGastosMes(usuarioId);
 
         return despesasPorMes.stream()

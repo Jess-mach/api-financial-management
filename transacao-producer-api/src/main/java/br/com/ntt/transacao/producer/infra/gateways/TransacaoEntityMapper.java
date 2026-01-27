@@ -1,6 +1,6 @@
 package br.com.ntt.transacao.producer.infra.gateways;
 
-import br.com.ntt.transacao.producer.domain.entities.transacao.analise.AnaliseDeDespesaItem;
+import br.com.ntt.transacao.producer.domain.entities.transacao.analise.RegistroDespesa;
 import br.com.ntt.transacao.producer.domain.model.StatusTransacao;
 import br.com.ntt.transacao.producer.domain.entities.transacao.transacao.Transacao;
 import br.com.ntt.transacao.producer.domain.model.TipoTransacao;
@@ -40,8 +40,8 @@ public class TransacaoEntityMapper {
                 entity.getDescricao());
     }
 
-    public AnaliseDeDespesaItem toDomain(AnaliseDeDespesaCampos campos) {
-        return new AnaliseDeDespesaItem(
+    public RegistroDespesa toDomain(AnaliseDeDespesaCampos campos) {
+        return new RegistroDespesa(
                 campos.getDataHoraSolicitacao(),
                 TipoTransacao.getDoCodigo(campos.getTipo()),
                 campos.getValor(),

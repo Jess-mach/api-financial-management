@@ -3,17 +3,17 @@ package br.com.ntt.transacao.producer.domain.entities.transacao.analise;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class AnaliseDeDespesaTotalizador {
+public class TotalizadorDespesa {
 
-    private List<AnaliseDeDespesaItem> despesas;
+    private List<RegistroDespesa> despesas;
     private BigDecimal valorTotal;
 
-    public AnaliseDeDespesaTotalizador(List<AnaliseDeDespesaItem> despesas, BigDecimal valorTotal) {
+    public TotalizadorDespesa(List<RegistroDespesa> despesas, BigDecimal valorTotal) {
         this.despesas = despesas;
         this.valorTotal = valorTotal;
     }
 
-    public List<AnaliseDeDespesaItem> getDespesas() {
+    public List<RegistroDespesa> getDespesas() {
         return despesas;
     }
 

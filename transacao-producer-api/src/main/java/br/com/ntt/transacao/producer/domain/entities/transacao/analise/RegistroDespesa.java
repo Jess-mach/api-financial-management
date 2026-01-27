@@ -3,14 +3,14 @@ package br.com.ntt.transacao.producer.domain.entities.transacao.analise;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class AnaliseDeDespesaItem {
+public class RegistroDespesa {
 
     private LocalDate data;
     private String tipo;
     private BigDecimal valor;
     private Long quantidade;
 
-    public AnaliseDeDespesaItem(LocalDate data, String tipo, BigDecimal valor, Long quantidade) {
+    public RegistroDespesa(LocalDate data, String tipo, BigDecimal valor, Long quantidade) {
         this.data = data;
         this.tipo = tipo;
         this.valor = valor;
