@@ -5,7 +5,7 @@ import br.com.ntt.transacao.producer.application.gateways.RepositorioDeExportaca
 import br.com.ntt.transacao.producer.application.gateways.RepositorioProdutorDeTransacao;
 import br.com.ntt.transacao.producer.application.usecases.*;
 import br.com.ntt.transacao.producer.infra.gateways.RepositorioDeTransacaoKafka;
-import br.com.ntt.transacao.producer.domain.entities.transacao.Transacao;
+import br.com.ntt.transacao.producer.domain.entities.transacao.transacao.Transacao;
 import br.com.ntt.transacao.producer.infra.controller.mapper.TransacaoDtoMapper;
 import br.com.ntt.transacao.producer.infra.gateways.RepositorioDeTransacaoJpa;
 import br.com.ntt.transacao.producer.infra.gateways.TransacaoEntityMapper;

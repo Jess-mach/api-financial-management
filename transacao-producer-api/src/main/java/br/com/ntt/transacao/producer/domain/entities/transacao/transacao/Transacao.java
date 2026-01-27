@@ -1,4 +1,4 @@
-package br.com.ntt.transacao.producer.domain.entities.transacao;
+package br.com.ntt.transacao.producer.domain.entities.transacao.transacao;
 
 import br.com.ntt.transacao.producer.domain.model.StatusTransacao;
 import br.com.ntt.transacao.producer.domain.model.TipoTransacao;

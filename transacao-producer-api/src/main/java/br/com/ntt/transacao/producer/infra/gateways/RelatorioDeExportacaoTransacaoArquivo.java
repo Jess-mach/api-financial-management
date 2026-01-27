@@ -2,7 +2,7 @@ package br.com.ntt.transacao.producer.infra.gateways;
 
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeExportacao;
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao;
-import br.com.ntt.transacao.producer.domain.entities.transacao.Transacao;
+import br.com.ntt.transacao.producer.domain.entities.transacao.transacao.Transacao;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 

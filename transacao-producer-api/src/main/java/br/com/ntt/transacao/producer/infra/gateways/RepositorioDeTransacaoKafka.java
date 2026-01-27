@@ -1,7 +1,7 @@
 package br.com.ntt.transacao.producer.infra.gateways;
 
 import br.com.ntt.transacao.producer.application.gateways.RepositorioProdutorDeTransacao;
-import br.com.ntt.transacao.producer.domain.entities.transacao.Transacao;
+import br.com.ntt.transacao.producer.domain.entities.transacao.transacao.Transacao;
 import org.springframework.kafka.core.KafkaTemplate;
 
 import java.util.UUID;

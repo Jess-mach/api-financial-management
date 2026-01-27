@@ -1,8 +1,8 @@
 package br.com.ntt.transacao.producer.infra.gateways;
 
-import br.com.ntt.transacao.producer.domain.entities.transacao.AnaliseDeDespesaItem;
+import br.com.ntt.transacao.producer.domain.entities.transacao.analise.AnaliseDeDespesaItem;
 import br.com.ntt.transacao.producer.domain.model.StatusTransacao;
-import br.com.ntt.transacao.producer.domain.entities.transacao.Transacao;
+import br.com.ntt.transacao.producer.domain.entities.transacao.transacao.Transacao;
 import br.com.ntt.transacao.producer.domain.model.TipoTransacao;
 import br.com.ntt.transacao.producer.infra.persistence.AnaliseDeDespesaCampos;
 import br.com.ntt.transacao.producer.infra.persistence.TransacaoEntity;

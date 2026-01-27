@@ -1,9 +1,9 @@
 package br.com.ntt.transacao.producer.application.usecases;
 
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao;
-import br.com.ntt.transacao.producer.domain.entities.transacao.AnaliseDeDespesa;
-import br.com.ntt.transacao.producer.domain.entities.transacao.AnaliseDeDespesaItem;
-import br.com.ntt.transacao.producer.domain.entities.transacao.AnaliseDeDespesaTotalizador;
+import br.com.ntt.transacao.producer.domain.entities.transacao.analise.AnaliseDeDespesa;
+import br.com.ntt.transacao.producer.domain.entities.transacao.analise.AnaliseDeDespesaItem;
+import br.com.ntt.transacao.producer.domain.entities.transacao.analise.AnaliseDeDespesaTotalizador;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -19,29 +19,38 @@ public class AnaliseDespesaTransacao {
 
     public AnaliseDeDespesa visualizarGastos(UUID usuarioId) {
 
-        // ---------------------------------  DIA ----------------------------------------
+        AnaliseDeDespesaTotalizador dia = calcularGastosPorDia(usuarioId);
 
-        List<AnaliseDeDespesaItem>  gastosPorDia = repositorioDeTransacao.visualizarGastosDia(usuarioId);
-
-        BigDecimal valorTotalDia = gastosPorDia.stream()
-
-//                           TODO - SOMAR E SUBTRAIR
-                .map(AnaliseDeDespesaItem::getValor)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        AnaliseDeDespesaTotalizador dia = new AnaliseDeDespesaTotalizador(gastosPorDia, valorTotalDia);
-
-        // ---------------------------------  MES ----------------------------------------
-
-        List<AnaliseDeDespesaItem>  gastosPorMes = repositorioDeTransacao.visualizarGastosMes(usuarioId);
-
-        BigDecimal valorTotalMes = gastosPorDia.stream()        // TODO - SOMAR E SUBTRAIR
-                .map(AnaliseDeDespesaItem::getValor)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        AnaliseDeDespesaTotalizador mes = new AnaliseDeDespesaTotalizador(gastosPorMes, valorTotalMes);
+        AnaliseDeDespesaTotalizador mes = calcularGastosPorMes(usuarioId);
 
         return new AnaliseDeDespesa(dia, mes);
     }
+
+    private AnaliseDeDespesaTotalizador calcularGastosPorMes(UUID usuarioId) {
+        List<AnaliseDeDespesaItem>  gastosPorMes = repositorioDeTransacao.visualizarGastosMes(usuarioId);
+        BigDecimal valorTotalMes = contabilizarValorTotal(gastosPorMes);
+        AnaliseDeDespesaTotalizador mes = new AnaliseDeDespesaTotalizador(gastosPorMes, valorTotalMes);
+        return mes;
+    }
+
+    private AnaliseDeDespesaTotalizador calcularGastosPorDia(UUID usuarioId) {
+        List<AnaliseDeDespesaItem>  gastosPorDia = repositorioDeTransacao.visualizarGastosDia(usuarioId);
+        BigDecimal valorTotalDia = contabilizarValorTotal(gastosPorDia);
+        AnaliseDeDespesaTotalizador dia = new AnaliseDeDespesaTotalizador(gastosPorDia, valorTotalDia);
+        return dia;
+    }
+
+    private static BigDecimal contabilizarValorTotal(List<AnaliseDeDespesaItem> gastos) {
+        BigDecimal valorTotal = BigDecimal.ZERO;
+
+        for (AnaliseDeDespesaItem despesa : gastos) {
+            if (despesa.getTipo().equals("DEPOSITO")) {
+                valorTotal = valorTotal.add(despesa.getValor());
+            }else
+                valorTotal = valorTotal.subtract(despesa.getValor());
+        }
+        return valorTotal;
+    }
+
 }
 

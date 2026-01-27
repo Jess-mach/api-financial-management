@@ -1,4 +1,4 @@
-package br.com.ntt.transacao.producer.domain.entities.transacao;
+package br.com.ntt.transacao.producer.domain.entities.transacao.analise;
 
 import java.math.BigDecimal;
 import java.util.List;

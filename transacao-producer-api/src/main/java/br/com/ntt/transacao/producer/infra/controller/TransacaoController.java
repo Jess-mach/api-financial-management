@@ -4,8 +4,8 @@ import br.com.ntt.transacao.producer.application.usecases.AnaliseDespesaTransaca
 import br.com.ntt.transacao.producer.application.usecases.BuscarTransacaoPorId;
 import br.com.ntt.transacao.producer.application.usecases.CriarTransacao;
 import br.com.ntt.transacao.producer.application.usecases.ListarTransacao;
-import br.com.ntt.transacao.producer.domain.entities.transacao.AnaliseDeDespesa;
-import br.com.ntt.transacao.producer.domain.entities.transacao.Transacao;
+import br.com.ntt.transacao.producer.domain.entities.transacao.analise.AnaliseDeDespesa;
+import br.com.ntt.transacao.producer.domain.entities.transacao.transacao.Transacao;
 import br.com.ntt.transacao.producer.infra.controller.dto.DadosNovaTransacao;
 import br.com.ntt.transacao.producer.infra.controller.dto.TransacaoDto;
 import br.com.ntt.transacao.producer.infra.controller.mapper.TransacaoDtoMapper;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/transacoes")
-@Tag(name = "Animals", description = "API for managing animals in the veterinary clinic")
+@Tag(name = "Transação", description = "API de Gestão Finacera")
 class TransacaoController {
 
     private final CriarTransacao criarTransacao;
@@ -34,7 +34,9 @@ class TransacaoController {
     private final AnaliseDespesaTransacao analiseDespesaTransacao;
 
 
-    public TransacaoController(CriarTransacao criarTransacao, ListarTransacao listarTransacao, TransacaoDtoMapper transacaoDtoMapper, BuscarTransacaoPorId buscarTransacaoPorId, AnaliseDespesaTransacao analiseDespesaTransacao) {
+    public TransacaoController(CriarTransacao criarTransacao, ListarTransacao listarTransacao,
+                               TransacaoDtoMapper transacaoDtoMapper, BuscarTransacaoPorId buscarTransacaoPorId,
+                               AnaliseDespesaTransacao analiseDespesaTransacao) {
         this.criarTransacao = criarTransacao;
         this.listarTransacao = listarTransacao;
         this.transacaoDtoMapper = transacaoDtoMapper;
@@ -43,50 +45,44 @@ class TransacaoController {
     }
 
     @PostMapping
-    public TransacaoDto executar(@RequestBody @Valid DadosNovaTransacao dados) {
+    public ResponseEntity<TransacaoDto> executar(@RequestBody @Valid DadosNovaTransacao dados) {
         Transacao novoTransacao = transacaoDtoMapper.toDomain(dados);
         Transacao salvo = criarTransacao.executar(novoTransacao);
 
-        return transacaoDtoMapper.toDto(salvo);
+        return ResponseEntity.ok(transacaoDtoMapper.toDto(salvo));
     }
 
     @GetMapping
-    public List<TransacaoDto> listarUsuarios() {
-        return listarTransacao.listarTodos().stream()
+    public ResponseEntity<List<TransacaoDto>> listarUsuarios() {
+        List<TransacaoDto> lista = listarTransacao.listarTodos().stream()
                 .map(salvo -> transacaoDtoMapper.toDto(salvo))
                 .collect(Collectors.toList());
+
+        return ResponseEntity.ok(lista);
     }
 
 
     @GetMapping("/{id}")
-    public TransacaoDto buscarPorId(@PathVariable UUID id) {
+    public ResponseEntity<TransacaoDto> buscarPorId(@PathVariable UUID id) {
         Transacao transacao  = buscarTransacaoPorId.buscarPorId(id);
 
         TransacaoDto dto = transacaoDtoMapper.toDto(transacao);
 
-        return dto;
+        return ResponseEntity.ok(dto);
     }
 
+
     @Operation(
-            summary = "Get consultation by ID",
-            description = "Retrieves a specific consultation by its ID"
+            summary = "Analise das Despesas",
+            description = "Retornando resumo por dia e Mês"
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Order created successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid data")
+            @ApiResponse(responseCode = "200", description = "ok"),
+            @ApiResponse(responseCode = "400", description = "Data invalida")
     })
     @GetMapping("/analise")
     public ResponseEntity<AnaliseDeDespesa> visualizarGastosDia(@RequestParam("usuarioId") @NotNull UUID usuarioId){
-        //Implementar uma funcionalidade que
-        //permite aos usuários visualizar um resumo
-        //e análise de suas despesas, categorizando
-        //as transações, agrupando total gasto no
-        //dia, mês.
-
         AnaliseDeDespesa analiseDeDespesa = analiseDespesaTransacao.visualizarGastos(usuarioId);
-
-
-        //DEVOLVER UM DTO - CONVERTER OBJETO - TODO
 
         return ResponseEntity.ok(analiseDeDespesa);
     }

@@ -1,15 +1,12 @@
 package br.com.ntt.transacao.producer.infra.gateways;
 
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao;
-import br.com.ntt.transacao.producer.domain.entities.transacao.AnaliseDeDespesa;
-import br.com.ntt.transacao.producer.domain.entities.transacao.AnaliseDeDespesaItem;
-import br.com.ntt.transacao.producer.domain.entities.transacao.AnaliseDeDespesaTotalizador;
-import br.com.ntt.transacao.producer.domain.entities.transacao.Transacao;
+import br.com.ntt.transacao.producer.domain.entities.transacao.analise.AnaliseDeDespesaItem;
+import br.com.ntt.transacao.producer.domain.entities.transacao.transacao.Transacao;
 import br.com.ntt.transacao.producer.infra.persistence.AnaliseDeDespesaCampos;
 import br.com.ntt.transacao.producer.infra.persistence.TransacaoEntity;
 import br.com.ntt.transacao.producer.infra.persistence.TransacaoRepository;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;

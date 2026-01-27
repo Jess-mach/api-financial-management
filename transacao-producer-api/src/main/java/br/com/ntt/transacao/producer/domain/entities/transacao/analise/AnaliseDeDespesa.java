@@ -1,4 +1,4 @@
-package br.com.ntt.transacao.producer.domain.entities.transacao;
+package br.com.ntt.transacao.producer.domain.entities.transacao.analise;
 
 
 public record AnaliseDeDespesa(

@@ -33,6 +33,4 @@ public class ExportacaoTransacaoController {
                 .body(new InputStreamResource(fluxoDados));
     }
 
-    //Relatórios: Rota para baixar relatório em PDF ou Excel com o resumo das transações.
-
 }
