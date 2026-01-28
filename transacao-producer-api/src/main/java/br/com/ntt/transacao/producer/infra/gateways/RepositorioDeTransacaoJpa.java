@@ -1,11 +1,13 @@
 package br.com.ntt.transacao.producer.infra.gateways;
 
+import br.com.ntt.common.transacao.domain.entity.RegistroDespesa;
+import br.com.ntt.common.transacao.domain.entity.Transacao;
+import br.com.ntt.common.transacao.infra.gateways.TransacaoEntityMapper;
+import br.com.ntt.common.transacao.infra.persistence.AnaliseDeDespesaCampos;
+import br.com.ntt.common.transacao.infra.persistence.TransacaoEntity;
+import br.com.ntt.common.transacao.infra.persistence.TransacaoRepository;
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao;
-import br.com.ntt.transacao.producer.domain.entity.RegistroDespesa;
-import br.com.ntt.transacao.producer.domain.entity.Transacao;
-import br.com.ntt.transacao.producer.infra.persistence.AnaliseDeDespesaCampos;
-import br.com.ntt.transacao.producer.infra.persistence.TransacaoEntity;
-import br.com.ntt.transacao.producer.infra.persistence.TransacaoRepository;
+
 import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 

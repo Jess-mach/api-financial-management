@@ -1,17 +1,18 @@
 package br.com.ntt.transacao.producer.infra.controller.mapper;
 
 
-import br.com.ntt.transacao.producer.domain.entity.AnaliseDeDespesa;
-import br.com.ntt.transacao.producer.domain.entity.RegistroDespesa;
-import br.com.ntt.transacao.producer.domain.model.TipoTransacao;
-import br.com.ntt.transacao.producer.domain.entity.Transacao;
+
+import br.com.ntt.common.transacao.domain.entity.AnaliseDeDespesa;
+import br.com.ntt.common.transacao.domain.entity.RegistroDespesa;
+import br.com.ntt.common.transacao.domain.entity.Transacao;
+import br.com.ntt.common.transacao.domain.model.TipoTransacao;
 import br.com.ntt.transacao.producer.infra.controller.dto.*;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
-public class TransacaoDtoMapper {
+public class TransacaoMapper {
 
     public Transacao toDomain(DadosNovaTransacaoDto dados) {
         return new Transacao(
@@ -25,20 +26,6 @@ public class TransacaoDtoMapper {
                 dados.moeda(),
                 null,
                 dados.descricao());
-    }
-
-    public TransacaoDto toDto(Transacao salvo) {
-        return new TransacaoDto(
-                salvo.getId(),
-                salvo.getUsuarioId(),
-                salvo.getValor(),
-                salvo.getTipo(),
-                salvo.getStatus(),
-                salvo.getDataHoraSolicitacao(),
-                salvo.getDataHoraFinalizacao(),
-                salvo.getMoeda(),
-                salvo.getTaxaCambio(),
-                salvo.getDescricao());
     }
 
     public AnaliseDespesaDto toDto(AnaliseDeDespesa dados) {

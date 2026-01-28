@@ -15,6 +15,7 @@ public class ValidadorDeTransacao {
         Double valorDoSaldo = saldoConta.getSaldo().doubleValue();
         Double valorDaTransacao = transacao.getValor().doubleValue();
         Double valorTaxaDeCambio = conversorMoeda.getCotacoes().get(0).getCotacaoVenda().doubleValue();
+        Double valorLimiteCartao =  saldoConta.getLimiteCartao().doubleValue();
 
         if (!transacao.getMoeda().equals("BRL")) {
             transacao.setTaxaCambio(BigDecimal.valueOf(valorTaxaDeCambio));
@@ -39,7 +40,7 @@ public class ValidadorDeTransacao {
                 if (valorTaxaDeCambio > 0)
                     valorDaTransacao = valorDaTransacao * valorTaxaDeCambio;
 
-                if (valorDaTransacao <= valorDoSaldo)
+                if (valorDaTransacao <= valorLimiteCartao)
                     transacao.setStatus(StatusTransacao.AUTORIZADO);
                 else
                     transacao.setStatus(StatusTransacao.REJEITADO);

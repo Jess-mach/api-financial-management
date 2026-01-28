@@ -1,15 +1,16 @@
 package br.com.ntt.transacao.producer.infra.controller;
 
+import br.com.ntt.common.transacao.domain.entity.AnaliseDeDespesa;
+import br.com.ntt.common.transacao.domain.entity.Transacao;
+import br.com.ntt.common.transacao.infra.controller.dto.TransacaoDto;
+import br.com.ntt.common.transacao.infra.controller.mapper.TransacaoDtoMapper;
 import br.com.ntt.transacao.producer.application.usecases.AnaliseDespesaTransacao;
 import br.com.ntt.transacao.producer.application.usecases.BuscarTransacaoPorId;
 import br.com.ntt.transacao.producer.application.usecases.CriarTransacao;
 import br.com.ntt.transacao.producer.application.usecases.ListarTransacao;
-import br.com.ntt.transacao.producer.domain.entity.AnaliseDeDespesa;
-import br.com.ntt.transacao.producer.domain.entity.Transacao;
 import br.com.ntt.transacao.producer.infra.controller.dto.AnaliseDespesaDto;
 import br.com.ntt.transacao.producer.infra.controller.dto.DadosNovaTransacaoDto;
-import br.com.ntt.transacao.producer.infra.controller.dto.TransacaoDto;
-import br.com.ntt.transacao.producer.infra.controller.mapper.TransacaoDtoMapper;
+import br.com.ntt.transacao.producer.infra.controller.mapper.TransacaoMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -30,33 +31,35 @@ class TransacaoController {
 
     private final CriarTransacao criarTransacao;
     private final ListarTransacao listarTransacao;
-    private final TransacaoDtoMapper transacaoDtoMapper;
+    private final TransacaoMapper transacaoMapper;
+    private final TransacaoDtoMapper commonTransacaoMapper;
     private final BuscarTransacaoPorId buscarTransacaoPorId;
     private final AnaliseDespesaTransacao analiseDespesaTransacao;
 
 
     public TransacaoController(CriarTransacao criarTransacao, ListarTransacao listarTransacao,
-                               TransacaoDtoMapper transacaoDtoMapper, BuscarTransacaoPorId buscarTransacaoPorId,
+                               TransacaoMapper transacaoMapper, TransacaoDtoMapper commonTransacaoMapper, BuscarTransacaoPorId buscarTransacaoPorId,
                                AnaliseDespesaTransacao analiseDespesaTransacao) {
         this.criarTransacao = criarTransacao;
         this.listarTransacao = listarTransacao;
-        this.transacaoDtoMapper = transacaoDtoMapper;
+        this.transacaoMapper = transacaoMapper;
+        this.commonTransacaoMapper = commonTransacaoMapper;
         this.buscarTransacaoPorId = buscarTransacaoPorId;
         this.analiseDespesaTransacao = analiseDespesaTransacao;
     }
 
     @PostMapping
     public ResponseEntity<TransacaoDto> executar(@RequestBody @Valid DadosNovaTransacaoDto dados) {
-        Transacao novoTransacao = transacaoDtoMapper.toDomain(dados);
+        Transacao novoTransacao = transacaoMapper.toDomain(dados);
         novoTransacao = criarTransacao.executar(novoTransacao);
 
-        return ResponseEntity.ok(transacaoDtoMapper.toDto(novoTransacao));
+        return ResponseEntity.ok(commonTransacaoMapper.toDto(novoTransacao));
     }
 
     @GetMapping
     public ResponseEntity<List<TransacaoDto>> listarUsuarios() {
         List<TransacaoDto> lista = listarTransacao.listarTodos().stream()
-                .map(salvo -> transacaoDtoMapper.toDto(salvo))
+                .map(salvo -> commonTransacaoMapper.toDto(salvo))
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(lista);
@@ -67,7 +70,7 @@ class TransacaoController {
     public ResponseEntity<TransacaoDto> buscarPorId(@PathVariable UUID id) {
         Transacao transacao  = buscarTransacaoPorId.buscarPorId(id);
 
-        TransacaoDto dto = transacaoDtoMapper.toDto(transacao);
+        TransacaoDto dto = commonTransacaoMapper.toDto(transacao);
 
         return ResponseEntity.ok(dto);
     }
@@ -85,7 +88,7 @@ class TransacaoController {
     public ResponseEntity<AnaliseDespesaDto> visualizarGastosDia(@RequestParam("usuarioId") @NotNull UUID usuarioId){
         AnaliseDeDespesa analiseDeDespesa = analiseDespesaTransacao.visualizarGastos(usuarioId);
 
-        AnaliseDespesaDto dto = transacaoDtoMapper.toDto(analiseDeDespesa);
+        AnaliseDespesaDto dto = transacaoMapper.toDto(analiseDeDespesa);
 
         return ResponseEntity.ok(dto);
     }

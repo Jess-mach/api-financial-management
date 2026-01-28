@@ -1,4 +1,4 @@
-package br.com.ntt.transacao.producer.domain.entity;
+package br.com.ntt.common.transacao.domain.entity;
 
 import java.math.BigDecimal;
 import java.util.List;

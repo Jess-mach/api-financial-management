@@ -27,9 +27,9 @@ public class RepositorioSaldoClienteHttp implements RepositorioSaldoCliente {
     @Value("${endpoint.consulta.saldo:}")
     private String endpointConsultaSaldo;
 
-    private HttpClient client = HttpClient.newHttpClient();
+    private final HttpClient client = HttpClient.newHttpClient();
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
 
     private final SaldoDtoMapper mapper;
 
@@ -70,7 +70,9 @@ public class RepositorioSaldoClienteHttp implements RepositorioSaldoCliente {
 
         saldoConta.setSaldo(valorAtualizado);
 
-        String json = objectMapper.writeValueAsString(saldoConta);
+        SaldoContaDto dto = mapper.toDto(saldoConta);
+
+        String json = objectMapper.writeValueAsString(dto);
 
         try {
             HttpRequest request = HttpRequest.newBuilder()

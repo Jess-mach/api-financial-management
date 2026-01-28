@@ -1,7 +1,7 @@
-package br.com.ntt.transacao.producer.infra.controller.dto;
+package br.com.ntt.common.transacao.infra.controller.dto;
 
-import br.com.ntt.transacao.producer.domain.model.StatusTransacao;
-import br.com.ntt.transacao.producer.domain.model.TipoTransacao;
+import br.com.ntt.common.transacao.domain.model.StatusTransacao;
+import br.com.ntt.common.transacao.domain.model.TipoTransacao;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

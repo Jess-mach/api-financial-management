@@ -1,8 +1,8 @@
 package br.com.ntt.transacao.producer.infra.gateways;
 
+import br.com.ntt.common.transacao.domain.entity.Transacao;
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeExportacao;
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao;
-import br.com.ntt.transacao.producer.domain.entity.Transacao;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;

@@ -1,4 +1,4 @@
-package br.com.ntt.transacao.producer.domain.entity;
+package br.com.ntt.common.transacao.domain.entity;
 
 
 public class AnaliseDeDespesa {

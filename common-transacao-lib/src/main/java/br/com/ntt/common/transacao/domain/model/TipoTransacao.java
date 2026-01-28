@@ -1,4 +1,4 @@
-package br.com.ntt.transacao.producer.domain.model;
+package br.com.ntt.common.transacao.domain.model;
 
 public enum TipoTransacao {
 

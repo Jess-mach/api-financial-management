@@ -4,26 +4,26 @@ import java.math.BigDecimal;
 
 public class SaldoConta {
 
-        private String name;
+        private String nome;
         private String conta;
         private BigDecimal saldo;
-        private String routingNumber;
         private String id;
+        public BigDecimal limiteCartao;
 
-    public SaldoConta(String name, String conta, BigDecimal saldo, String routingNumber, String id) {
-        this.name = name;
+    public SaldoConta(String nome, String conta, BigDecimal saldo, String id, BigDecimal limiteCartao) {
+        this.nome = nome;
         this.conta = conta;
         this.saldo = saldo;
-        this.routingNumber = routingNumber;
         this.id = id;
+        this.limiteCartao = limiteCartao;
     }
 
-    public String getName() {
-        return name;
+    public String getNome() {
+        return nome;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getConta() {
@@ -42,20 +42,20 @@ public class SaldoConta {
         this.saldo = saldo;
     }
 
-    public String getRoutingNumber() {
-        return routingNumber;
-    }
-
-    public void setRoutingNumber(String routingNumber) {
-        this.routingNumber = routingNumber;
-    }
-
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public BigDecimal getLimiteCartao() {
+        return limiteCartao;
+    }
+
+    public void setLimiteCartao(BigDecimal limiteCartao) {
+        this.limiteCartao = limiteCartao;
     }
 }
 

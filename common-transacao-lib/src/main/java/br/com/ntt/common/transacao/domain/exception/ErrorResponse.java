@@ -1,4 +1,4 @@
-package br.com.ntt.transacao.producer.domain.exception;
+package br.com.ntt.common.transacao.domain.exception;
 
 import java.time.LocalDateTime;
 import java.util.Map;

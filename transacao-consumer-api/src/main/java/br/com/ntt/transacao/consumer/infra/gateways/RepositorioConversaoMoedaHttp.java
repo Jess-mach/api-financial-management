@@ -29,12 +29,11 @@ public class RepositorioConversaoMoedaHttp implements RepositorioConversaoMoeda 
     @Value("${endpoint.conversor.moeda:}")
     private String endpointConversorMoeda;
 
-    private HttpClient client = HttpClient.newHttpClient();
+    private final HttpClient client = HttpClient.newHttpClient();
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
 
     private final ConversorMoedaMapper mapper;
-
 
     @Override
     public ConversorMoeda conversaoMoeda(String moeda, LocalDateTime dataHoraSolicitacao) {

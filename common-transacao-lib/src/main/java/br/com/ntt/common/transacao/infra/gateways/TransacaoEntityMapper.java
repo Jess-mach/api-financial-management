@@ -1,11 +1,11 @@
-package br.com.ntt.transacao.producer.infra.gateways;
+package br.com.ntt.common.transacao.infra.gateways;
 
-import br.com.ntt.transacao.producer.domain.entity.RegistroDespesa;
-import br.com.ntt.transacao.producer.domain.model.StatusTransacao;
-import br.com.ntt.transacao.producer.domain.entity.Transacao;
-import br.com.ntt.transacao.producer.domain.model.TipoTransacao;
-import br.com.ntt.transacao.producer.infra.persistence.AnaliseDeDespesaCampos;
-import br.com.ntt.transacao.producer.infra.persistence.TransacaoEntity;
+import br.com.ntt.common.transacao.domain.entity.RegistroDespesa;
+import br.com.ntt.common.transacao.domain.model.StatusTransacao;
+import br.com.ntt.common.transacao.domain.entity.Transacao;
+import br.com.ntt.common.transacao.domain.model.TipoTransacao;
+import br.com.ntt.common.transacao.infra.persistence.AnaliseDeDespesaCampos;
+import br.com.ntt.common.transacao.infra.persistence.TransacaoEntity;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;

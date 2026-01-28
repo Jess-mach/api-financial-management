@@ -1,4 +1,4 @@
-package br.com.ntt.transacao.producer.domain.exception;
+package br.com.ntt.common.transacao.domain.exception;
 
 public class AccessDeniedException extends RuntimeException {
 

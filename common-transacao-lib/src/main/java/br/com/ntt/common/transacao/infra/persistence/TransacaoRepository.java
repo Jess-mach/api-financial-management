@@ -1,4 +1,4 @@
-package br.com.ntt.transacao.producer.infra.persistence;
+package br.com.ntt.common.transacao.infra.persistence;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

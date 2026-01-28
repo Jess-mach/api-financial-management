@@ -1,14 +1,17 @@
-package br.com.ntt.transacao.producer.domain.entity;
+package br.com.ntt.common.transacao.infra.persistence;
 
-import br.com.ntt.transacao.producer.domain.model.StatusTransacao;
-import br.com.ntt.transacao.producer.domain.model.TipoTransacao;
+import br.com.ntt.common.transacao.domain.model.StatusTransacao;
+import br.com.ntt.common.transacao.domain.model.TipoTransacao;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class Transacao {
-
+@Entity
+@Table(name = "transacao")
+public class TransacaoEntity {
+    @Id
     private UUID id;
     private UUID usuarioId;
     private BigDecimal valor;
@@ -20,11 +23,10 @@ public class Transacao {
     private BigDecimal taxaCambio;
     private String descricao;
 
-
-    public Transacao(UUID id, UUID usuarioId, BigDecimal valor, TipoTransacao tipo,
-                     StatusTransacao status, LocalDateTime dataHoraSolicitacao,
-                     LocalDateTime dataHoraFinalizacao, String moeda, BigDecimal taxaCambio,
-                     String descricao) {
+    public TransacaoEntity(UUID id, UUID usuarioId, BigDecimal valor, TipoTransacao tipo,
+                           StatusTransacao status, LocalDateTime dataHoraSolicitacao,
+                           LocalDateTime dataHoraFinalizacao, String moeda,
+                           BigDecimal taxaCambio, String descricao) {
         this.id = id;
         this.usuarioId = usuarioId;
         this.valor = valor;
@@ -35,6 +37,9 @@ public class Transacao {
         this.moeda = moeda;
         this.taxaCambio = taxaCambio;
         this.descricao = descricao;
+    }
+
+    public TransacaoEntity() {
     }
 
     public UUID getId() {
@@ -116,4 +121,5 @@ public class Transacao {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
+
 }

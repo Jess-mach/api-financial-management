@@ -1,4 +1,4 @@
-package br.com.ntt.transacao.producer.infra.persistence;
+package br.com.ntt.common.transacao.infra.persistence;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
