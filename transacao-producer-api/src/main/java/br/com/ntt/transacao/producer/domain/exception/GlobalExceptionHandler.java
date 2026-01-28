@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -30,17 +31,18 @@ public class GlobalExceptionHandler {
         Map<String, String> errors = new HashMap<>();
         ex.getFieldErrors().forEach(e -> errors.put(e.getField(), e.getDefaultMessage()));
 
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.BAD_REQUEST.value())
-                .error("Erro de Validação")
-                .message("Dados inválidos fornecidos")
-                .path(request.getDescription(false).replace("uri=", ""))
-                .validationErrors(errors)
-                .build();
+        ErrorResponse errorResponse = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                "Erro de Validação",
+                "Dados inválidos fornecidos",
+                request.getDescription(false).replace("uri=", ""),
+                errors
+        );
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorResponse> handleConstraintViolationException(
@@ -55,15 +57,14 @@ public class GlobalExceptionHandler {
             errors.put(fieldName, errorMessage);
         }
 
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.BAD_REQUEST.value())
-                .error("Erro de Validação")
-                .message("Parâmetros inválidos fornecidos")
-                .path(request.getDescription(false).replace("uri=", ""))
-                .validationErrors(errors)
-                .build();
-
+        ErrorResponse errorResponse = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                "Erro de Validação",
+                "Parâmetros inválidos fornecidos",
+                request.getDescription(false).replace("uri=", ""),
+                errors
+        );
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
@@ -75,13 +76,14 @@ public class GlobalExceptionHandler {
         String message = String.format("Método '%s' não é permitido. Métodos suportados: %s",
                 ex.getMethod(), supportedMethods);
 
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.METHOD_NOT_ALLOWED.value())
-                .error("Método Não Permitido")
-                .message(message)
-                .path(request.getDescription(false).replace("uri=", ""))
-                .build();
+        ErrorResponse errorResponse = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.METHOD_NOT_ALLOWED.value(),
+                "Método Não Permitido",
+                message,
+                request.getDescription(false).replace("uri=", ""),
+                null
+        );
 
         return new ResponseEntity<>(errorResponse, HttpStatus.METHOD_NOT_ALLOWED);
     }
@@ -90,13 +92,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleResourceNotFoundException(
             ResourceNotFoundException ex, WebRequest request) {
 
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.NOT_FOUND.value())
-                .error("Recurso Não Encontrado")
-                .message(ex.getMessage())
-                .path(request.getDescription(false).replace("uri=", ""))
-                .build();
+        ErrorResponse errorResponse = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND.value(),
+                "Recurso Não Encontrado",
+                ex.getMessage(),
+                request.getDescription(false).replace("uri=", ""),
+                null
+        );
 
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
@@ -105,13 +108,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleBusinessException(
             BusinessException ex, WebRequest request) {
 
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.UNPROCESSABLE_ENTITY.value())
-                .error("Erro de Negócio")
-                .message(ex.getMessage())
-                .path(request.getDescription(false).replace("uri=", ""))
-                .build();
+        ErrorResponse errorResponse = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.UNPROCESSABLE_ENTITY.value(),
+                "Erro de Negócio",
+                ex.getMessage(),
+                request.getDescription(false).replace("uri=", ""),
+                null
+        );
 
         return new ResponseEntity<>(errorResponse, HttpStatus.UNPROCESSABLE_ENTITY);
     }
@@ -120,29 +124,45 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleAccessDeniedException(
             AccessDeniedException ex, WebRequest request) {
 
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.FORBIDDEN.value())
-                .error("Acesso Negado")
-                .message("Você não tem permissão para acessar este recurso")
-                .path(request.getDescription(false).replace("uri=", ""))
-                .build();
+        ErrorResponse errorResponse = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.FORBIDDEN.value(),
+                "Acesso Negado",
+                "Você não tem permissão para acessar este recurso",
+                request.getDescription(false).replace("uri=", ""),
+                null
+        );
 
         return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorResponse> handleInternalAuthenticationServiceException(
+            AuthenticationException ex, WebRequest request) {
+
+        ErrorResponse errorResponse = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.UNAUTHORIZED.value(),
+                "Acesso Negado",
+                "Você não tem permissão para acessar este recurso",
+                request.getDescription(false).replace("uri=", ""),
+                null);
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleIllegalArgumentException(
             IllegalArgumentException ex, WebRequest request) {
 
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.BAD_REQUEST.value())
-                .error("Argumento Inválido")
-                .message(ex.getMessage())
-                .path(request.getDescription(false).replace("uri=", ""))
-                .build();
-
+        ErrorResponse errorResponse = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                "Argumento Inválido",
+                ex.getMessage(),
+                request.getDescription(false).replace("uri=", ""),
+                null
+        );
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
@@ -150,13 +170,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleGlobalException(
             Exception ex, WebRequest request) {
 
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.BAD_REQUEST.value())
-                .error("Erro Interno do Servidor")
-                .message("Ocorreu um erro inesperado. Tente novamente mais tarde.")
-                .path(request.getDescription(false).replace("uri=", ""))
-                .build();
+        ErrorResponse errorResponse = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                "Erro Interno do Servidor",
+                "Ocorreu um erro inesperado. Tente novamente mais tarde.",
+                request.getDescription(false).replace("uri=", ""),
+                null
+        );
 
         log.error("Erro não tratado: " + ex.getMessage(), ex);
 
@@ -166,13 +187,15 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleEntityNotFoundException(Exception ex, WebRequest request) {
 
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.NOT_FOUND.value())
-                .error("Entidade não encontrada")
-                .message("Entidade não encontrada.")
-                .path(request.getDescription(false).replace("uri=", ""))
-                .build();
+        ErrorResponse errorResponse = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND.value(),
+                "Entidade não encontrada",
+                "Entidade não encontrada.",
+                request.getDescription(false).replace("uri=", ""),
+                null
+
+        );
 
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
@@ -204,14 +227,14 @@ public class GlobalExceptionHandler {
             errors.put(fieldName, errorMessage);
         }
 
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.CONFLICT.value())
-                .error("Erro de Integridade")
-                .message(errorMessage)
-                .path(request.getDescription(false).replace("uri=", ""))
-                .validationErrors(errors.isEmpty() ? null : errors)
-                .build();
+        ErrorResponse errorResponse = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.CONFLICT.value(),
+                "Erro de Integridade",
+                errorMessage,
+                request.getDescription(false).replace("uri=", ""),
+                errors
+        );
 
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
