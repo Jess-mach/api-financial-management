@@ -8,16 +8,3 @@ public record TotalizadorDespesaDto(
         BigDecimal valorTotal){
 
 }
-
-
-//despesasPorDia.
-//
-//stream()
-//                .
-//
-//map(campos ->mapper.
-//
-//toDomain(campos))
-//        .
-//
-//collect(Collectors.toList());

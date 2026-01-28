@@ -4,8 +4,8 @@ import br.com.ntt.transacao.producer.application.usecases.AnaliseDespesaTransaca
 import br.com.ntt.transacao.producer.application.usecases.BuscarTransacaoPorId;
 import br.com.ntt.transacao.producer.application.usecases.CriarTransacao;
 import br.com.ntt.transacao.producer.application.usecases.ListarTransacao;
-import br.com.ntt.transacao.producer.domain.entities.transacao.analise.AnaliseDeDespesa;
-import br.com.ntt.transacao.producer.domain.entities.transacao.transacao.Transacao;
+import br.com.ntt.transacao.producer.domain.entity.AnaliseDeDespesa;
+import br.com.ntt.transacao.producer.domain.entity.Transacao;
 import br.com.ntt.transacao.producer.infra.controller.dto.AnaliseDespesaDto;
 import br.com.ntt.transacao.producer.infra.controller.dto.DadosNovaTransacaoDto;
 import br.com.ntt.transacao.producer.infra.controller.dto.TransacaoDto;

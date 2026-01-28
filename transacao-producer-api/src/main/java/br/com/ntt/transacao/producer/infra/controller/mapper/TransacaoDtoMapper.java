@@ -1,10 +1,10 @@
 package br.com.ntt.transacao.producer.infra.controller.mapper;
 
 
-import br.com.ntt.transacao.producer.domain.entities.transacao.analise.AnaliseDeDespesa;
-import br.com.ntt.transacao.producer.domain.entities.transacao.analise.RegistroDespesa;
+import br.com.ntt.transacao.producer.domain.entity.AnaliseDeDespesa;
+import br.com.ntt.transacao.producer.domain.entity.RegistroDespesa;
 import br.com.ntt.transacao.producer.domain.model.TipoTransacao;
-import br.com.ntt.transacao.producer.domain.entities.transacao.transacao.Transacao;
+import br.com.ntt.transacao.producer.domain.entity.Transacao;
 import br.com.ntt.transacao.producer.infra.controller.dto.*;
 import org.springframework.stereotype.Component;
 

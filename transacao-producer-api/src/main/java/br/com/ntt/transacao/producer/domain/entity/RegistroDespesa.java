@@ -1,4 +1,4 @@
-package br.com.ntt.transacao.producer.domain.entities.transacao.analise;
+package br.com.ntt.transacao.producer.domain.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

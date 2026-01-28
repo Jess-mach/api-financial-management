@@ -1,4 +1,4 @@
-package br.com.ntt.transacao.producer.domain.entities.transacao.transacao;
+package br.com.ntt.transacao.producer.domain.entity;
 
 import br.com.ntt.transacao.producer.domain.model.StatusTransacao;
 import br.com.ntt.transacao.producer.domain.model.TipoTransacao;
@@ -21,7 +21,10 @@ public class Transacao {
     private String descricao;
 
 
-    public Transacao(UUID id, UUID usuarioId, BigDecimal valor, TipoTransacao tipo, StatusTransacao status, LocalDateTime dataHoraSolicitacao, LocalDateTime dataHoraFinalizacao, String moeda, BigDecimal taxaCambio, String descricao) {
+    public Transacao(UUID id, UUID usuarioId, BigDecimal valor, TipoTransacao tipo,
+                     StatusTransacao status, LocalDateTime dataHoraSolicitacao,
+                     LocalDateTime dataHoraFinalizacao, String moeda, BigDecimal taxaCambio,
+                     String descricao) {
         this.id = id;
         this.usuarioId = usuarioId;
         this.valor = valor;
@@ -34,81 +37,80 @@ public class Transacao {
         this.descricao = descricao;
     }
 
-
     public UUID getId() {
         return id;
-    }
-
-    public UUID getUsuarioId() {
-        return usuarioId;
-    }
-
-    public BigDecimal getValor() {
-        return valor;
-    }
-
-    public TipoTransacao getTipo() {
-        return tipo;
-    }
-
-    public StatusTransacao getStatus() {
-        return status;
-    }
-
-    public LocalDateTime getDataHoraSolicitacao() {
-        return dataHoraSolicitacao;
-    }
-
-    public LocalDateTime getDataHoraFinalizacao() {
-        return dataHoraFinalizacao;
-    }
-
-    public String getMoeda() {
-        return moeda;
-    }
-
-    public BigDecimal getTaxaCambio() {
-        return taxaCambio;
-    }
-
-    public String getDescricao() {
-        return descricao;
     }
 
     public void setId(UUID id) {
         this.id = id;
     }
 
+    public UUID getUsuarioId() {
+        return usuarioId;
+    }
+
     public void setUsuarioId(UUID usuarioId) {
         this.usuarioId = usuarioId;
+    }
+
+    public BigDecimal getValor() {
+        return valor;
     }
 
     public void setValor(BigDecimal valor) {
         this.valor = valor;
     }
 
+    public TipoTransacao getTipo() {
+        return tipo;
+    }
+
     public void setTipo(TipoTransacao tipo) {
         this.tipo = tipo;
+    }
+
+    public StatusTransacao getStatus() {
+        return status;
     }
 
     public void setStatus(StatusTransacao status) {
         this.status = status;
     }
 
+    public LocalDateTime getDataHoraSolicitacao() {
+        return dataHoraSolicitacao;
+    }
+
     public void setDataHoraSolicitacao(LocalDateTime dataHoraSolicitacao) {
         this.dataHoraSolicitacao = dataHoraSolicitacao;
+    }
+
+    public LocalDateTime getDataHoraFinalizacao() {
+        return dataHoraFinalizacao;
     }
 
     public void setDataHoraFinalizacao(LocalDateTime dataHoraFinalizacao) {
         this.dataHoraFinalizacao = dataHoraFinalizacao;
     }
 
+    public String getMoeda() {
+        return moeda;
+    }
+
     public void setMoeda(String moeda) {
         this.moeda = moeda;
     }
 
+    public BigDecimal getTaxaCambio() {
+        return taxaCambio;
+    }
+
     public void setTaxaCambio(BigDecimal taxaCambio) {
         this.taxaCambio = taxaCambio;
+    }
+
+    public String getDescricao() {
+        return descricao;
     }
 
     public void setDescricao(String descricao) {

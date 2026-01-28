@@ -23,6 +23,24 @@ public class TransacaoEntity {
     private BigDecimal taxaCambio;
     private String descricao;
 
+    public TransacaoEntity(UUID id, UUID usuarioId, BigDecimal valor, TipoTransacao tipo,
+                           StatusTransacao status, LocalDateTime dataHoraSolicitacao,
+                           LocalDateTime dataHoraFinalizacao, String moeda,
+                           BigDecimal taxaCambio, String descricao) {
+        this.id = id;
+        this.usuarioId = usuarioId;
+        this.valor = valor;
+        this.tipo = tipo;
+        this.status = status;
+        this.dataHoraSolicitacao = dataHoraSolicitacao;
+        this.dataHoraFinalizacao = dataHoraFinalizacao;
+        this.moeda = moeda;
+        this.taxaCambio = taxaCambio;
+        this.descricao = descricao;
+    }
+
+    public TransacaoEntity() {
+    }
 
     public UUID getId() {
         return id;
@@ -104,19 +122,4 @@ public class TransacaoEntity {
         this.descricao = descricao;
     }
 
-    public TransacaoEntity(UUID id, UUID usuarioId, BigDecimal valor, TipoTransacao tipo, StatusTransacao status, LocalDateTime dataHoraSolicitacao, LocalDateTime dataHoraFinalizacao, String moeda, BigDecimal taxaCambio, String descricao) {
-        this.id = id;
-        this.usuarioId = usuarioId;
-        this.valor = valor;
-        this.tipo = tipo;
-        this.status = status;
-        this.dataHoraSolicitacao = dataHoraSolicitacao;
-        this.dataHoraFinalizacao = dataHoraFinalizacao;
-        this.moeda = moeda;
-        this.taxaCambio = taxaCambio;
-        this.descricao = descricao;
-    }
-
-    public TransacaoEntity() {
-    }
 }

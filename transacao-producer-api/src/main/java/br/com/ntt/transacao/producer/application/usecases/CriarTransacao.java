@@ -2,7 +2,7 @@ package br.com.ntt.transacao.producer.application.usecases;
 
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao;
 import br.com.ntt.transacao.producer.application.gateways.RepositorioProdutorDeTransacao;
-import br.com.ntt.transacao.producer.domain.entities.transacao.transacao.Transacao;
+import br.com.ntt.transacao.producer.domain.entity.Transacao;
 import org.springframework.stereotype.Component;
 
 @Component

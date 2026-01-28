@@ -1,9 +1,9 @@
 package br.com.ntt.transacao.producer.application.usecases;
 
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao;
-import br.com.ntt.transacao.producer.domain.entities.transacao.analise.AnaliseDeDespesa;
-import br.com.ntt.transacao.producer.domain.entities.transacao.analise.RegistroDespesa;
-import br.com.ntt.transacao.producer.domain.entities.transacao.analise.TotalizadorDespesa;
+import br.com.ntt.transacao.producer.domain.entity.AnaliseDeDespesa;
+import br.com.ntt.transacao.producer.domain.entity.RegistroDespesa;
+import br.com.ntt.transacao.producer.domain.entity.TotalizadorDespesa;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;

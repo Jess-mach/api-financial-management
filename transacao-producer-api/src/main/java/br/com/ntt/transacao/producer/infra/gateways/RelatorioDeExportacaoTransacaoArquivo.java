@@ -2,7 +2,7 @@ package br.com.ntt.transacao.producer.infra.gateways;
 
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeExportacao;
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao;
-import br.com.ntt.transacao.producer.domain.entities.transacao.transacao.Transacao;
+import br.com.ntt.transacao.producer.domain.entity.Transacao;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
@@ -80,7 +80,4 @@ public class RelatorioDeExportacaoTransacaoArquivo implements RepositorioDeExpor
             return new ByteArrayInputStream(saida.toByteArray());
         }
     }
-
-    public ByteArrayInputStream gerarPdf() {return null;}
-
 }

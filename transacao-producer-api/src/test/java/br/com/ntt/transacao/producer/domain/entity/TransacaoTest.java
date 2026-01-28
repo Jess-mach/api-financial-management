@@ -1,4 +1,4 @@
-package br.com.ntt.transacao.producer.domain.entities.transacao;
+package br.com.ntt.transacao.producer.domain.entity;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
