@@ -12,3 +12,6 @@ docker exec -it kafka kafka-topics --create --bootstrap-server localhost:9092 --
 ´´´
 
 mvn clean install
+
+
+http://localhost:8082/swagger-ui/index.html
