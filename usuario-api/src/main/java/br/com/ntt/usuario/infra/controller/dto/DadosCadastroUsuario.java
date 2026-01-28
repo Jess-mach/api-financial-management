@@ -24,6 +24,6 @@ public record DadosCadastroUsuario(
                         "uma letra minúscula, um número e um caractere especial")
         String senha,
 
-        @NotNull
+        @NotNull(message = "O perfil é obrigatório")
         PerfilUsuario perfilUsuario ) {
 }
