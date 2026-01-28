@@ -7,7 +7,7 @@ import br.com.ntt.transacao.producer.application.usecases.ListarTransacao;
 import br.com.ntt.transacao.producer.domain.entities.transacao.analise.AnaliseDeDespesa;
 import br.com.ntt.transacao.producer.domain.entities.transacao.transacao.Transacao;
 import br.com.ntt.transacao.producer.infra.controller.dto.AnaliseDespesaDto;
-import br.com.ntt.transacao.producer.infra.controller.dto.DadosNovaTransacao;
+import br.com.ntt.transacao.producer.infra.controller.dto.DadosNovaTransacaoDto;
 import br.com.ntt.transacao.producer.infra.controller.dto.TransacaoDto;
 import br.com.ntt.transacao.producer.infra.controller.mapper.TransacaoDtoMapper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -46,11 +46,11 @@ class TransacaoController {
     }
 
     @PostMapping
-    public ResponseEntity<TransacaoDto> executar(@RequestBody @Valid DadosNovaTransacao dados) {
+    public ResponseEntity<TransacaoDto> executar(@RequestBody @Valid DadosNovaTransacaoDto dados) {
         Transacao novoTransacao = transacaoDtoMapper.toDomain(dados);
-        Transacao salvo = criarTransacao.executar(novoTransacao);
+        novoTransacao = criarTransacao.executar(novoTransacao);
 
-        return ResponseEntity.ok(transacaoDtoMapper.toDto(salvo));
+        return ResponseEntity.ok(transacaoDtoMapper.toDto(novoTransacao));
     }
 
     @GetMapping

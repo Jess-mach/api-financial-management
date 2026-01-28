@@ -12,7 +12,7 @@ import java.util.List;
 
 public class TransacaoDtoMapper {
 
-    public Transacao toDomain(DadosNovaTransacao dados) {
+    public Transacao toDomain(DadosNovaTransacaoDto dados) {
         return new Transacao(
                 null,
                 dados.usuarioId(),

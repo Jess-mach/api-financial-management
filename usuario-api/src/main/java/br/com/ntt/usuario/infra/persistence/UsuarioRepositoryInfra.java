@@ -3,7 +3,7 @@ package br.com.ntt.usuario.infra.persistence;
 import br.com.ntt.usuario.domain.entity.Usuario;
 import br.com.ntt.usuario.application.gateways.UsuarioRepository;
 import br.com.ntt.usuario.infra.persistence.entity.UsuarioJpaEntity;
-import br.com.ntt.usuario.infra.persistence.mapper.UsuarioMapper;
+import br.com.ntt.usuario.infra.persistence.mapper.UsuarioJpaMapper;
 import br.com.ntt.usuario.infra.persistence.repository.RepositoryJpa;
 import org.springframework.stereotype.Repository;
 
@@ -15,9 +15,9 @@ import java.util.UUID;
 public class UsuarioRepositoryInfra implements UsuarioRepository {
 
     private final RepositoryJpa repositoryJpa;
-    private final UsuarioMapper mapper;
+    private final UsuarioJpaMapper mapper;
 
-    public UsuarioRepositoryInfra(RepositoryJpa repositoryJpa, UsuarioMapper mapper) {
+    public UsuarioRepositoryInfra(RepositoryJpa repositoryJpa, UsuarioJpaMapper mapper) {
         this.repositoryJpa = repositoryJpa;
         this.mapper = mapper;
     }

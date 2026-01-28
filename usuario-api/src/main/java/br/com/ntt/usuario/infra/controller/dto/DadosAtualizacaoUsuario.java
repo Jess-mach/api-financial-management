@@ -3,6 +3,7 @@ package br.com.ntt.usuario.infra.controller.dto;
 import br.com.ntt.usuario.domain.PerfilUsuario;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 public record DadosAtualizacaoUsuario(
@@ -20,6 +21,6 @@ public record DadosAtualizacaoUsuario(
                         "uma letra minúscula, um número e um caractere especial")
         String senha,
 
-        @NotBlank(message = "O perfil é obrigatório")
+        @NotNull(message = "O perfil é obrigatório")
         PerfilUsuario perfilUsuario) {
 }

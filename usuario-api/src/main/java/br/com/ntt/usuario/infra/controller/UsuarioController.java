@@ -4,6 +4,9 @@ import br.com.ntt.usuario.application.usecase.*;
 import br.com.ntt.usuario.domain.entity.Usuario;
 import br.com.ntt.usuario.infra.controller.dto.DadosAtualizacaoUsuario;
 import br.com.ntt.usuario.infra.controller.dto.DadosCadastroUsuario;
+import br.com.ntt.usuario.infra.controller.dto.UsuarioDto;
+import br.com.ntt.usuario.infra.controller.mapper.UsuarioMapper;
+import br.com.ntt.usuario.infra.persistence.mapper.UsuarioJpaMapper;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,49 +25,44 @@ public class UsuarioController {
     private final AtualizarUsuario atualizarUsuario;
     private final DeletarUsuario deletarUsuario;
     private final ArquivoUsuario arquivoUsuario;
+    private final UsuarioMapper usuarioMapper;
 
-    public UsuarioController(CriarUsuario criarUsuario, ListarUsuario listarUsuario, AtualizarUsuario atualizarUsuario, DeletarUsuario deletarUsuario, ArquivoUsuario arquivoUsuario) {
+    public UsuarioController(CriarUsuario criarUsuario, ListarUsuario listarUsuario,
+                             AtualizarUsuario atualizarUsuario, DeletarUsuario deletarUsuario,
+                             ArquivoUsuario arquivoUsuario, UsuarioMapper usuarioMapper) {
         this.criarUsuario = criarUsuario;
         this.listarUsuario = listarUsuario;
         this.atualizarUsuario = atualizarUsuario;
         this.deletarUsuario = deletarUsuario;
         this.arquivoUsuario = arquivoUsuario;
+        this.usuarioMapper = usuarioMapper;
     }
 
     @PostMapping
-    public ResponseEntity<Usuario> criar(@RequestBody @Valid DadosCadastroUsuario dados) {
-        Usuario novoUsuario = Usuario.criarNovo(
-                dados.nome(),
-                dados.email(),
-                dados.login(),
-                dados.senha(),
-                dados.perfilUsuario()
-        );
+    public ResponseEntity<UsuarioDto> criar(@RequestBody @Valid DadosCadastroUsuario dados) {
+        Usuario novoUsuario = usuarioMapper.toDomain(dados);
+        novoUsuario = criarUsuario.executar(novoUsuario);
 
-        Usuario usuario = criarUsuario.executar(novoUsuario);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuario);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(usuarioMapper.toDto(novoUsuario));
     }
 
     @GetMapping
-    public ResponseEntity<List<Usuario>> listar() {
-        List<Usuario> usuarios = listarUsuario.executar();
-        return ResponseEntity.ok(usuarios);
+    public ResponseEntity<List<UsuarioDto>> listar() {
+        List<UsuarioDto> lista = listarUsuario.executar()
+                .stream()
+                .map(salvo -> usuarioMapper.toDto(salvo))
+                .toList();
+
+        return ResponseEntity.ok(lista);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> atualizar(@PathVariable String id, @RequestBody @Valid DadosAtualizacaoUsuario dados) {
-        Usuario usuarioAtualizado = Usuario.atualizarUsuario(
-                id,
-                dados.nome(),
-                dados.email(),
-                dados.senha(),
-                dados.perfilUsuario()
+    public ResponseEntity<UsuarioDto> atualizar(@PathVariable String id, @RequestBody @Valid DadosAtualizacaoUsuario dados) {
+        Usuario usuarioAtualizado = usuarioMapper.toDomain(id, dados);
+        usuarioAtualizado = atualizarUsuario.executar(usuarioAtualizado);
 
-        );
-        Usuario usuario = atualizarUsuario.executar(usuarioAtualizado);
-
-        return ResponseEntity.ok(usuario);
+        return ResponseEntity.ok(usuarioMapper.toDto(usuarioAtualizado));
     }
 
     @DeleteMapping("/{id}")

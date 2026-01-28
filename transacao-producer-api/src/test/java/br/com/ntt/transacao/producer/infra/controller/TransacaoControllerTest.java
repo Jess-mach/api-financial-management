@@ -1,6 +1,6 @@
 package br.com.ntt.transacao.producer.infra.controller;
 
-import br.com.ntt.transacao.producer.infra.controller.dto.DadosNovaTransacao;
+import br.com.ntt.transacao.producer.infra.controller.dto.DadosNovaTransacaoDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -46,7 +46,7 @@ class TransacaoControllerTest {
     @DisplayName("Deve criar transação com sucesso (Status 202) mesmo sem token real")
     void deveCriarTransacaoComSucesso() throws Exception {
 
-        DadosNovaTransacao request = new DadosNovaTransacao(
+        DadosNovaTransacaoDto request = new DadosNovaTransacaoDto(
                 UUID.randomUUID(),
                 new BigDecimal("100.50"),
                 "DEPOSITO", // Use as Strings exatas do seu Enum
@@ -68,7 +68,7 @@ class TransacaoControllerTest {
     @Test
     @DisplayName("Deve falhar se valor for negativo (Teste de Validação)")
     void deveFalharComValorNegativo() throws Exception {
-        DadosNovaTransacao requestInvalido = new DadosNovaTransacao(
+        DadosNovaTransacaoDto requestInvalido = new DadosNovaTransacaoDto(
                 UUID.randomUUID(),
                 new BigDecimal("-50.00"),
                 "SAQUE",

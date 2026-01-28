@@ -75,7 +75,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         try {
             var algorithm = Algorithm.HMAC256(secret);
             return JWT.require(algorithm)
-                    .withIssuer("API Financial.anagement")
+                    .withIssuer("API Financial.management")
                     .build()
                     .verify(tokenJWT)
                     .getSubject();

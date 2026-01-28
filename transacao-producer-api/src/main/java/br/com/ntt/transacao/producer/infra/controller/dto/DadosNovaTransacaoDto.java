@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public record DadosNovaTransacao(
+public record DadosNovaTransacaoDto(
         @NotNull(message = "O ID do usuário é obrigatório")
         UUID usuarioId,
 

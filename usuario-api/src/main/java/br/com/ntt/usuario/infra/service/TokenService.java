@@ -28,7 +28,7 @@ public class TokenService {
         try {
             var algorithm = Algorithm.HMAC256(secret);
             return JWT.create()
-                    .withIssuer("API Financial.anagement")
+                    .withIssuer("API Financial.management")
                     .withSubject(usuario.getLogin())
                     .withExpiresAt(dataExpiracao())
                     .sign(algorithm);
