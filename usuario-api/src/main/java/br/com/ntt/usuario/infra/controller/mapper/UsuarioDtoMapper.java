@@ -5,8 +5,10 @@ import br.com.ntt.usuario.infra.controller.dto.DadosAtualizacaoUsuario;
 import br.com.ntt.usuario.infra.controller.dto.DadosCadastroUsuario;
 import br.com.ntt.usuario.infra.controller.dto.UsuarioDto;
 import jakarta.validation.Valid;
+import org.springframework.stereotype.Component;
 
-public class UsuarioMapper {
+@Component
+public class UsuarioDtoMapper {
 
     public Usuario toDomain(DadosCadastroUsuario dados){
         return new Usuario(

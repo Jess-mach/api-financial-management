@@ -1,14 +1,14 @@
 package br.com.ntt.usuario.infra.persistence;
 
-import br.com.ntt.usuario.domain.entity.Usuario;
 import br.com.ntt.usuario.application.gateways.UsuarioRepository;
+import br.com.ntt.usuario.domain.entity.Usuario;
+import br.com.ntt.usuario.domain.exception.ResourceNotFoundException;
 import br.com.ntt.usuario.infra.persistence.entity.UsuarioJpaEntity;
 import br.com.ntt.usuario.infra.persistence.mapper.UsuarioJpaMapper;
 import br.com.ntt.usuario.infra.persistence.repository.RepositoryJpa;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -22,7 +22,6 @@ public class UsuarioRepositoryInfra implements UsuarioRepository {
         this.mapper = mapper;
     }
 
-
     @Override
     public Usuario save(Usuario usuario, String senhaHash) {
         UsuarioJpaEntity entity = mapper.toEntity(usuario, senhaHash);
@@ -31,9 +30,11 @@ public class UsuarioRepositoryInfra implements UsuarioRepository {
     }
 
     @Override
-    public Optional<Usuario> findById(UUID id) {
-        return repositoryJpa.findById(id)
-                .map(mapper::toDomain);
+    public Usuario findById(UUID id) {
+        UsuarioJpaEntity byId = repositoryJpa.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario não encontrado"));
+
+        return mapper.toDomain(byId);
     }
 
     @Override

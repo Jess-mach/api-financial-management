@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public class Usuario {
 
-    private final  UUID id;
+    private UUID id;
     private String nome;
     private String email;
     private String login;
@@ -86,5 +86,11 @@ public class Usuario {
         return senha;
     }
 
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
+    public void setLogin(String login) {
+        this.login = login;
+    }
 }
