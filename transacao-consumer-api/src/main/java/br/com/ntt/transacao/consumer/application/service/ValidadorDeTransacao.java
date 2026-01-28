@@ -4,7 +4,11 @@ import br.com.ntt.transacao.consumer.domain.entities.conta.SaldoConta;
 import br.com.ntt.transacao.consumer.domain.entities.moeda.ConversorMoeda;
 import br.com.ntt.transacao.consumer.domain.entities.transacao.Transacao;
 import br.com.ntt.transacao.consumer.domain.model.StatusTransacao;
+import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+
+@Component
 public class ValidadorDeTransacao {
 
     public Transacao validarTransacao(Transacao transacao, SaldoConta saldoConta, ConversorMoeda conversorMoeda) {
@@ -12,41 +16,47 @@ public class ValidadorDeTransacao {
         Double valorDaTransacao = transacao.getValor().doubleValue();
         Double valorTaxaDeCambio = conversorMoeda.getCotacoes().get(0).getCotacaoVenda().doubleValue();
 
-        if(!transacao.getMoeda().equals("BRL")){
-            transacao.atualizaTaxaDeCambio(valorTaxaDeCambio);
+        if (!transacao.getMoeda().equals("BRL")) {
+            transacao.setTaxaCambio(BigDecimal.valueOf(valorTaxaDeCambio));
         }
 
         switch (transacao.getTipo()) {
             case SAQUE:
-                if(valorTaxaDeCambio > 0) {
+                if (valorTaxaDeCambio > 0) {
                     valorDaTransacao = valorDaTransacao * valorTaxaDeCambio;
                 }
-                if(valorDaTransacao <= valorDoSaldo)
-                    transacao.atualizaStatus(StatusTransacao.REJEITADO);
-                transacao.atualizaStatus(StatusTransacao.AUTORIZADO);
+                if (valorDaTransacao <= valorDoSaldo)
+                    transacao.setStatus(StatusTransacao.AUTORIZADO);
+                else
+                    transacao.setStatus(StatusTransacao.REJEITADO);
                 break;
 
             case DEPOSITO:
-                transacao.atualizaStatus(StatusTransacao.AUTORIZADO);
+                transacao.setStatus(StatusTransacao.AUTORIZADO);
                 break;
 
             case COMPRA:
-                if(valorTaxaDeCambio > 0)
+                if (valorTaxaDeCambio > 0)
                     valorDaTransacao = valorDaTransacao * valorTaxaDeCambio;
-                if(valorDaTransacao <= valorDoSaldo)
-                    transacao.atualizaStatus(StatusTransacao.REJEITADO);
-                transacao.atualizaStatus(StatusTransacao.AUTORIZADO);
+
+                if (valorDaTransacao <= valorDoSaldo)
+                    transacao.setStatus(StatusTransacao.AUTORIZADO);
+                else
+                    transacao.setStatus(StatusTransacao.REJEITADO);
                 break;
 
             case TRANSFERENCIA:
-                if(valorTaxaDeCambio > 0)
+                if (valorTaxaDeCambio > 0)
                     valorDaTransacao = valorDaTransacao * valorTaxaDeCambio;
-                if(valorDaTransacao <= valorDoSaldo)
-                    transacao.atualizaStatus(StatusTransacao.REJEITADO);
+
+                if (valorDaTransacao <= valorDoSaldo)
+                    transacao.setStatus(StatusTransacao.AUTORIZADO);
+                else
+                    transacao.setStatus(StatusTransacao.REJEITADO);
                 break;
 
             default:
-                transacao.atualizaStatus(StatusTransacao.REJEITADO);
+                transacao.setStatus(StatusTransacao.REJEITADO);
                 break;
         }
         return transacao;

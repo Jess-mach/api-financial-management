@@ -34,53 +34,81 @@ public class Transacao {
         this.descricao = descricao;
     }
 
-
     public UUID getId() {
         return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public UUID getUsuarioId() {
         return usuarioId;
     }
 
+    public void setUsuarioId(UUID usuarioId) {
+        this.usuarioId = usuarioId;
+    }
+
     public BigDecimal getValor() {
         return valor;
+    }
+
+    public void setValor(BigDecimal valor) {
+        this.valor = valor;
     }
 
     public TipoTransacao getTipo() {
         return tipo;
     }
 
+    public void setTipo(TipoTransacao tipo) {
+        this.tipo = tipo;
+    }
+
     public StatusTransacao getStatus() {
         return status;
+    }
+
+    public void setStatus(StatusTransacao status) {
+        this.status = status;
     }
 
     public LocalDateTime getDataHoraSolicitacao() {
         return dataHoraSolicitacao;
     }
 
+    public void setDataHoraSolicitacao(LocalDateTime dataHoraSolicitacao) {
+        this.dataHoraSolicitacao = dataHoraSolicitacao;
+    }
+
     public LocalDateTime getDataHoraFinalizacao() {
         return dataHoraFinalizacao;
+    }
+
+    public void setDataHoraFinalizacao(LocalDateTime dataHoraFinalizacao) {
+        this.dataHoraFinalizacao = dataHoraFinalizacao;
     }
 
     public String getMoeda() {
         return moeda;
     }
 
+    public void setMoeda(String moeda) {
+        this.moeda = moeda;
+    }
+
     public BigDecimal getTaxaCambio() {
         return taxaCambio;
+    }
+
+    public void setTaxaCambio(BigDecimal taxaCambio) {
+        this.taxaCambio = taxaCambio;
     }
 
     public String getDescricao() {
         return descricao;
     }
 
-    public void atualizaStatus(StatusTransacao statusTransacao) {
-        this.status = statusTransacao;
-    }
 
-    public void atualizaTaxaDeCambio(Double cotacaoVenda) {
-        this.taxaCambio = BigDecimal.valueOf(cotacaoVenda);
-
-    }
 }

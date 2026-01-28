@@ -22,24 +22,40 @@ public class SaldoConta {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getConta() {
         return conta;
+    }
+
+    public void setConta(String conta) {
+        this.conta = conta;
     }
 
     public BigDecimal getSaldo() {
         return saldo;
     }
 
+    public void setSaldo(BigDecimal saldo) {
+        this.saldo = saldo;
+    }
+
     public String getRoutingNumber() {
         return routingNumber;
+    }
+
+    public void setRoutingNumber(String routingNumber) {
+        this.routingNumber = routingNumber;
     }
 
     public String getId() {
         return id;
     }
 
-    public void saldoAtualizado(BigDecimal valor) {
-        this.saldo = valor;
+    public void setId(String id) {
+        this.id = id;
     }
 }
 

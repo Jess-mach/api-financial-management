@@ -2,9 +2,11 @@ package br.com.ntt.transacao.consumer.infra.consumer.mapper;
 
 import br.com.ntt.transacao.consumer.domain.entities.transacao.Transacao;
 import br.com.ntt.transacao.consumer.infra.persistence.TransacaoEntity;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
+@Component
 public class TransacaoEntityMapper {
 
     public TransacaoEntity toEntity(Transacao dadosAtualizados, TransacaoEntity entity){

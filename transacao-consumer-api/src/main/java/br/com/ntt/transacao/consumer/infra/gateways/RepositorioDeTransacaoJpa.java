@@ -6,7 +6,9 @@ import br.com.ntt.transacao.consumer.domain.model.StatusTransacao;
 import br.com.ntt.transacao.consumer.infra.consumer.mapper.TransacaoEntityMapper;
 import br.com.ntt.transacao.consumer.infra.persistence.TransacaoEntity;
 import br.com.ntt.transacao.consumer.infra.persistence.TransacaoRepository;
+import org.springframework.stereotype.Component;
 
+@Component
 public class RepositorioDeTransacaoJpa implements RepositorioDeTransacao {
 
     private final TransacaoRepository repositorio;

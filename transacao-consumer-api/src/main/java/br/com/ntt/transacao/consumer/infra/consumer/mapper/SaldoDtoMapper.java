@@ -2,7 +2,9 @@ package br.com.ntt.transacao.consumer.infra.consumer.mapper;
 
 import br.com.ntt.transacao.consumer.domain.entities.conta.SaldoConta;
 import br.com.ntt.transacao.consumer.infra.consumer.dto.SaldoContaDto;
+import org.springframework.stereotype.Component;
 
+@Component
 public class SaldoDtoMapper {
 
     public SaldoConta toDomain(SaldoContaDto dto) {

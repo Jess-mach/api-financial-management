@@ -20,11 +20,23 @@ public class ConversorMoeda {
         return moeda;
     }
 
+    public void setMoeda(String moeda) {
+        this.moeda = moeda;
+    }
+
     public String getData() {
         return data;
     }
 
+    public void setData(String data) {
+        this.data = data;
+    }
+
     public List<Cotacao> getCotacoes() {
         return cotacoes;
+    }
+
+    public void setCotacoes(List<Cotacao> cotacoes) {
+        this.cotacoes = cotacoes;
     }
 }

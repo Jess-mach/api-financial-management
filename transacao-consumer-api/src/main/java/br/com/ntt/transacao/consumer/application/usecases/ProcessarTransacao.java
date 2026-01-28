@@ -58,7 +58,7 @@ public class ProcessarTransacao {
     }
 
     public void atualizarStatusErro(Transacao transacao) {
-        transacao.atualizaStatus(StatusTransacao.ERRO_PROCESSAMENTO);
+        transacao.setStatus(StatusTransacao.ERRO_PROCESSAMENTO);
 
         repositorio.atualizarTransacao(transacao);
     }

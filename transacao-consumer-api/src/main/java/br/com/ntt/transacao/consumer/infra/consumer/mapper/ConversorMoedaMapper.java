@@ -4,7 +4,9 @@ import br.com.ntt.transacao.consumer.domain.entities.cotacao.Cotacao;
 import br.com.ntt.transacao.consumer.domain.entities.moeda.ConversorMoeda;
 import br.com.ntt.transacao.consumer.infra.consumer.dto.ConversorMoedaDto;
 import br.com.ntt.transacao.consumer.infra.consumer.dto.CotacoesDto;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ConversorMoedaMapper {
 
     public ConversorMoeda toDomain(ConversorMoedaDto dto){

@@ -24,23 +24,47 @@ public class Cotacao {
         return paridadeCompra;
     }
 
+    public void setParidadeCompra(BigDecimal paridadeCompra) {
+        this.paridadeCompra = paridadeCompra;
+    }
+
     public BigDecimal getParidadeVenda() {
         return paridadeVenda;
+    }
+
+    public void setParidadeVenda(BigDecimal paridadeVenda) {
+        this.paridadeVenda = paridadeVenda;
     }
 
     public BigDecimal getCotacaoCompra() {
         return cotacaoCompra;
     }
 
+    public void setCotacaoCompra(BigDecimal cotacaoCompra) {
+        this.cotacaoCompra = cotacaoCompra;
+    }
+
     public BigDecimal getCotacaoVenda() {
         return cotacaoVenda;
+    }
+
+    public void setCotacaoVenda(BigDecimal cotacaoVenda) {
+        this.cotacaoVenda = cotacaoVenda;
     }
 
     public String getDataHoraCotacao() {
         return dataHoraCotacao;
     }
 
+    public void setDataHoraCotacao(String dataHoraCotacao) {
+        this.dataHoraCotacao = dataHoraCotacao;
+    }
+
     public String getTipoBoletim() {
         return tipoBoletim;
+    }
+
+    public void setTipoBoletim(String tipoBoletim) {
+        this.tipoBoletim = tipoBoletim;
     }
 }
