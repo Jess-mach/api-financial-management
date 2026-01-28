@@ -24,7 +24,7 @@ public class UsuarioJpaMapper {
     }
 
     public Usuario toDomain(UsuarioJpaEntity entity){
-        return Usuario.restaurar(
+        return new Usuario(
                 entity.getId(),
                 entity.getNome(),
                 entity.getEmail(),

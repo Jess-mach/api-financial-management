@@ -7,6 +7,8 @@ import br.com.ntt.usuario.infra.controller.dto.UsuarioDto;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 public class UsuarioDtoMapper {
 
@@ -22,12 +24,14 @@ public class UsuarioDtoMapper {
     }
 
     public Usuario toDomain(String id, DadosAtualizacaoUsuario dados) {
-        return Usuario.atualizarUsuario(
-                id,
+        return new Usuario(
+                UUID.fromString(id),
                 dados.nome(),
                 dados.email(),
+                dados.login(),
                 dados.senha(),
                 dados.perfilUsuario()
+
         );
     }
 

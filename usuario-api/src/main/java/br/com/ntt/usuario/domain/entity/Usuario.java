@@ -21,33 +21,8 @@ public class Usuario {
         this.login = login;
         this.senha = senha;
         this.perfilUsuario = perfilUsuario;
-        this.validar();
     }
 
-    private void validar() {
-        if (nome == null || nome.isBlank()) {
-            throw new IllegalArgumentException("O nome é obrigatório");
-        }
-    }
-
-    public static Usuario criarNovo(String nome, String email, String login, String senha, PerfilUsuario perfilUsuario) {
-        if (perfilUsuario == null) {
-            perfilUsuario = PerfilUsuario.USUARIO;
-        }
-        return new Usuario(null, nome, email, login, senha, perfilUsuario);
-    }
-
-
-    public static Usuario restaurar(UUID id, String nome, String email, String login, String senha, PerfilUsuario perfilUsuario) {
-        return new Usuario(id, nome, email, login, senha, perfilUsuario);
-    }
-
-    public static Usuario atualizarUsuario(String id, String nome, String email, String senha, PerfilUsuario perfilUsuario) {
-        if (perfilUsuario == null) {
-            perfilUsuario = PerfilUsuario.USUARIO;
-        }
-        return new Usuario(UUID.fromString(id), nome, email, null, senha, perfilUsuario);
-    }
 
     @Override
     public boolean equals(Object obj) {
@@ -62,35 +37,51 @@ public class Usuario {
         return Objects.hash(id);
     }
 
-    public String getLogin() {
-        return login;
-    }
-
     public UUID getId() {
         return id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public PerfilUsuario getPerfilUsuario() {
-        return perfilUsuario;
-    }
-
-    public String getSenha() {
-        return senha;
     }
 
     public void setId(UUID id) {
         this.id = id;
     }
 
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
     public void setLogin(String login) {
         this.login = login;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public PerfilUsuario getPerfilUsuario() {
+        return perfilUsuario;
+    }
+
+    public void setPerfilUsuario(PerfilUsuario perfilUsuario) {
+        this.perfilUsuario = perfilUsuario;
     }
 }

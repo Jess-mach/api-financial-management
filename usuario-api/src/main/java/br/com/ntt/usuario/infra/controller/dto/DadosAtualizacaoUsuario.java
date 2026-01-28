@@ -15,6 +15,10 @@ public record DadosAtualizacaoUsuario(
         @Email
         String email,
 
+        @NotBlank(message = "O login é obrigatório")
+        String login,
+
+
         @NotBlank(message = "A senha é obrigatória")
         @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$",
                 message = "A senha deve conter pelo menos 8 caracteres, uma letra maiúscula, " +

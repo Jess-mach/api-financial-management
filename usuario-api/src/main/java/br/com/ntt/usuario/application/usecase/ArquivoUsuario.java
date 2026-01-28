@@ -2,6 +2,7 @@ package br.com.ntt.usuario.application.usecase;
 
 import br.com.ntt.usuario.domain.PerfilUsuario;
 import br.com.ntt.usuario.domain.entity.Usuario;
+import br.com.ntt.usuario.infra.controller.mapper.UsuarioDtoMapper;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -22,6 +23,7 @@ public class ArquivoUsuario {
 
     public ArquivoUsuario(CriarUsuario criarUsuario) {
         this.criarUsuario = criarUsuario;
+
     }
 
     public List<Usuario> processarArquivo(MultipartFile file) throws Exception {
@@ -48,7 +50,8 @@ public class ArquivoUsuario {
              CSVParser csvParser = new CSVParser(fileReader, CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim())) {
 
             for (CSVRecord csvRecord : csvParser) {
-                Usuario usuario = Usuario.criarNovo(
+                Usuario usuario = new Usuario(
+                        null,
                         csvRecord.get("nome"),
                         csvRecord.get("email"),
                         csvRecord.get("login"),
@@ -78,7 +81,8 @@ public class ArquivoUsuario {
                 if(perfil == null || perfil.isBlank())
                     break;
 
-                Usuario usuario = Usuario.criarNovo(
+                Usuario usuario = new Usuario(
+                        null,
                         dataFormatter.formatCellValue(row.getCell(0)),
                         dataFormatter.formatCellValue(row.getCell(1)),
                         dataFormatter.formatCellValue(row.getCell(2)),
