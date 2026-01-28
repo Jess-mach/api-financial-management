@@ -1,8 +1,8 @@
 package br.com.ntt.transacao.consumer.infra.gateways;
 
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioSaldoCliente;
-import br.com.ntt.transacao.consumer.domain.entities.conta.SaldoConta;
-import br.com.ntt.transacao.consumer.domain.entities.transacao.Transacao;
+import br.com.ntt.transacao.consumer.domain.entity.conta.SaldoConta;
+import br.com.ntt.transacao.consumer.domain.entity.transacao.Transacao;
 import br.com.ntt.transacao.consumer.domain.model.TipoTransacao;
 import br.com.ntt.transacao.consumer.infra.consumer.dto.SaldoContaDto;
 import br.com.ntt.transacao.consumer.infra.consumer.mapper.SaldoDtoMapper;
@@ -68,7 +68,7 @@ public class RepositorioSaldoClienteHttp implements RepositorioSaldoCliente {
         else
             valorAtualizado = saldoConta.getSaldo().subtract(transacao.getValor());
 
-        saldoConta.saldoAtualizado(valorAtualizado);
+        saldoConta.setSaldo(valorAtualizado);
 
         String json = objectMapper.writeValueAsString(saldoConta);
 

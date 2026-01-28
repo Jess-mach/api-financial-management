@@ -1,15 +1,13 @@
 package br.com.ntt.transacao.consumer.infra.consumer;
 
 import br.com.ntt.transacao.consumer.application.usecases.ProcessarTransacao;
-import br.com.ntt.transacao.consumer.domain.entities.transacao.Transacao;
+import br.com.ntt.transacao.consumer.domain.entity.transacao.Transacao;
 import br.com.ntt.transacao.consumer.infra.consumer.dto.TransacaoDto;
 import br.com.ntt.transacao.consumer.infra.consumer.mapper.TransacaoDtoMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaHandler;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.support.KafkaHeaders;
-import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
 
 @Slf4j

@@ -1,7 +1,7 @@
 package br.com.ntt.transacao.consumer.application.gateways;
 
-import br.com.ntt.transacao.consumer.domain.entities.conta.SaldoConta;
-import br.com.ntt.transacao.consumer.domain.entities.transacao.Transacao;
+import br.com.ntt.transacao.consumer.domain.entity.conta.SaldoConta;
+import br.com.ntt.transacao.consumer.domain.entity.transacao.Transacao;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 public interface RepositorioSaldoCliente {

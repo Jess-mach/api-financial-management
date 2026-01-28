@@ -1,4 +1,4 @@
-package br.com.ntt.transacao.consumer.domain.entities.transacao;
+package br.com.ntt.transacao.consumer.domain.entity.transacao;
 
 import br.com.ntt.transacao.consumer.domain.model.StatusTransacao;
 import br.com.ntt.transacao.consumer.domain.model.TipoTransacao;

@@ -1,8 +1,8 @@
 package br.com.ntt.transacao.consumer.application.service;
 
-import br.com.ntt.transacao.consumer.domain.entities.conta.SaldoConta;
-import br.com.ntt.transacao.consumer.domain.entities.moeda.ConversorMoeda;
-import br.com.ntt.transacao.consumer.domain.entities.transacao.Transacao;
+import br.com.ntt.transacao.consumer.domain.entity.conta.SaldoConta;
+import br.com.ntt.transacao.consumer.domain.entity.moeda.ConversorMoeda;
+import br.com.ntt.transacao.consumer.domain.entity.transacao.Transacao;
 import br.com.ntt.transacao.consumer.domain.model.StatusTransacao;
 import org.springframework.stereotype.Component;
 
@@ -61,6 +61,4 @@ public class ValidadorDeTransacao {
         }
         return transacao;
     }
-
-
 }

@@ -1,6 +1,6 @@
-package br.com.ntt.transacao.consumer.domain.entities.moeda;
+package br.com.ntt.transacao.consumer.domain.entity.moeda;
 
-import br.com.ntt.transacao.consumer.domain.entities.cotacao.Cotacao;
+import br.com.ntt.transacao.consumer.domain.entity.cotacao.Cotacao;
 
 import java.util.List;
 

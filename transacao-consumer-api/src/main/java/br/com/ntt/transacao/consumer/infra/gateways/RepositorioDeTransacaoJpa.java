@@ -1,7 +1,7 @@
 package br.com.ntt.transacao.consumer.infra.gateways;
 
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioDeTransacao;
-import br.com.ntt.transacao.consumer.domain.entities.transacao.Transacao;
+import br.com.ntt.transacao.consumer.domain.entity.transacao.Transacao;
 import br.com.ntt.transacao.consumer.domain.model.StatusTransacao;
 import br.com.ntt.transacao.consumer.infra.consumer.mapper.TransacaoEntityMapper;
 import br.com.ntt.transacao.consumer.infra.persistence.TransacaoEntity;

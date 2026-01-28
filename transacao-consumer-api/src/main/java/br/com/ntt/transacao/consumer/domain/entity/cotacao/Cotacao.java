@@ -1,4 +1,4 @@
-package br.com.ntt.transacao.consumer.domain.entities.cotacao;
+package br.com.ntt.transacao.consumer.domain.entity.cotacao;
 
 import java.math.BigDecimal;
 

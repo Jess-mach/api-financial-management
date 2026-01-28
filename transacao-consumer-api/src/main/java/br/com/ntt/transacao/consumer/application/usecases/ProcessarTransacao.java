@@ -4,9 +4,9 @@ import br.com.ntt.transacao.consumer.application.gateways.RepositorioConversaoMo
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioDeTransacao;
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioSaldoCliente;
 import br.com.ntt.transacao.consumer.application.service.ValidadorDeTransacao;
-import br.com.ntt.transacao.consumer.domain.entities.conta.SaldoConta;
-import br.com.ntt.transacao.consumer.domain.entities.moeda.ConversorMoeda;
-import br.com.ntt.transacao.consumer.domain.entities.transacao.Transacao;
+import br.com.ntt.transacao.consumer.domain.entity.conta.SaldoConta;
+import br.com.ntt.transacao.consumer.domain.entity.moeda.ConversorMoeda;
+import br.com.ntt.transacao.consumer.domain.entity.transacao.Transacao;
 import br.com.ntt.transacao.consumer.domain.model.StatusTransacao;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;

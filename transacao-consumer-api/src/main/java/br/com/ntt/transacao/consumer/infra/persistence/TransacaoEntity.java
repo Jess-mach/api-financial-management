@@ -104,7 +104,10 @@ public class TransacaoEntity {
         this.descricao = descricao;
     }
 
-    public TransacaoEntity(UUID id, UUID usuarioId, BigDecimal valor, TipoTransacao tipo, StatusTransacao status, LocalDateTime dataHoraSolicitacao, LocalDateTime dataHoraFinalizacao, String moeda, BigDecimal taxaCambio, String descricao) {
+    public TransacaoEntity(UUID id, UUID usuarioId, BigDecimal valor, TipoTransacao tipo,
+                           StatusTransacao status, LocalDateTime dataHoraSolicitacao,
+                           LocalDateTime dataHoraFinalizacao, String moeda,
+                           BigDecimal taxaCambio, String descricao) {
         this.id = id;
         this.usuarioId = usuarioId;
         this.valor = valor;

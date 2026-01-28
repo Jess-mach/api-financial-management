@@ -1,7 +1,7 @@
 package br.com.ntt.transacao.consumer.infra.consumer.mapper;
 
 
-import br.com.ntt.transacao.consumer.domain.entities.transacao.Transacao;
+import br.com.ntt.transacao.consumer.domain.entity.transacao.Transacao;
 import br.com.ntt.transacao.consumer.infra.consumer.dto.TransacaoDto;
 import org.springframework.stereotype.Component;
 

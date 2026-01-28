@@ -1,6 +1,6 @@
 package br.com.ntt.transacao.consumer.infra.consumer.mapper;
 
-import br.com.ntt.transacao.consumer.domain.entities.conta.SaldoConta;
+import br.com.ntt.transacao.consumer.domain.entity.conta.SaldoConta;
 import br.com.ntt.transacao.consumer.infra.consumer.dto.SaldoContaDto;
 import org.springframework.stereotype.Component;
 

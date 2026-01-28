@@ -1,8 +1,8 @@
 package br.com.ntt.transacao.consumer.infra.gateways;
 
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioConversaoMoeda;
-import br.com.ntt.transacao.consumer.domain.entities.cotacao.Cotacao;
-import br.com.ntt.transacao.consumer.domain.entities.moeda.ConversorMoeda;
+import br.com.ntt.transacao.consumer.domain.entity.cotacao.Cotacao;
+import br.com.ntt.transacao.consumer.domain.entity.moeda.ConversorMoeda;
 import br.com.ntt.transacao.consumer.infra.consumer.dto.ConversorMoedaDto;
 import br.com.ntt.transacao.consumer.infra.consumer.mapper.ConversorMoedaMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
