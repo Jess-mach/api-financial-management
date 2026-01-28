@@ -6,11 +6,14 @@ import br.com.ntt.transacao.producer.domain.entities.transacao.transacao.Transac
 import br.com.ntt.transacao.producer.infra.persistence.AnaliseDeDespesaCampos;
 import br.com.ntt.transacao.producer.infra.persistence.TransacaoEntity;
 import br.com.ntt.transacao.producer.infra.persistence.TransacaoRepository;
+import org.apache.kafka.common.errors.ResourceNotFoundException;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Component
 public class RepositorioDeTransacaoJpa implements RepositorioDeTransacao {
 
     private final TransacaoRepository repositorio;
@@ -38,7 +41,8 @@ public class RepositorioDeTransacaoJpa implements RepositorioDeTransacao {
     @Override
     public Transacao buscarPorId(UUID id) {
         TransacaoEntity entity = repositorio.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Transação não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Transação não encontrado"));
+
         return mapper.toDomain(entity);
     }
 

@@ -21,20 +21,7 @@ public class TransacaoConfig {
     @Value(value = "${endpoint.consulta.saldo:}")
     private String endpointConsultaSaldo;
 
-    @Bean
-    TransacaoDtoMapper mapper() {
-        return new TransacaoDtoMapper();
-    }
 
-    @Bean
-    ProcessarTransacao atualizarTransacao(RepositorioDeTransacao repositorioDeTransacao,
-                                          RepositorioSaldoCliente repositorioSaldoCliente,
-                                          RepositorioConversaoMoeda repositorioConversaoMoeda,
-                                          ValidadorDeTransacao validadorDeTransacao) {
-
-        return new ProcessarTransacao(repositorioDeTransacao,
-                repositorioSaldoCliente, repositorioConversaoMoeda, validadorDeTransacao);
-    }
 
 
     @Bean

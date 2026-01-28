@@ -7,6 +7,4 @@ public interface RepositorioDeExportacao
 {
     ByteArrayInputStream gerarExcel() throws IOException;
 
-    ByteArrayInputStream gerarPdf() throws IOException;
-
 }

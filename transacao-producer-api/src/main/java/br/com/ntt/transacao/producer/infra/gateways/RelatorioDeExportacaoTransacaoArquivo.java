@@ -5,6 +5,7 @@ import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao
 import br.com.ntt.transacao.producer.domain.entities.transacao.transacao.Transacao;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -12,7 +13,7 @@ import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-
+@Component
 public class RelatorioDeExportacaoTransacaoArquivo implements RepositorioDeExportacao {
 
     private final DateTimeFormatter formatadorData = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
@@ -80,7 +81,6 @@ public class RelatorioDeExportacaoTransacaoArquivo implements RepositorioDeExpor
         }
     }
 
-    @Override
     public ByteArrayInputStream gerarPdf() {return null;}
 
 }

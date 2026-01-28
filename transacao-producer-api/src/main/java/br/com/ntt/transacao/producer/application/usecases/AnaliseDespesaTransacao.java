@@ -4,11 +4,13 @@ import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao
 import br.com.ntt.transacao.producer.domain.entities.transacao.analise.AnaliseDeDespesa;
 import br.com.ntt.transacao.producer.domain.entities.transacao.analise.RegistroDespesa;
 import br.com.ntt.transacao.producer.domain.entities.transacao.analise.TotalizadorDespesa;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+@Component
 public class AnaliseDespesaTransacao {
 
     private final RepositorioDeTransacao repositorioDeTransacao;

@@ -1,10 +1,12 @@
 package br.com.ntt.transacao.producer.application.usecases;
 
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeExportacao;
+import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
+@Component
 public class ExportarTransacao {
     private final RepositorioDeExportacao repositorioDeExportacao;
 

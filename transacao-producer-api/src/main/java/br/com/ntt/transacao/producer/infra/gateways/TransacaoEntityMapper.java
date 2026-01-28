@@ -6,10 +6,12 @@ import br.com.ntt.transacao.producer.domain.entities.transacao.transacao.Transac
 import br.com.ntt.transacao.producer.domain.model.TipoTransacao;
 import br.com.ntt.transacao.producer.infra.persistence.AnaliseDeDespesaCampos;
 import br.com.ntt.transacao.producer.infra.persistence.TransacaoEntity;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Component
 public class TransacaoEntityMapper {
 
     public TransacaoEntity toEntity(Transacao dados){

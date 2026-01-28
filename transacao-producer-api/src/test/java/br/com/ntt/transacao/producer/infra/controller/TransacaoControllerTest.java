@@ -62,7 +62,7 @@ class TransacaoControllerTest {
 
                 .andExpect(status().isAccepted())
                 .andExpect(jsonPath("$.valor").value(100.50))
-                .andExpect(jsonPath("$.status").value("PENDING")); // Confirma que nasceu Pendente
+                .andExpect(jsonPath("$.status").value("PENDING"));
     }
 
     @Test

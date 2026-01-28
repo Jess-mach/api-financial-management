@@ -6,10 +6,11 @@ import br.com.ntt.transacao.producer.domain.entities.transacao.analise.RegistroD
 import br.com.ntt.transacao.producer.domain.model.TipoTransacao;
 import br.com.ntt.transacao.producer.domain.entities.transacao.transacao.Transacao;
 import br.com.ntt.transacao.producer.infra.controller.dto.*;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-
+@Component
 public class TransacaoDtoMapper {
 
     public Transacao toDomain(DadosNovaTransacaoDto dados) {
