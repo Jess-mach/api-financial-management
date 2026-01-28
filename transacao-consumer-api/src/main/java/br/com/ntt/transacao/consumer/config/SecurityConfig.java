@@ -1,4 +1,4 @@
-package br.com.ntt.transacao.producer.config;
+package br.com.ntt.transacao.consumer.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

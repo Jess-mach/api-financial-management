@@ -1,4 +1,4 @@
-package br.com.ntt.usuario.config;
+package br.com.ntt.transacao.consumer.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -21,15 +21,15 @@ public class SpringDocConfiguration {
                                 new SecurityScheme().type(SecurityScheme.Type.HTTP)
                                         .scheme("bearer").bearerFormat("JWT")))
                 .addServersItem(new Server()
-                        .url("http://localhost:8080")
+                        .url("http://localhost:8081")
                         .description("Local Server"))
                 .addServersItem(new Server()
-                        .url("https://api.usuario-api.prd")
+                        .url("https://api.transacao-consumer-api.prd")
                         .description("Production Server"))
                 .info(new Info()
-                        .title("API Usuario")
+                        .title("API Transacao Consumer API")
                         .version("1.0.0")
-                        .description("API Gestão dos Usuários")
+                        .description("API Transacao Consumer API")
                         .contact(new Contact()
                                 .name("Jess Mach")
                                 .email("machadojessica1997@gmail.com"))
