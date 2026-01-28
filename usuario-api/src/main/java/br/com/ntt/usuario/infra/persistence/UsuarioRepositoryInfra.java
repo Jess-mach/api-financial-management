@@ -55,7 +55,7 @@ public class UsuarioRepositoryInfra implements UsuarioRepository {
         if (repositoryJpa.existsById(id)) {
             repositoryJpa.deleteById(id);
         } else {
-            throw new IllegalArgumentException("Usuário não encontrado");
+            throw new ResourceNotFoundException("Usuário não encontrado");
         }
     }
 }

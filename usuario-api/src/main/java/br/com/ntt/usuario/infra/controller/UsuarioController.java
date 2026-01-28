@@ -87,6 +87,6 @@ public class UsuarioController {
     public ResponseEntity<?> uploadArquivo(@RequestParam("file") MultipartFile file) throws Exception {
         List<Usuario> listaUsuarios = arquivoUsuario.processarArquivo(file);
 
-        return ResponseEntity.ok(listaUsuarios);
+        return ResponseEntity.status(HttpStatus.CREATED).body(listaUsuarios);
     }
 }

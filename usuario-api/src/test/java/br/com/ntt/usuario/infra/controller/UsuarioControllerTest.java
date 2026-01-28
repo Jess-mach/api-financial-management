@@ -11,9 +11,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -53,6 +56,9 @@ class UsuarioControllerTest {
     private RepositoryJpa repositoryJpa;
 
     private UUID usuarioId;
+
+    @Value("classpath:payload/cadastro_massa.csv")
+    private Resource sampleFile;
 
     @BeforeEach
     void setUp() {
@@ -165,18 +171,20 @@ class UsuarioControllerTest {
     @DisplayName("POST /usuarios/upload - Sucesso ao criar usuario")
     void deveCriarUsuarioViaArquivoComSucesso() throws Exception {
 
-        DadosCadastroUsuario novoUsuario = gerarNovoUsuario();
+        MockMultipartFile mockFile = new MockMultipartFile(
+                "file",
+                "cadastro_massa.csv",
+                MediaType.APPLICATION_PDF_VALUE,
+                sampleFile.getInputStream() // Use the input stream directly
+        );
 
-        mockMvc.perform(post("/usuarios/upload")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(novoUsuario)))
-                .andDo(print())
+        repositoryJpa.deleteAll();
+
+        mockMvc.perform(multipart("/usuarios/upload")
+                        .file(mockFile))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.nome").value(novoUsuario.nome()))
-                .andExpect(jsonPath("$.email").value(novoUsuario.email()))
-                .andExpect(jsonPath("$.login").value(novoUsuario.login()))
-                .andExpect(jsonPath("$.perfilUsuario").value("ADMINISTRADOR"));
+                .andExpect(jsonPath("$", hasSize(greaterThan(0))));
     }
 
     @Test
@@ -194,12 +202,10 @@ class UsuarioControllerTest {
                 .andExpect(jsonPath("$.status").value(400))
                 .andExpect(jsonPath("$.validationErrors").exists())
                 .andExpect(jsonPath("$.validationErrors.senha").exists())
-                .andExpect(jsonPath("$.validationErrors.perfilUsuario").exists())
+                .andExpect(jsonPath("$.validationErrors.perfilUsuario").value("O perfil é obrigatório"))
                 .andExpect(jsonPath("$.validationErrors.nome").exists())
                 .andExpect(jsonPath("$.validationErrors.login").exists())
                 .andExpect(jsonPath("$.validationErrors.senha").exists());
-
-//                .andExpect(jsonPath("$.validationErrors.senha").value("A senha é obrigatória"));
     }
 
 
@@ -289,7 +295,7 @@ class UsuarioControllerTest {
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.message").value("Usuario not found with id: 999"));
+                .andExpect(jsonPath("$.message").value("Usuário não encontrado"));
 
     }
 
