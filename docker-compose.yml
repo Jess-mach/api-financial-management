@@ -1,0 +1,129 @@
+version: '3.8'
+
+services:
+  usuarios-db:
+    image: postgres:16-alpine
+    container_name: usuarios-db
+    environment:
+      POSTGRES_DB: usuarios_db
+      POSTGRES_USER: user_usr
+      POSTGRES_PASSWORD: password_usr
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata-usuarios:/var/lib/postgresql/data
+    networks:
+      - rede-sistema
+
+  usuarios-api:
+    build: ./usuario-api
+    build: .
+    container_name: usuarios-api
+    depends_on:
+      - usuarios-db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://usuarios-db:5432/usuarios_db
+      SPRING_DATASOURCE_USERNAME: user_usr
+      SPRING_DATASOURCE_PASSWORD: password_usr
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8080:8080"
+    networks:
+      - rede-sistema
+      
+  transacoes-db:
+    image: postgres:16-alpine
+    container_name: transacoes-db
+    environment:
+      POSTGRES_DB: transacoes_db
+      POSTGRES_USER: db_user
+      POSTGRES_PASSWORD: db_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata-transacoes:/var/lib/postgresql/data
+    networks:
+      - rede-sistema
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - rede-sistema
+
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: kafka
+    restart: on-failure
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+    networks:
+      - rede-sistema
+
+  kafka-setup:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: kafka-setup
+    depends_on:
+      - kafka
+    networks:
+      - rede-sistema
+    command: >
+      bash -c "
+      echo 'Aguardando o Kafka ficar pronto...'
+      cub kafka-ready -b kafka:29092 1 60 && \
+      kafka-topics --create --if-not-exists --bootstrap-server kafka:29092 --partitions 1 --replication-factor 1 --topic TRANSACAO-TOPIC && \
+      echo 'Tópico TRANSACAO-TOPIC criado!'"
+
+  transacoes-api:
+    build: ./transacao-producer-api
+    container_name: transacoes-api
+    depends_on:
+      - transacoes-db
+      - kafka
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://transacoes-db:5432/transacoes_db
+      SPRING_DATASOURCE_USERNAME: db_user
+      SPRING_DATASOURCE_PASSWORD: db_password
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8081:8080"
+    networks:
+      - rede-sistema
+      
+  consumer-api:
+    build: ./transacao-consumer-api
+    container_name: consumer-api
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://transacoes-db:5432/transacoes_db
+      SPRING_DATASOURCE_USERNAME: db_user
+      SPRING_DATASOURCE_PASSWORD: db_password
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8082:8080"
+    networks:
+      - rede-sistema
+
+volumes:
+  pgdata-transacoes:
+
+networks:
+  rede-sistema:
+    name: rede-sistema
+    driver: bridge
