@@ -1,11 +1,9 @@
 package br.com.ntt.usuario.domain.exception;
 
-import lombok.Builder;
 
 import java.time.LocalDateTime;
 import java.util.Map;
 
-@Builder
 public record ErrorResponse(
         LocalDateTime timestamp,
         int status,
