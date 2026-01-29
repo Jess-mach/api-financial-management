@@ -14,7 +14,7 @@ public interface TransacaoRepository extends JpaRepository<TransacaoEntity, UUID
                          t.tipo as tipo ,
                          sum (t.valor) as valor,
                          count(*) as quantidade
-                 from transacao t
+                 from transacoes t
                  where t.usuario_id = ?1
                  and t.status = 1
                  group by t.tipo , DATE(data_hora_solicitacao)
@@ -29,7 +29,7 @@ public interface TransacaoRepository extends JpaRepository<TransacaoEntity, UUID
                        sum (t.valor) as valor,
                        count(*) as quantidade
     
-                 from transacao t
+                 from transacoes t
                  where t.usuario_id = ?1
                  and t.status = 1
                  group by t.tipo , DATE_TRUNC('month', t.data_hora_solicitacao)

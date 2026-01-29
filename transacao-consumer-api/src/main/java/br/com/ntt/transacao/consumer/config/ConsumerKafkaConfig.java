@@ -1,6 +1,6 @@
 package br.com.ntt.transacao.consumer.config;
 
-import br.com.ntt.transacao.consumer.infra.consumer.dto.TransacaoDto;
+import br.com.ntt.common.transacao.infra.controller.dto.TransacaoDto;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.TopicPartition;

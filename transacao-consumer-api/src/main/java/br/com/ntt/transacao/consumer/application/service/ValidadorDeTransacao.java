@@ -1,9 +1,9 @@
 package br.com.ntt.transacao.consumer.application.service;
 
+import br.com.ntt.common.transacao.domain.entity.Transacao;
+import br.com.ntt.common.transacao.domain.model.StatusTransacao;
 import br.com.ntt.transacao.consumer.domain.entity.conta.SaldoConta;
 import br.com.ntt.transacao.consumer.domain.entity.moeda.ConversorMoeda;
-import br.com.ntt.transacao.consumer.domain.entity.transacao.Transacao;
-import br.com.ntt.transacao.consumer.domain.model.StatusTransacao;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;

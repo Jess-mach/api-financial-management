@@ -1,6 +1,6 @@
 package br.com.ntt.transacao.consumer.application.gateways;
 
-import br.com.ntt.transacao.consumer.domain.entity.transacao.Transacao;
+import br.com.ntt.common.transacao.domain.entity.Transacao;
 
 public interface RepositorioDeTransacao {
 

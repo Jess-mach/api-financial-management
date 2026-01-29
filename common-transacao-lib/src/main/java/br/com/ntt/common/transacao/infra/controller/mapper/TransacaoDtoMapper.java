@@ -19,6 +19,22 @@ public class TransacaoDtoMapper {
                 salvo.getDataHoraFinalizacao(),
                 salvo.getMoeda(),
                 salvo.getTaxaCambio(),
-                salvo.getDescricao());
+                salvo.getDescricao(),
+                salvo.getConta());
+    }
+
+    public Transacao toDomain(TransacaoDto dto) {
+        return new Transacao(
+                dto.id(),
+                dto.usuarioId(),
+                dto.valor(),
+                dto.tipo(),
+                dto.status(),
+                dto.dataHoraSolicitacao(),
+                dto.dataHoraFinalizacao(),
+                dto.moeda(),
+                dto.taxaCambio(),
+                dto.descricao(),
+                dto.conta());
     }
 }

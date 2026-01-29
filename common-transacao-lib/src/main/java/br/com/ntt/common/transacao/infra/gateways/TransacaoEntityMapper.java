@@ -25,7 +25,8 @@ public class TransacaoEntityMapper {
                 null,
                 dados.getMoeda(),
                 null,
-                dados.getDescricao());
+                dados.getDescricao(),
+                dados.getConta());
     }
 
     public Transacao toDomain(TransacaoEntity entity){
@@ -39,7 +40,8 @@ public class TransacaoEntityMapper {
                 entity.getDataHoraFinalizacao(),
                 entity.getMoeda(),
                 entity.getTaxaCambio(),
-                entity.getDescricao());
+                entity.getDescricao(),
+                entity.getConta());
     }
 
     public RegistroDespesa toDomain(AnaliseDeDespesaCampos campos) {
@@ -49,5 +51,20 @@ public class TransacaoEntityMapper {
                 campos.getValor(),
                 campos.getQuantidade()
         );
+    }
+
+    public TransacaoEntity toEntity(Transacao dadosAtualizados, TransacaoEntity entity){
+        return new TransacaoEntity(
+                entity.getId(),
+                entity.getUsuarioId(),
+                entity.getValor(),
+                entity.getTipo(),
+                dadosAtualizados.getStatus(),
+                entity.getDataHoraSolicitacao(),
+                LocalDateTime.now(),
+                entity.getMoeda(),
+                dadosAtualizados.getTaxaCambio(),
+                entity.getDescricao(),
+                entity.getConta());
     }
 }

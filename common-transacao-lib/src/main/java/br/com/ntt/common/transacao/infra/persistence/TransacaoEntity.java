@@ -3,30 +3,49 @@ package br.com.ntt.common.transacao.infra.persistence;
 import br.com.ntt.common.transacao.domain.model.StatusTransacao;
 import br.com.ntt.common.transacao.domain.model.TipoTransacao;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "transacao")
+@Table(name = "transacoes")
 public class TransacaoEntity {
     @Id
+    @NotNull
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
+
+    @NotNull
     private UUID usuarioId;
+
+    @NotNull
     private BigDecimal valor;
+
+    @NotNull
     private TipoTransacao tipo;
+
+    @NotNull
     private StatusTransacao status;
+
+    @NotNull
     private LocalDateTime dataHoraSolicitacao;
     private LocalDateTime dataHoraFinalizacao;
+
+    @NotNull
     private String moeda;
+
     private BigDecimal taxaCambio;
+
+    @NotNull
     private String descricao;
 
-    public TransacaoEntity(UUID id, UUID usuarioId, BigDecimal valor, TipoTransacao tipo,
-                           StatusTransacao status, LocalDateTime dataHoraSolicitacao,
-                           LocalDateTime dataHoraFinalizacao, String moeda,
-                           BigDecimal taxaCambio, String descricao) {
+    @NotNull
+    private Long conta;
+
+    public TransacaoEntity(UUID id, UUID usuarioId, BigDecimal valor, TipoTransacao tipo, StatusTransacao status, LocalDateTime dataHoraSolicitacao, LocalDateTime dataHoraFinalizacao, String moeda, BigDecimal taxaCambio, String descricao, Long conta) {
         this.id = id;
         this.usuarioId = usuarioId;
         this.valor = valor;
@@ -37,6 +56,15 @@ public class TransacaoEntity {
         this.moeda = moeda;
         this.taxaCambio = taxaCambio;
         this.descricao = descricao;
+        this.conta = conta;
+    }
+
+    public Long getConta() {
+        return conta;
+    }
+
+    public void setConta(Long conta) {
+        this.conta = conta;
     }
 
     public TransacaoEntity() {

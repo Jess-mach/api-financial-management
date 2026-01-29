@@ -17,5 +17,6 @@ public record TransacaoDto(
         LocalDateTime dataHoraFinalizacao,
         String moeda,
         BigDecimal taxaCambio,
-        String descricao) {
+        String descricao,
+        Long conta) {
 }

@@ -1,9 +1,9 @@
 package br.com.ntt.transacao.consumer.infra.gateways;
 
+import br.com.ntt.common.transacao.domain.entity.Transacao;
+import br.com.ntt.common.transacao.domain.model.TipoTransacao;
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioSaldoCliente;
 import br.com.ntt.transacao.consumer.domain.entity.conta.SaldoConta;
-import br.com.ntt.transacao.consumer.domain.entity.transacao.Transacao;
-import br.com.ntt.transacao.consumer.domain.model.TipoTransacao;
 import br.com.ntt.transacao.consumer.infra.consumer.dto.SaldoContaDto;
 import br.com.ntt.transacao.consumer.infra.consumer.mapper.SaldoDtoMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;

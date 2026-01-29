@@ -25,7 +25,8 @@ public class TransacaoMapper {
                 null,
                 dados.moeda(),
                 null,
-                dados.descricao());
+                dados.descricao(),
+                dados.conta());
     }
 
     public AnaliseDespesaDto toDto(AnaliseDeDespesa dados) {

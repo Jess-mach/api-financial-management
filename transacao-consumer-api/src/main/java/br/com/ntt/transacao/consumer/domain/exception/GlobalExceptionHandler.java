@@ -1,9 +1,13 @@
 package br.com.ntt.transacao.consumer.domain.exception;
 
+import br.com.ntt.common.transacao.domain.exception.AccessDeniedException;
+import br.com.ntt.common.transacao.domain.exception.BusinessException;
+import br.com.ntt.common.transacao.domain.exception.ErrorResponse;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

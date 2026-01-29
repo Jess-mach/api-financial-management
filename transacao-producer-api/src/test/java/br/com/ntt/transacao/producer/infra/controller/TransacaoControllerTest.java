@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc(addFilters = false)
 @TestPropertySource(properties = {
         "spring.flyway.enabled=false",
-        "spring.datasource.url=jdbc:postgresql://localhost:5433/transacoes_db",
+        "spring.datasource.url=jdbc:postgresql://localhost:5433/transacoes_test_db",
         "spring.datasource.username=TEST",
         "spring.datasource.password=TEST",
         "spring.datasource.driver-class-name=org.postgresql.Driver",
@@ -51,7 +51,8 @@ class TransacaoControllerTest {
                 new BigDecimal("100.50"),
                 "DEPOSITO", // Use as Strings exatas do seu Enum
                 "Almoço de domingo",
-                "BRL"
+                "BRL",
+                1L
         );
 
 //        doNothing().when(publicadorTransacao).publicarSolicitacao(any(Transacao.class));
@@ -73,7 +74,8 @@ class TransacaoControllerTest {
                 new BigDecimal("-50.00"),
                 "SAQUE",
                 "Erro",
-                "BRL"
+                "BRL",
+                1L
         );
 
         mockMvc.perform(post("/transacoes")

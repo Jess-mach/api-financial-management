@@ -1,13 +1,13 @@
 package br.com.ntt.transacao.consumer.application.usecases;
 
+import br.com.ntt.common.transacao.domain.entity.Transacao;
+import br.com.ntt.common.transacao.domain.model.StatusTransacao;
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioConversaoMoeda;
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioDeTransacao;
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioSaldoCliente;
 import br.com.ntt.transacao.consumer.application.service.ValidadorDeTransacao;
 import br.com.ntt.transacao.consumer.domain.entity.conta.SaldoConta;
 import br.com.ntt.transacao.consumer.domain.entity.moeda.ConversorMoeda;
-import br.com.ntt.transacao.consumer.domain.entity.transacao.Transacao;
-import br.com.ntt.transacao.consumer.domain.model.StatusTransacao;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -41,7 +41,7 @@ public class ProcessarTransacao {
 
     @Transactional
     public Transacao executar(Transacao transacao) throws JsonProcessingException {
-        SaldoConta saldoConta = repositorioSaldoCliente.buscarPorId(getValidAccountId());
+        SaldoConta saldoConta = repositorioSaldoCliente.buscarPorId(transacao.getConta());
 
         ConversorMoeda conversorMoeda = repositorioConversaoMoeda.conversaoMoeda(transacao.getMoeda(), transacao.getDataHoraSolicitacao());
 
@@ -52,10 +52,6 @@ public class ProcessarTransacao {
         repositorioSaldoCliente.atualizarSaldo(saldoConta, transacao);
 
         return transacaoSalva;
-    }
-
-    public Long getValidAccountId() {
-        return ThreadLocalRandom.current().nextLong(1, 51);
     }
 
     public void atualizarStatusErro(Transacao transacao) {

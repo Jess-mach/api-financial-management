@@ -1,5 +1,6 @@
 package br.com.ntt.transacao.producer.infra.controller.dto;
 
+import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -22,6 +23,10 @@ public record DadosNovaTransacaoDto(
         String descricao,
 
         @NotBlank(message = "A moeda é obrigatória")
-        String moeda
+        String moeda,
+
+        @NotNull(message = "A conta é obrigatória")
+        @DecimalMax(value = "50", message = "Id da conta deve ser até 50")
+        Long conta
 ) {
 }
