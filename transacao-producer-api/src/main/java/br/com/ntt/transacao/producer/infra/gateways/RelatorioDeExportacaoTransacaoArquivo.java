@@ -1,6 +1,7 @@
 package br.com.ntt.transacao.producer.infra.gateways;
 
 import br.com.ntt.common.transacao.domain.entity.Transacao;
+import br.com.ntt.common.transacao.domain.exception.BusinessException;
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeExportacao;
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao;
 import org.apache.poi.ss.usermodel.*;
@@ -12,6 +13,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 public class RelatorioDeExportacaoTransacaoArquivo implements RepositorioDeExportacao {
@@ -25,9 +27,10 @@ public class RelatorioDeExportacaoTransacaoArquivo implements RepositorioDeExpor
     }
 
     @Override
-    public ByteArrayInputStream gerarExcel() throws IOException {
+    public ByteArrayInputStream gerarExcel(UUID usuarioId) {
 
-        List<Transacao> transacoes = repositorioDeTransacao.listarTodos();
+        List<Transacao> transacoes = repositorioDeTransacao.listarTodos(usuarioId);
+
 
         try (Workbook planilha = new XSSFWorkbook();
             ByteArrayOutputStream saida = new ByteArrayOutputStream()) {
@@ -78,6 +81,8 @@ public class RelatorioDeExportacaoTransacaoArquivo implements RepositorioDeExpor
             planilha.write(saida);
 
             return new ByteArrayInputStream(saida.toByteArray());
+        } catch (Exception e){
+            throw new BusinessException("Falha ao gerar o excel");
         }
     }
 }

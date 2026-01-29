@@ -37,5 +37,6 @@ public interface TransacaoRepository extends JpaRepository<TransacaoEntity, UUID
             """, nativeQuery = true)
     List<AnaliseDeDespesaCampos> visualisarGastosMes(UUID usuarioId);
 
+    List<TransacaoEntity> findAllByUsuarioId(UUID usuarioId);
 
 }

@@ -10,8 +10,8 @@ import java.util.UUID;
 
 public interface RepositorioDeTransacao {
 
-    Transacao cadastrarTransacao(Transacao transacao);
-    List<Transacao> listarTodos();
+    Transacao cadastrarTransacao(Transacao transacao, String token);
+    List<Transacao> listarTodos(UUID usuarioId);
     Transacao buscarPorId (UUID id);
     List<RegistroDespesa>  visualizarGastosDia(UUID usuarioId);
     List<RegistroDespesa>  visualizarGastosMes(UUID usuarioId);

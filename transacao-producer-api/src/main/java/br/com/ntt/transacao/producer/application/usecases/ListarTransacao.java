@@ -5,6 +5,7 @@ import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.UUID;
 
 @Component
 public class ListarTransacao {
@@ -15,8 +16,8 @@ public class ListarTransacao {
         this.repositorio = repositorio;
     }
 
-    public List<Transacao> listarTodos(){
-        return this.repositorio.listarTodos();
+    public List<Transacao> listarTodos(UUID usuarioId){
+        return this.repositorio.listarTodos(usuarioId);
     }
 
 }

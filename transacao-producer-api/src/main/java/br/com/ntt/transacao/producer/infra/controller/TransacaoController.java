@@ -48,24 +48,39 @@ class TransacaoController {
         this.analiseDespesaTransacao = analiseDespesaTransacao;
     }
 
+    @Operation(
+            summary = "Analise das Despesas",
+            description = "Retornando resumo por dia e Mês"
+    )
     @PostMapping
-    public ResponseEntity<TransacaoDto> executar(@RequestBody @Valid DadosNovaTransacaoDto dados) {
+    public ResponseEntity<TransacaoDto> executar(@RequestBody @Valid DadosNovaTransacaoDto dados,
+                                                 @RequestHeader(value = "Authorization", required = false) String token) {
+
         Transacao novoTransacao = transacaoMapper.toDomain(dados);
-        novoTransacao = criarTransacao.executar(novoTransacao);
+
+        novoTransacao = criarTransacao.executar(novoTransacao, token);
 
         return ResponseEntity.ok(commonTransacaoMapper.toDto(novoTransacao));
     }
 
+    @Operation(
+            summary = "Analise das Despesas",
+            description = "Retornando resumo por dia e Mês"
+    )
     @GetMapping
-    public ResponseEntity<List<TransacaoDto>> listarUsuarios() {
-        List<TransacaoDto> lista = listarTransacao.listarTodos().stream()
+    public ResponseEntity<List<TransacaoDto>> listarTodos(@RequestParam(value = "usuarioId", required = false) UUID usuarioId) {
+        List<TransacaoDto> lista = listarTransacao.listarTodos(usuarioId)
+                .stream()
                 .map(salvo -> commonTransacaoMapper.toDto(salvo))
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(lista);
     }
 
-
+    @Operation(
+            summary = "Analise das Despesas",
+            description = "Retornando resumo por dia e Mês"
+    )
     @GetMapping("/{id}")
     public ResponseEntity<TransacaoDto> buscarPorId(@PathVariable UUID id) {
         Transacao transacao  = buscarTransacaoPorId.buscarPorId(id);

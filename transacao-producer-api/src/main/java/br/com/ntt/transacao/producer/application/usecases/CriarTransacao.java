@@ -19,8 +19,8 @@ public class CriarTransacao {
         this.repositorioProdutorDeTransacao = repositorioProdutorDeTransacao;
     }
 
-    public Transacao executar(Transacao transacao) {
-        Transacao transacaoSalva = repositorio.cadastrarTransacao(transacao);
+    public Transacao executar(Transacao transacao, String token) {
+        Transacao transacaoSalva = repositorio.cadastrarTransacao(transacao, token);
 
         repositorioProdutorDeTransacao.publicarTransacao(transacaoSalva);
 

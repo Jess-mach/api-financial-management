@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.UUID;
 
 @Component
 public class ExportarTransacao {
@@ -14,7 +15,7 @@ public class ExportarTransacao {
         this.repositorioDeExportacao = repositorioDeExportacao;
     }
 
-    public ByteArrayInputStream gerarExcel() throws IOException {
-        return repositorioDeExportacao.gerarExcel();
+    public ByteArrayInputStream gerarExcel(UUID usuarioId) {
+        return repositorioDeExportacao.gerarExcel(usuarioId);
     }
 }

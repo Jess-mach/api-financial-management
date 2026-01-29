@@ -8,10 +8,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/transacoes/exportar")
@@ -24,8 +26,8 @@ public class ExportacaoTransacaoController {
     }
 
     @GetMapping("/excel")
-    public ResponseEntity<Resource> baixarExcel() throws IOException {
-        ByteArrayInputStream fluxoDados = exportarTransacao.gerarExcel();
+    public ResponseEntity<Resource> baixarExcel(@RequestParam(value = "usuarioId", required = false) UUID usuarioId) {
+        ByteArrayInputStream fluxoDados = exportarTransacao.gerarExcel(usuarioId);
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=relatorio-transacoes.xlsx")

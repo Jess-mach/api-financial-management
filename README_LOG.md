@@ -1,4 +1,4 @@
-
+docker compose up -d --build
 
 docker compose logs -f transacao-consumer-api
 
@@ -8,4 +8,38 @@ docker compose logs -f transacao-producer-api
 
 
 
-docker compose up -d --build
+
+http://localhost:8080/swagger-ui/index.html#/autenticacao-controller/efetuarLogin
+
+{
+    "login": "Irving_Robel",
+    "senha": "Teste@12345"
+}
+
+
+Novo Usuario: 
+{
+    "nome": "testandodenovo",
+    "email": "usuario_001@email.com",
+    "login": "usuario_001",
+    "senha": "Teste@12345",
+    "perfilUsuario": "ADMINISTRADOR"
+}
+
+http://localhost:8081/swagger-ui/index.html
+
+Nova Transacao
+
+{
+    "usuarioId": "87df2bc8-4bb8-41fa-8559-98028346513e",
+    "valor": "323.00",
+    "tipo": "DEPOSITO",
+    "moeda": "BRL",
+    "descricao": "Depósito em conta corrente", 
+    "conta": 5
+}
+
+usuarioId: 3f97e5fc-b446-40c7-9d75-ed649f4a8ac0
+
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJBUEkgRmluYW5jaWFsLm1hbmFnZW1lbnQiLCJzdWIiOiJJcnZpbmdfUm9iZWwiLCJleHAiOjE3Njk3MTAwMzd9.j6FvdEPRhLC01sedbexJJjOEbvMNrnAiXrgGu11M6ZY
