@@ -1,4 +1,4 @@
-package br.com.ntt.transacao.consumer.application.service;
+package br.com.ntt.transacao.consumer.application.usecases;
 
 import br.com.ntt.common.transacao.domain.entity.Transacao;
 import br.com.ntt.common.transacao.domain.model.StatusTransacao;

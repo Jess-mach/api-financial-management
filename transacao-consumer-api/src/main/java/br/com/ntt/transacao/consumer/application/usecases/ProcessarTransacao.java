@@ -5,7 +5,6 @@ import br.com.ntt.common.transacao.domain.model.StatusTransacao;
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioConversaoMoeda;
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioDeTransacao;
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioSaldoCliente;
-import br.com.ntt.transacao.consumer.application.service.ValidadorDeTransacao;
 import br.com.ntt.transacao.consumer.domain.entity.conta.SaldoConta;
 import br.com.ntt.transacao.consumer.domain.entity.moeda.ConversorMoeda;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -13,15 +12,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.concurrent.ThreadLocalRandom;
-
 @Slf4j
 @Component
 public class ProcessarTransacao {
 
     private final RepositorioDeTransacao repositorio;
-
 
     private final RepositorioSaldoCliente repositorioSaldoCliente;
 
