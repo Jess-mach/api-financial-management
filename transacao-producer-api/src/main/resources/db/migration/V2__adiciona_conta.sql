@@ -1,0 +1,4 @@
+ALTER TABLE transacoes
+    ADD COLUMN conta INTEGER NOT NULL DEFAULT 0;
+
+CREATE SCHEMA IF NOT EXISTS transacoes_test_db;
