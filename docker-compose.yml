@@ -16,8 +16,9 @@ services:
       - rede-sistema
 
   usuarios-api:
-    build: ./usuario-api
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.usuario
     container_name: usuarios-api
     depends_on:
       - usuarios-db
@@ -30,7 +31,7 @@ services:
       - "8080:8080"
     networks:
       - rede-sistema
-      
+
   transacoes-db:
     image: postgres:16-alpine
     container_name: transacoes-db
@@ -90,7 +91,9 @@ services:
       echo 'Tópico TRANSACAO-TOPIC criado!'"
 
   transacoes-api:
-    build: ./transacao-producer-api
+    build:
+      context: .
+      dockerfile: Dockerfile.transacao-producer
     container_name: transacoes-api
     depends_on:
       - transacoes-db
@@ -105,10 +108,15 @@ services:
       - "8081:8080"
     networks:
       - rede-sistema
-      
+
   consumer-api:
-    build: ./transacao-consumer-api
+    build:
+      context: .
+      dockerfile: Dockerfile.transacao-consumer
     container_name: consumer-api
+    depends_on:
+      - transacoes-db
+      - kafka
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://transacoes-db:5432/transacoes_db
       SPRING_DATASOURCE_USERNAME: db_user
@@ -121,6 +129,7 @@ services:
       - rede-sistema
 
 volumes:
+  pgdata-usuarios:
   pgdata-transacoes:
 
 networks:
