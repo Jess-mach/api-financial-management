@@ -1,8 +1,8 @@
 package br.com.ntt.transacao.consumer.infra.controller;
 
-import br.com.ntt.transacao.consumer.domain.model.StatusTransacao;
-import br.com.ntt.transacao.consumer.domain.model.TipoTransacao;
-import br.com.ntt.transacao.consumer.infra.consumer.dto.TransacaoDto;
+import br.com.ntt.common.transacao.domain.model.StatusTransacao;
+import br.com.ntt.common.transacao.domain.model.TipoTransacao;
+import br.com.ntt.common.transacao.infra.controller.dto.TransacaoDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -59,7 +59,8 @@ StatusTransacao.PENDENTE,
                 LocalDateTime.now(),
                 "BRL",
                 new BigDecimal("100.50"),
-                "Teste"
+                "Teste",
+                1L
         );
 
 //        doNothing().when(publicadorTransacao).publicarSolicitacao(any(Transacao.class));
@@ -86,7 +87,8 @@ StatusTransacao.PENDENTE,
                 LocalDateTime.now(),
                 "BRL",
                 new BigDecimal("100.50"),
-                "Teste"
+                "Teste",
+                1L
         );
 
 
