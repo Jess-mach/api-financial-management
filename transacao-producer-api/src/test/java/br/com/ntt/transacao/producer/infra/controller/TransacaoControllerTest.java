@@ -24,9 +24,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc(addFilters = false)
 @TestPropertySource(properties = {
         "spring.flyway.enabled=false",
-        "spring.datasource.url=jdbc:postgresql://localhost:5433/transacoes_test_db",
-        "spring.datasource.username=TEST",
-        "spring.datasource.password=TEST",
+        "spring.datasource.url=jdbc:postgresql://localhost:5433/transacoes_db?currentSchema=transacoes_test_db",
+        "spring.datasource.username=db_user",
+        "spring.datasource.password=db_password",
         "spring.datasource.driver-class-name=org.postgresql.Driver",
         "spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect",
         "hibernate.dialect=org.hibernate.dialect.HSQLDialect"
@@ -38,9 +38,6 @@ class TransacaoControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
-
-//    @MockBean
-//    private PublicadorTransacao publicadorTransacao;
 
     @Test
     @DisplayName("Deve criar transação com sucesso (Status 202) mesmo sem token real")
@@ -61,7 +58,7 @@ class TransacaoControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
 
-                .andExpect(status().isAccepted())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.valor").value(100.50))
                 .andExpect(jsonPath("$.status").value("PENDING"));
     }

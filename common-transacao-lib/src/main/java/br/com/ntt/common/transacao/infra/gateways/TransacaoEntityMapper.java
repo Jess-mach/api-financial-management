@@ -16,7 +16,7 @@ public class TransacaoEntityMapper {
 
     public TransacaoEntity toEntity(Transacao dados){
         return new TransacaoEntity(
-                UUID.randomUUID(),
+                dados.getId(),
                 dados.getUsuarioId(),
                 dados.getValor(),
                 dados.getTipo(),

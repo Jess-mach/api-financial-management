@@ -51,8 +51,11 @@ public class ProcessarTransacao {
 
     public void atualizarStatusErro(Transacao transacao) {
         transacao.setStatus(StatusTransacao.ERRO_PROCESSAMENTO);
-
-        repositorio.atualizarTransacao(transacao);
+        try {
+            repositorio.atualizarTransacao(transacao);
+        } catch (Exception e) {
+            log.error("Falha ao processar a DLQ: ", e.getMessage());
+        }
     }
 }
 

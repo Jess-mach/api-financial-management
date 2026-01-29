@@ -90,11 +90,11 @@ services:
       kafka-topics --create --if-not-exists --bootstrap-server kafka:29092 --partitions 1 --replication-factor 1 --topic TRANSACAO-TOPIC && \
       echo 'Tópico TRANSACAO-TOPIC criado!'"
 
-  transacoes-api:
+  transacao-producer-api:
     build:
       context: .
       dockerfile: Dockerfile.transacao-producer
-    container_name: transacoes-api
+    container_name: transacao-producer-api
     depends_on:
       - transacoes-db
       - kafka
@@ -105,15 +105,15 @@ services:
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
       SPRING_PROFILES_ACTIVE: docker
     ports:
-      - "8081:8080"
+      - "8081:8081"
     networks:
       - rede-sistema
 
-  consumer-api:
+  transacao-consumer-api:
     build:
       context: .
       dockerfile: Dockerfile.transacao-consumer
-    container_name: consumer-api
+    container_name: transacao-consumer-api
     depends_on:
       - transacoes-db
       - kafka
@@ -124,7 +124,7 @@ services:
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
       SPRING_PROFILES_ACTIVE: docker
     ports:
-      - "8082:8080"
+      - "8082:8082"
     networks:
       - rede-sistema
 
