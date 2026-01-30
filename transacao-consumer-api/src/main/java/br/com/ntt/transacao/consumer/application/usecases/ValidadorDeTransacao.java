@@ -58,7 +58,7 @@ public class ValidadorDeTransacao {
 
             case SAIDA_EM_DINHEIRO:
                 transacao.setStatus(StatusTransacao.AUTORIZADO);
-
+                break;
             default:
                 transacao.setStatus(StatusTransacao.REJEITADO);
                 break;
