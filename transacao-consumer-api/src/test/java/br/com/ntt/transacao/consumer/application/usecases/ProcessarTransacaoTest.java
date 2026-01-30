@@ -280,7 +280,8 @@ class ProcessarTransacaoTest {
                 moeda,
                 null,
                 "Preciso pagar a cartão de crédito",
-                1L
+                1L,
+                BigDecimal.valueOf(valor)
         );
     }
 }

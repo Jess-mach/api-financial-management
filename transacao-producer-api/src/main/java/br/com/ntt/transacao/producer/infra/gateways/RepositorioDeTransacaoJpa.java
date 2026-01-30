@@ -2,11 +2,13 @@ package br.com.ntt.transacao.producer.infra.gateways;
 
 import br.com.ntt.common.transacao.domain.entity.RegistroDespesa;
 import br.com.ntt.common.transacao.domain.entity.Transacao;
+import br.com.ntt.common.transacao.domain.exception.AccessDeniedException;
 import br.com.ntt.common.transacao.infra.gateways.TransacaoEntityMapper;
 import br.com.ntt.common.transacao.infra.persistence.AnaliseDeDespesaCampos;
 import br.com.ntt.common.transacao.infra.persistence.TransacaoEntity;
 import br.com.ntt.common.transacao.infra.persistence.TransacaoRepository;
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao;
+import br.com.ntt.transacao.producer.domain.Usuario;
 import lombok.extern.slf4j.Slf4j;
 import br.com.ntt.common.transacao.domain.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
@@ -60,9 +62,12 @@ public class RepositorioDeTransacaoJpa implements RepositorioDeTransacao {
     }
 
     @Override
-    public Transacao buscarPorId(UUID id) {
+    public Transacao buscarPorId(UUID id, Usuario usuarioLogado) {
         TransacaoEntity entity = repositorio.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Transação não encontrado"));
+
+        if (!entity.getUsuarioId().equals(usuarioLogado.id()) && !usuarioLogado.perfilUsuario().equals("GERENTE"))
+            throw new AccessDeniedException("Acesso negado");
 
         return mapper.toDomain(entity);
     }

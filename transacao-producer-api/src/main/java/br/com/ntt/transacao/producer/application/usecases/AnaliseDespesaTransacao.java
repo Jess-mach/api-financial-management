@@ -7,7 +7,7 @@ import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao
 
 import br.com.ntt.transacao.producer.domain.Usuario;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.AccessDeniedException;
+import br.com.ntt.common.transacao.domain.exception.AccessDeniedException;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;

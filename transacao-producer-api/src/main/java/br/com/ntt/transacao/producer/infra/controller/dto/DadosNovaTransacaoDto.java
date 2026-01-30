@@ -24,7 +24,7 @@ public record DadosNovaTransacaoDto(
         String moeda,
 
         @NotNull(message = "A conta é obrigatória")
-        @DecimalMax(value = "50", message = "Id da conta deve ser até 50")
+        @DecimalMax(value = "100", message = "Id da conta deve ser até 50")
         Long conta
 ) {
 }

@@ -17,7 +17,7 @@ public class ValidadarUsuarioLogado {
     private final List<PerfilUsuario> ehTipoUsuarioGerenteOuAdministrador = List.of(PerfilUsuario.GERENTE, PerfilUsuario.ADMINISTRADOR);
 
     public void validaUsuarioGerenteOuAdministrador(Usuario usuarioLogado) {
-        if (ehTipoUsuarioGerenteOuAdministrador(usuarioLogado)){
+        if (ehTipoUsuarioGerenteOuAdministrador(usuarioLogado)) {
             log.info("usuário gerente ou administrador");
             return;
         }
@@ -27,17 +27,17 @@ public class ValidadarUsuarioLogado {
     }
 
     public void validaPermissaoDeCriarUsuarios(Usuario novoUsuario, Usuario usuarioLogado) {
-        if(usuarioLogado == null){
-            if(!novoUsuario.getPerfilUsuario().equals(PerfilUsuario.USUARIO)) {
+        if (usuarioLogado == null) {
+            if (!novoUsuario.getPerfilUsuario().equals(PerfilUsuario.USUARIO)) {
                 log.warn("usuario sendo cadastrado sem token e com perfil Administrador ou Gerente");
 
                 throw new BusinessException("Cadastre um usuário com perfil USUARIO");
             }
         } else {
 
-            switch (novoUsuario.getPerfilUsuario()){
+            switch (novoUsuario.getPerfilUsuario()) {
                 case ADMINISTRADOR:
-                    if(!usuarioLogado.getPerfilUsuario().equals(PerfilUsuario.ADMINISTRADOR)){
+                    if (!usuarioLogado.getPerfilUsuario().equals(PerfilUsuario.ADMINISTRADOR)) {
                         throw new BusinessException("Cadastre um usuário com perfil USUARIO");
                     }
                     break;
@@ -63,13 +63,13 @@ public class ValidadarUsuarioLogado {
     }
 
     public void validaSeEhProprioUsuarioLogadoOuUsuarioGerenteOuAdministrador(UUID id, Usuario usuarioLogado) {
-        if(!usuarioLogado.getId().equals(id) && !ehTipoUsuarioGerenteOuAdministrador(usuarioLogado)) {
+        if (!usuarioLogado.getId().equals(id) && !ehTipoUsuarioGerenteOuAdministrador(usuarioLogado)) {
             log.warn("Erro de Acesso - Usuário sem permissão");
             throw new AccessDeniedException("Usuário sem permissão");
         }
     }
 
-    private boolean ehTipoUsuarioGerenteOuAdministrador(Usuario usuarioLogado){
+    private boolean ehTipoUsuarioGerenteOuAdministrador(Usuario usuarioLogado) {
         return ehTipoUsuarioGerenteOuAdministrador.contains(usuarioLogado.getPerfilUsuario());
     }
 }

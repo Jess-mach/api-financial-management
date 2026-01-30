@@ -54,7 +54,7 @@ class BuscarTransacaoPorIdTest {
                 123456L,
                 new BigDecimal("150.00")
         );
-        when(repositorio.buscarPorId(any(UUID.class))).thenReturn(transacao);
+        when(repositorio.buscarPorId(any(UUID.class), usuarioLogado)).thenReturn(transacao);
 
         Transacao resultado = buscarTransacaoPorId.buscarPorId(usuarioId , usuarioLogado);
 
@@ -65,7 +65,7 @@ class BuscarTransacaoPorIdTest {
     @DisplayName("Transacao nao encontrado")
     void erroAoBuscarTransacao() {
 
-        when(repositorio.buscarPorId(any())).thenThrow(new ResourceNotFoundException("Erro ao conectar no Postgres"));
+        when(repositorio.buscarPorId(any(), usuarioLogado)).thenThrow(new ResourceNotFoundException("Erro ao conectar no Postgres"));
 
         assertThrows(ResourceNotFoundException.class, () -> buscarTransacaoPorId.buscarPorId(usuarioId , usuarioLogado));
 

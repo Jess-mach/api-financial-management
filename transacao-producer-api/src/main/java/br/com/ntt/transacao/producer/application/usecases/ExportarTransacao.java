@@ -1,8 +1,8 @@
 package br.com.ntt.transacao.producer.application.usecases;
 
+import br.com.ntt.common.transacao.domain.exception.AccessDeniedException;
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeExportacao;
 import br.com.ntt.transacao.producer.domain.Usuario;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayInputStream;

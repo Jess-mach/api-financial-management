@@ -101,3 +101,4 @@ DATASOURCE_PASSWORD=password_usr;DATASOURCE_URL=jdbc:postgresql://localhost:5432
 
 
 http://localhost:8080/swagger-ui/index.html
+http://localhost:8080/v3/api-docs.yaml

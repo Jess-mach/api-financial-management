@@ -24,6 +24,8 @@ public class AtualizarUsuario {
 
     public Usuario executar(Usuario usuarioAtualizacao, Usuario usuarioLogado) {
 
+        validadarUsuarioLogado.validaPermissaoDeCriarUsuarios(usuarioAtualizacao, usuarioLogado);
+
         Usuario usuarioEntidade = repositorioDeUsuario.findById(usuarioAtualizacao.getId());
 
         String senhaHash = repositorioDeEncriptacao.encode(usuarioAtualizacao.getSenha());
