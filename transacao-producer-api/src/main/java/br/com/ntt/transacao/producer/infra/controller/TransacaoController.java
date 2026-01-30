@@ -8,6 +8,7 @@ import br.com.ntt.transacao.producer.application.usecases.AnaliseDespesaTransaca
 import br.com.ntt.transacao.producer.application.usecases.BuscarTransacaoPorId;
 import br.com.ntt.transacao.producer.application.usecases.CriarTransacao;
 import br.com.ntt.transacao.producer.application.usecases.ListarTransacao;
+import br.com.ntt.transacao.producer.domain.Usuario;
 import br.com.ntt.transacao.producer.infra.controller.dto.AnaliseDespesaDto;
 import br.com.ntt.transacao.producer.infra.controller.dto.DadosNovaTransacaoDto;
 import br.com.ntt.transacao.producer.infra.controller.mapper.TransacaoMapper;
@@ -19,6 +20,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -56,7 +58,8 @@ class TransacaoController {
     )
     @PostMapping
     public ResponseEntity<TransacaoDto> executar(@RequestBody @Valid DadosNovaTransacaoDto dados,
-                                                 @RequestHeader(value = "Authorization", required = false) String token) {
+                                                 @RequestHeader(value = "Authorization", required = false) String token,
+                                                 @AuthenticationPrincipal Usuario usuarioLogado) {
 
         log.info("criação da transação dados={} - inicio", dados);
 
@@ -76,7 +79,8 @@ class TransacaoController {
             description = "Retorna lista de transações geral e por id do usuário."
     )
     @GetMapping
-    public ResponseEntity<List<TransacaoDto>> listarTodos(@RequestParam(value = "usuarioId", required = false) UUID usuarioId) {
+    public ResponseEntity<List<TransacaoDto>> listarTodos(@RequestParam(value = "usuarioId", required = false) UUID usuarioId,
+                                                          @AuthenticationPrincipal Usuario usuarioLogado) {
 
         log.info("listagem de transações - inicio");
 
@@ -95,7 +99,8 @@ class TransacaoController {
             description = "Retorna dados da transação por id."
     )
     @GetMapping("/{id}")
-    public ResponseEntity<TransacaoDto> buscarPorId(@PathVariable UUID id) {
+    public ResponseEntity<TransacaoDto> buscarPorId(@PathVariable UUID id,
+                                                    @AuthenticationPrincipal Usuario usuarioLogado) {
 
         log.info("buscar transacao por id - inicio");
 
@@ -118,7 +123,8 @@ class TransacaoController {
             @ApiResponse(responseCode = "400", description = "Data invalida")
     })
     @GetMapping("/analise")
-    public ResponseEntity<AnaliseDespesaDto> visualizarGastosDia(@RequestParam("usuarioId") @NotNull UUID usuarioId) {
+    public ResponseEntity<AnaliseDespesaDto> visualizarGastosDia(@RequestParam("usuarioId") @NotNull UUID usuarioId,
+                                                                 @AuthenticationPrincipal Usuario usuarioLogado) {
         log.info("analise de despesas - inicio");
 
         AnaliseDeDespesa analiseDeDespesa = analiseDespesaTransacao.visualizarGastos(usuarioId);

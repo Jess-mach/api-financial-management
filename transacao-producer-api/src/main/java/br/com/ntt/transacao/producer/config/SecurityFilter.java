@@ -1,5 +1,6 @@
 package br.com.ntt.transacao.producer.config;
 
+import br.com.ntt.transacao.producer.domain.Usuario;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import jakarta.servlet.FilterChain;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.UUID;
 
 @Slf4j
 @Component
@@ -30,10 +32,11 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         var tokenJWT = recuperarToken(request);
 
-
         if (tokenJWT != null) {
             try {
-                var subject = getSubject(tokenJWT);
+                getSubject(tokenJWT);
+                Usuario subject = recuperaUsuarioLogado(tokenJWT);
+
                 var authentication = new UsernamePasswordAuthenticationToken(subject, null, null);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -62,14 +65,18 @@ public class SecurityFilter extends OncePerRequestFilter {
         return null;
     }
 
-//    private String recuperarDadosUsuario(String tokenJWT) {
-//        var algoritmo = Algorithm.HMAC256(secret);
-//        var verifier = JWT.require(algoritmo)
-//                .withIssuer("API Financial.management")
-//                .build();
-//
-//        var decodedJWT = verifier.verify(tokenJWT);
-//
-//        return decodedJWT.getClaim("usuarioId").asString();
-//    }
+    public Usuario recuperaUsuarioLogado(String tokenJWT) {
+        var algoritmo = Algorithm.HMAC256(secret);
+        var verifier = JWT.require(algoritmo)
+                .withIssuer("API Financial.management")
+                .build();
+
+        var decodedJWT = verifier.verify(tokenJWT);
+
+        return new Usuario(
+                UUID.fromString(decodedJWT.getClaim("usuarioId").asString()),
+                decodedJWT.getClaim("nome").asString(),
+                decodedJWT.getClaim("role").asString()
+        );
+    }
 }

@@ -30,7 +30,7 @@ class ExportarTransacaoTest {
         when(repositorioDeExportacao.gerarExcel(any()))
                 .thenReturn(new ByteArrayInputStream("valor teste".getBytes()));
 
-        ByteArrayInputStream resultado = exportarTransacao.gerarExcel(any());
+        ByteArrayInputStream resultado = exportarTransacao.gerarExcel(any(), usuarioLogado);
 
         assertNotNull(resultado);
         verify(repositorioDeExportacao, times(1)).gerarExcel(any());

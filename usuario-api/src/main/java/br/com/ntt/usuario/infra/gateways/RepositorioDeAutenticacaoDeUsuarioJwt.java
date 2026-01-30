@@ -66,6 +66,7 @@ public class RepositorioDeAutenticacaoDeUsuarioJwt implements RepositorioDeAuten
                     .withIssuer("API Financial.management")
                     .withSubject(usuario.getLogin())
                     .withClaim("usuarioId", usuario.getId().toString())
+                    .withClaim("nome", usuario.getNome())
                     .withClaim("role", usuario.getPerfilUsuario().toString())
                     .withIssuedAt(new Date())
                     .withExpiresAt(dataExpiracao())
