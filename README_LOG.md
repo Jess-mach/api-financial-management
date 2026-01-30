@@ -44,7 +44,7 @@ http://localhost:8081/swagger-ui/index.html
 Nova Transacao
 
 {
-    "usuarioId": "87df2bc8-4bb8-41fa-8559-98028346513e",
+    "usuarioId": "bd3eccad-76c7-4aa3-bb92-673a686e962f",
     "valor": "323.00",
     "tipo": "DEPOSITO",
     "moeda": "BRL",
@@ -55,4 +55,6 @@ Nova Transacao
 usuarioId: 3f97e5fc-b446-40c7-9d75-ed649f4a8ac0
 
 
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJBUEkgRmluYW5jaWFsLm1hbmFnZW1lbnQiLCJzdWIiOiJJcnZpbmdfUm9iZWwiLCJleHAiOjE3Njk3MTAwMzd9.j6FvdEPRhLC01sedbexJJjOEbvMNrnAiXrgGu11M6ZY
+
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJBUEkgRmluYW5jaWFsLm1hbmFnZW1lbnQiLCJzdWIiOiJJcnZpbmdfUm9iZWwiLCJleHAiOjE3Njk3NDk0Njd9.GZBdGNTC96N8eQuwrOY8hkeX9T466euDYtrqiEczXZ0
