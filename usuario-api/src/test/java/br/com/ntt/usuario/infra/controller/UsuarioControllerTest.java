@@ -2,7 +2,6 @@ package br.com.ntt.usuario.infra.controller;
 
 
 import br.com.ntt.usuario.application.usecase.AuthenticaUsuario;
-import br.com.ntt.usuario.application.usecase.ValidadarUsuarioLogado;
 import br.com.ntt.usuario.domain.PerfilUsuario;
 import br.com.ntt.usuario.domain.entity.Usuario;
 import br.com.ntt.usuario.infra.controller.dto.DadosCadastroUsuario;
@@ -68,9 +67,6 @@ class UsuarioControllerTest {
     private Resource sampleFile;
 
     @MockitoBean
-    private ValidadarUsuarioLogado validadarUsuarioLogado;
-
-    @MockitoBean
     private AuthenticaUsuario authenticaUsuario;
 
     private Usuario usuarioLogado = new Usuario(
@@ -81,6 +77,13 @@ class UsuarioControllerTest {
             "Senha@123",
             PerfilUsuario.ADMINISTRADOR);
 
+    private Usuario usuarioLogadoPadrao = new Usuario(
+            UUID.randomUUID(),
+            "Jessica",
+            "jessica@email.com",
+            "jess.login",
+            "Senha@123",
+            PerfilUsuario.USUARIO);
 
     @BeforeEach
     void setUp() {
@@ -125,7 +128,7 @@ class UsuarioControllerTest {
 
         mockMvc.perform(post("/usuarios")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content( objectMapper.writeValueAsString(novoUsuario)))
+                        .content(objectMapper.writeValueAsString(novoUsuario)))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -259,7 +262,6 @@ class UsuarioControllerTest {
     }
 
 
-
     @Test
     @DisplayName("GET /usuarios/{id} - Usuario nao encontrado")
     void deveRetornar404QuandoUsuarioNaoForEncontrado() throws Exception {
@@ -313,9 +315,20 @@ class UsuarioControllerTest {
     }
 
     @Test
+    @DisplayName("DELETE /usuarios/{id} - Usuario Deletado com erro com usuario padrao")
+    void deveDeletarUsuarioComErroQuandoUsuarioLogadoPerfilPadrao() throws Exception {
+        when(authenticaUsuario.recuperaUsuarioLogado(anyBoolean())).thenReturn(usuarioLogadoPadrao);
+
+        mockMvc.perform(delete("/usuarios/" + usuarioId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message").value("Você não tem permissão para acessar este recurso"));
+    }
+
+    @Test
     @DisplayName("DELETE /usuarios/{id} - Usuario nao encontrado")
     void deveRetornar404AoDeletarUsuarioInexistente() throws Exception {
-
 
         mockMvc.perform(delete("/usuarios/" + UUID.randomUUID())
                         .contentType(MediaType.APPLICATION_JSON))

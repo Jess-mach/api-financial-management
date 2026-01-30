@@ -14,16 +14,13 @@ import java.util.UUID;
 @Component
 public class ValidadarUsuarioLogado {
 
-    private final List<PerfilUsuario> ehTipoUsuarioGerenteOuAdministrador = List.of(PerfilUsuario.GERENTE, PerfilUsuario.ADMINISTRADOR);
+    private final List<PerfilUsuario> tipoGerenteOuAdmin = List.of(PerfilUsuario.GERENTE, PerfilUsuario.ADMINISTRADOR);
 
     public void validaUsuarioGerenteOuAdministrador(Usuario usuarioLogado) {
-        if (ehTipoUsuarioGerenteOuAdministrador(usuarioLogado)) {
-            log.info("usuário gerente ou administrador");
-            return;
+        if (!ehTipoUsuarioGerenteOuAdministrador(usuarioLogado)) {
+            log.warn("Erro de Acesso - Usuário sem permissão de Gerente/Administrador");
+            throw new AccessDeniedException("Usuário sem permissão de Gerente/Administrador");
         }
-
-        log.error("Erro de Acesso - Usuário sem permissão de Gerente/Administrador");
-        throw new AccessDeniedException("Usuário sem permissão de Gerente/Administrador");
     }
 
     public void validaPermissaoDeCriarUsuarios(Usuario novoUsuario, Usuario usuarioLogado) {
@@ -43,7 +40,7 @@ public class ValidadarUsuarioLogado {
                     break;
 
                 case GERENTE: {
-                    if (!ehTipoUsuarioGerenteOuAdministrador.contains(usuarioLogado.getPerfilUsuario())) {
+                    if (!tipoGerenteOuAdmin.contains(usuarioLogado.getPerfilUsuario())) {
                         throw new BusinessException("Cadastre um usuário com perfil USUARIO");
                     }
                     break;
@@ -70,6 +67,6 @@ public class ValidadarUsuarioLogado {
     }
 
     private boolean ehTipoUsuarioGerenteOuAdministrador(Usuario usuarioLogado) {
-        return ehTipoUsuarioGerenteOuAdministrador.contains(usuarioLogado.getPerfilUsuario());
+        return tipoGerenteOuAdmin.contains(usuarioLogado.getPerfilUsuario());
     }
 }
