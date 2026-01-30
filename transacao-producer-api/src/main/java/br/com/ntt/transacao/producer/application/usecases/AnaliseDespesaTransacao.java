@@ -34,7 +34,7 @@ public class AnaliseDespesaTransacao {
     private TotalizadorDespesa calcularGastosPorMes(UUID usuarioId) {
         log.info("calculando despesas por mes");
 
-        List<RegistroDespesa>  gastosPorMes = repositorioDeTransacao.visualizarGastosMes(usuarioId);
+        List<RegistroDespesa> gastosPorMes = repositorioDeTransacao.visualizarGastosMes(usuarioId);
         BigDecimal valorTotalMes = contabilizarValorTotal(gastosPorMes);
         TotalizadorDespesa mes = new TotalizadorDespesa(gastosPorMes, valorTotalMes);
 
@@ -46,7 +46,7 @@ public class AnaliseDespesaTransacao {
     private TotalizadorDespesa calcularGastosPorDia(UUID usuarioId) {
         log.info("calculando despesas por dia");
 
-        List<RegistroDespesa>  gastosPorDia = repositorioDeTransacao.visualizarGastosDia(usuarioId);
+        List<RegistroDespesa> gastosPorDia = repositorioDeTransacao.visualizarGastosDia(usuarioId);
         BigDecimal valorTotalDia = contabilizarValorTotal(gastosPorDia);
         TotalizadorDespesa dia = new TotalizadorDespesa(gastosPorDia, valorTotalDia);
 
@@ -63,7 +63,7 @@ public class AnaliseDespesaTransacao {
         for (RegistroDespesa despesa : gastos) {
             if (despesa.getTipo().equals("DEPOSITO")) {
                 valorTotal = valorTotal.add(despesa.getValor());
-            }else
+            } else
                 valorTotal = valorTotal.subtract(despesa.getValor());
         }
 
