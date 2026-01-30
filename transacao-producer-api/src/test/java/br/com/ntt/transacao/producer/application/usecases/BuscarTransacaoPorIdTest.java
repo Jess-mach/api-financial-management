@@ -5,6 +5,7 @@ import br.com.ntt.common.transacao.domain.model.StatusTransacao;
 import br.com.ntt.common.transacao.domain.model.TipoTransacao;
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao;
 import br.com.ntt.common.transacao.domain.exception.ResourceNotFoundException;
+import br.com.ntt.transacao.producer.domain.Usuario;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,6 +31,13 @@ class BuscarTransacaoPorIdTest {
     @InjectMocks
     private BuscarTransacaoPorId buscarTransacaoPorId;
 
+    private UUID usuarioId = UUID.randomUUID();
+    private Usuario usuarioLogado = new Usuario(
+            usuarioId,
+            null,
+            "ADMINISTRADOR"
+    );
+
     @Test
     void deveRetornarTransacaoPorId() {
         Transacao transacao = new Transacao(
@@ -48,7 +56,7 @@ class BuscarTransacaoPorIdTest {
         );
         when(repositorio.buscarPorId(any(UUID.class))).thenReturn(transacao);
 
-        Transacao resultado = buscarTransacaoPorId.buscarPorId(UUID.randomUUID());
+        Transacao resultado = buscarTransacaoPorId.buscarPorId(usuarioId , usuarioLogado);
 
         assertEquals(transacao, resultado);
     }
@@ -59,7 +67,7 @@ class BuscarTransacaoPorIdTest {
 
         when(repositorio.buscarPorId(any())).thenThrow(new ResourceNotFoundException("Erro ao conectar no Postgres"));
 
-        assertThrows(ResourceNotFoundException.class, () -> buscarTransacaoPorId.buscarPorId(UUID.randomUUID()));
+        assertThrows(ResourceNotFoundException.class, () -> buscarTransacaoPorId.buscarPorId(usuarioId , usuarioLogado));
 
 
     }

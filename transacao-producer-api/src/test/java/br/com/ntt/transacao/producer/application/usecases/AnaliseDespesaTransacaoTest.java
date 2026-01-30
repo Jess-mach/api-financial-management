@@ -2,6 +2,7 @@ package br.com.ntt.transacao.producer.application.usecases;
 
 import br.com.ntt.common.transacao.domain.entity.AnaliseDeDespesa;
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao;
+import br.com.ntt.transacao.producer.domain.Usuario;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,6 +26,13 @@ class AnaliseDespesaTransacaoTest {
     @Mock
     private RepositorioDeTransacao repositorioDeTransacao;
 
+    private UUID usuarioId = UUID.randomUUID();
+    private Usuario usuarioLogado = new Usuario(
+            usuarioId,
+            null,
+            "ADMINISTRADOR"
+    );
+
     @Test
     @DisplayName("Deve visualizar gastos com sucesso")
     void devevisualizarGastosComSucesso() {
@@ -33,7 +41,7 @@ class AnaliseDespesaTransacaoTest {
 
         when(repositorioDeTransacao.visualizarGastosDia(any())).thenReturn(List.of());
 
-        AnaliseDeDespesa analise = analiseDespesaTransacao.visualizarGastos(UUID.randomUUID());
+        AnaliseDeDespesa analise = analiseDespesaTransacao.visualizarGastos(usuarioId, usuarioLogado);
 
         assertNotNull(analise);
         assertNotNull(analise.getDia());

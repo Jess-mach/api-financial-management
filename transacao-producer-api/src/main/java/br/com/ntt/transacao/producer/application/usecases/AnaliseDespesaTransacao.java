@@ -5,7 +5,9 @@ import br.com.ntt.common.transacao.domain.entity.RegistroDespesa;
 import br.com.ntt.common.transacao.domain.entity.TotalizadorDespesa;
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao;
 
+import br.com.ntt.transacao.producer.domain.Usuario;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -22,7 +24,10 @@ public class AnaliseDespesaTransacao {
         this.repositorioDeTransacao = repositorioDeTransacao;
     }
 
-    public AnaliseDeDespesa visualizarGastos(UUID usuarioId) {
+    public AnaliseDeDespesa visualizarGastos(UUID usuarioId, Usuario usuarioLogado) {
+
+        if (!usuarioId.equals(usuarioLogado.id()) && !usuarioLogado.perfilUsuario().equals("GERENTE"))
+            throw new AccessDeniedException("Acesso negado");
 
         TotalizadorDespesa dia = calcularGastosPorDia(usuarioId);
 

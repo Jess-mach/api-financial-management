@@ -6,6 +6,7 @@ import br.com.ntt.common.transacao.domain.entity.AnaliseDeDespesa;
 import br.com.ntt.common.transacao.domain.entity.RegistroDespesa;
 import br.com.ntt.common.transacao.domain.entity.Transacao;
 import br.com.ntt.common.transacao.domain.model.TipoTransacao;
+import br.com.ntt.transacao.producer.domain.Usuario;
 import br.com.ntt.transacao.producer.infra.controller.dto.*;
 import org.springframework.stereotype.Component;
 
@@ -14,10 +15,10 @@ import java.util.List;
 @Component
 public class TransacaoMapper {
 
-    public Transacao toDomain(DadosNovaTransacaoDto dados) {
+    public Transacao toDomain(DadosNovaTransacaoDto dados, Usuario usuarioLogado) {
         return new Transacao(
                 null,
-                dados.usuarioId(),
+                usuarioLogado.id(),
                 dados.valor(),
                 TipoTransacao.valueOf(dados.tipo()),
                 null,
@@ -26,7 +27,8 @@ public class TransacaoMapper {
                 dados.moeda(),
                 null,
                 dados.descricao(),
-                dados.conta());
+                dados.conta(),
+                null);
     }
 
     public AnaliseDespesaDto toDto(AnaliseDeDespesa dados) {

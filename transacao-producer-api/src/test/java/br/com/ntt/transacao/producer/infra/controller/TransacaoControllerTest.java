@@ -1,6 +1,7 @@
 package br.com.ntt.transacao.producer.infra.controller;
 
 import br.com.ntt.transacao.producer.application.gateways.RepositorioConsultaUsuario;
+import br.com.ntt.transacao.producer.domain.Usuario;
 import br.com.ntt.transacao.producer.infra.controller.dto.DadosNovaTransacaoDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -10,6 +11,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -44,18 +47,27 @@ class TransacaoControllerTest {
     @MockBean
     private RepositorioConsultaUsuario repositorioConsultaUsuario;
 
+    private UUID usuarioId = UUID.randomUUID();
+    private Usuario usuarioLogado = new Usuario(
+            usuarioId,
+            null,
+            "ADMINISTRADOR"
+    );
+
     @Test
     @DisplayName("Deve criar transação com sucesso (Status 202) mesmo sem token real")
     void deveCriarTransacaoComSucesso() throws Exception {
 
         DadosNovaTransacaoDto request = new DadosNovaTransacaoDto(
-                UUID.randomUUID(),
                 new BigDecimal("100.50"),
                 "DEPOSITO",
                 "Almoço de domingo",
                 "BRL",
                 1L
         );
+
+        var authentication = new UsernamePasswordAuthenticationToken(usuarioLogado, null, null);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
         mockMvc.perform(post("/transacoes")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -67,10 +79,9 @@ class TransacaoControllerTest {
     }
 
     @Test
-    @DisplayName("Deve falhar se valor for negativo (Teste de Validação)")
+    @DisplayName("Deve falhar se valor for negativo")
     void deveFalharComValorNegativo() throws Exception {
         DadosNovaTransacaoDto requestInvalido = new DadosNovaTransacaoDto(
-                UUID.randomUUID(),
                 new BigDecimal("-50.00"),
                 "SAQUE",
                 "Erro",

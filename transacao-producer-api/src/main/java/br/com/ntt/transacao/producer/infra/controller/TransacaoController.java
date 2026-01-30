@@ -63,7 +63,7 @@ class TransacaoController {
 
         log.info("criação da transação dados={} - inicio", dados);
 
-        Transacao novoTransacao = transacaoMapper.toDomain(dados);
+        Transacao novoTransacao = transacaoMapper.toDomain(dados, usuarioLogado);
 
         novoTransacao = criarTransacao.executar(novoTransacao, token);
 
@@ -84,7 +84,7 @@ class TransacaoController {
 
         log.info("listagem de transações - inicio");
 
-        List<TransacaoDto> lista = listarTransacao.listarTodos(usuarioId)
+        List<TransacaoDto> lista = listarTransacao.listarTodos(usuarioId, usuarioLogado)
                 .stream()
                 .map(salvo -> commonTransacaoMapper.toDto(salvo))
                 .collect(Collectors.toList());
@@ -104,7 +104,7 @@ class TransacaoController {
 
         log.info("buscar transacao por id - inicio");
 
-        Transacao transacao = buscarTransacaoPorId.buscarPorId(id);
+        Transacao transacao = buscarTransacaoPorId.buscarPorId(id, usuarioLogado);
 
         TransacaoDto dto = commonTransacaoMapper.toDto(transacao);
 
@@ -127,7 +127,7 @@ class TransacaoController {
                                                                  @AuthenticationPrincipal Usuario usuarioLogado) {
         log.info("analise de despesas - inicio");
 
-        AnaliseDeDespesa analiseDeDespesa = analiseDespesaTransacao.visualizarGastos(usuarioId);
+        AnaliseDeDespesa analiseDeDespesa = analiseDespesaTransacao.visualizarGastos(usuarioId, usuarioLogado);
 
         AnaliseDespesaDto dto = transacaoMapper.toDto(analiseDeDespesa);
 

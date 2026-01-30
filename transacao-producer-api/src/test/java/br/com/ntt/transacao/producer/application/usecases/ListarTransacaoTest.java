@@ -5,6 +5,7 @@ import br.com.ntt.common.transacao.domain.exception.BusinessException;
 import br.com.ntt.common.transacao.domain.model.StatusTransacao;
 import br.com.ntt.common.transacao.domain.model.TipoTransacao;
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao;
+import br.com.ntt.transacao.producer.domain.Usuario;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,6 +31,13 @@ class ListarTransacaoTest {
     @InjectMocks
     private ListarTransacao listarTransacao;
 
+    private UUID usuarioId = UUID.randomUUID();
+    private Usuario administrador = new Usuario(
+            usuarioId,
+            null,
+            "ADMINISTRADOR"
+    );
+
     @Test
     @DisplayName("Sucesso na consulta")
     void deveConsultarComSucesso() {
@@ -50,7 +58,7 @@ class ListarTransacaoTest {
 
         when(repositorio.listarTodos(any())).thenReturn(List.of(transacao));
 
-        List<Transacao> resultado = listarTransacao.listarTodos(UUID.randomUUID());
+        List<Transacao> resultado = listarTransacao.listarTodos(usuarioId, administrador);
 
         assertNotNull(resultado);
         verify(repositorio, times(1)).listarTodos(any());
@@ -63,7 +71,7 @@ class ListarTransacaoTest {
         when(repositorio.listarTodos(any()))
                 .thenThrow(new BusinessException("Erro ao conectar no Postgres"));
 
-        assertThrows(RuntimeException.class, () -> listarTransacao.listarTodos(UUID.randomUUID()));
+        assertThrows(RuntimeException.class, () -> listarTransacao.listarTodos(usuarioId, administrador));
 
     }
 }
