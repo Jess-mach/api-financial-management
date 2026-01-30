@@ -1,8 +1,8 @@
 package br.com.ntt.usuario.application.usecase;
 
 
-import br.com.ntt.usuario.application.gateways.UsuarioRepository;
-import br.com.ntt.usuario.config.PasswordService;
+import br.com.ntt.usuario.application.gateways.RepositorioDeUsuario;
+import br.com.ntt.usuario.application.gateways.RepositorioDeEncriptacao;
 import br.com.ntt.usuario.domain.PerfilUsuario;
 import br.com.ntt.usuario.domain.entity.Usuario;
 import org.junit.jupiter.api.DisplayName;
@@ -24,10 +24,10 @@ import static org.mockito.Mockito.*;
 class CriarUsuarioTest {
     
     @Mock
-    private UsuarioRepository usuarioRepository;
+    private RepositorioDeUsuario repositorioDeUsuario;
 
     @Mock
-    private PasswordService passwordService;
+    private RepositorioDeEncriptacao repositorioDeEncriptacao;
 
     @InjectMocks
     private CriarUsuario criarUsuario;
@@ -43,13 +43,13 @@ class CriarUsuarioTest {
                 "jess.login",
                 "Senha@123",
                 PerfilUsuario.USUARIO);
-        when(usuarioRepository.existsByEmail(usuario.getEmail())).thenReturn(false);
-        when(passwordService.encode("Senha@123")).thenReturn("hash_seguro");
+        when(repositorioDeUsuario.existsByEmail(usuario.getEmail())).thenReturn(false);
+        when(repositorioDeEncriptacao.encode("Senha@123")).thenReturn("hash_seguro");
 
         criarUsuario.executar(usuario);
 
-        verify(passwordService).encode("Senha@123");
-        verify(usuarioRepository).save(usuario, "hash_seguro");
+        verify(repositorioDeEncriptacao).encode("Senha@123");
+        verify(repositorioDeUsuario).save(usuario, "hash_seguro");
     }
 
     @Test
@@ -63,10 +63,10 @@ class CriarUsuarioTest {
                 "jess.login",
                 "Senha@123",
                 PerfilUsuario.USUARIO);
-        when(usuarioRepository.existsByEmail(anyString())).thenReturn(true);
+        when(repositorioDeUsuario.existsByEmail(anyString())).thenReturn(true);
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> criarUsuario.executar(usuario));
-        verify(usuarioRepository, never()).save(any(), anyString());
+        verify(repositorioDeUsuario, never()).save(any(), anyString());
     }
 }

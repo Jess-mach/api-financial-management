@@ -1,8 +1,8 @@
 package br.com.ntt.usuario.infra.controller;
 
+import br.com.ntt.usuario.application.gateways.RepositorioDeUsuarioToken;
 import br.com.ntt.usuario.infra.controller.dto.DadosAutenticacao;
-import br.com.ntt.usuario.infra.service.DadosToken;
-import br.com.ntt.usuario.infra.service.TokenService;
+import br.com.ntt.usuario.domain.entity.DadosToken;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class AutenticacaoController {
 
     @Autowired
-    private TokenService tokenService;
+    private RepositorioDeUsuarioToken repositorioDeUsuarioToken;
 
     @PostMapping
     public ResponseEntity<DadosToken> efetuarLogin(@RequestBody @Valid DadosAutenticacao dados) {
         log.info("efetuando login - inicio");
 
-        String tokenJWT = tokenService.gerarToken(dados.login(), dados.senha());
+        String tokenJWT = repositorioDeUsuarioToken.gerarToken(dados.login(), dados.senha());
 
         DadosToken body = new DadosToken(tokenJWT);
 

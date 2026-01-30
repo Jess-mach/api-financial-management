@@ -1,6 +1,6 @@
 package br.com.ntt.usuario.config;
 
-import br.com.ntt.usuario.infra.persistence.repository.RepositoryJpa;
+import br.com.ntt.usuario.infra.persistence.repository.UsuarioRepository;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
@@ -25,9 +25,9 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Value("${api.security.token.secret}")
     private String secret;
 
-    private final RepositoryJpa repository;
+    private final UsuarioRepository repository;
 
-    public SecurityFilter(RepositoryJpa repository) {
+    public SecurityFilter(UsuarioRepository repository) {
         this.repository = repository;
     }
 

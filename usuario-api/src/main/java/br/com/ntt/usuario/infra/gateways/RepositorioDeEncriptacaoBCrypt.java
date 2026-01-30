@@ -1,14 +1,13 @@
-package br.com.ntt.usuario.infra.service;
+package br.com.ntt.usuario.infra.gateways;
 
-import br.com.ntt.usuario.config.PasswordService;
+import br.com.ntt.usuario.application.gateways.RepositorioDeEncriptacao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 @Slf4j
 @Component
-public class BCryptPasswordService implements PasswordService {
+public class RepositorioDeEncriptacaoBCrypt implements RepositorioDeEncriptacao {
 
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 

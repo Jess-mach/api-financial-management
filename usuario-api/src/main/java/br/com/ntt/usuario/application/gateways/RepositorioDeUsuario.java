@@ -3,10 +3,9 @@ package br.com.ntt.usuario.application.gateways;
 import br.com.ntt.usuario.domain.entity.Usuario;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
-public interface UsuarioRepository {
+public interface RepositorioDeUsuario {
 
     Usuario save (Usuario usuario, String senhaHash);
     Usuario findById(UUID id);

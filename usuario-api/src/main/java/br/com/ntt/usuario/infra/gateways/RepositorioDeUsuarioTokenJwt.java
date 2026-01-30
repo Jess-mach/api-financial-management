@@ -1,5 +1,6 @@
-package br.com.ntt.usuario.infra.service;
+package br.com.ntt.usuario.infra.gateways;
 
+import br.com.ntt.usuario.application.gateways.RepositorioDeUsuarioToken;
 import br.com.ntt.usuario.infra.persistence.entity.UsuarioJpaEntity;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -16,7 +17,7 @@ import java.time.ZoneOffset;
 
 
 @Service
-public class TokenService {
+public class RepositorioDeUsuarioTokenJwt implements RepositorioDeUsuarioToken {
 
     @Value("${api.security.token.secret}")
     private String secret;
@@ -24,7 +25,17 @@ public class TokenService {
     @Autowired
     private AuthenticationManager manager;
 
-    public String gerarToken(UsuarioJpaEntity usuario) {
+    @Override
+    public String gerarToken(String login, String senha) {
+        var authenticationToken = new UsernamePasswordAuthenticationToken(login, senha);
+        var authentication = manager.authenticate(authenticationToken);
+
+        var tokenJWT = gerarToken((UsuarioJpaEntity) authentication.getPrincipal());
+
+        return tokenJWT;
+    }
+
+    private String gerarToken(UsuarioJpaEntity usuario) {
         try {
             var algorithm = Algorithm.HMAC256(secret);
             return JWT.create()
@@ -42,12 +53,4 @@ public class TokenService {
         return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
     }
 
-    public String gerarToken(String login, String senha) {
-        var authenticationToken = new UsernamePasswordAuthenticationToken(login, senha);
-        var authentication = manager.authenticate(authenticationToken);
-
-        var tokenJWT = gerarToken((UsuarioJpaEntity) authentication.getPrincipal());
-
-        return tokenJWT;
-    }
 }

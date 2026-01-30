@@ -1,11 +1,11 @@
 package br.com.ntt.usuario.infra.persistence;
 
-import br.com.ntt.usuario.application.gateways.UsuarioRepository;
+import br.com.ntt.usuario.application.gateways.RepositorioDeUsuario;
 import br.com.ntt.usuario.domain.entity.Usuario;
 import br.com.ntt.usuario.domain.exception.ResourceNotFoundException;
 import br.com.ntt.usuario.infra.persistence.entity.UsuarioJpaEntity;
 import br.com.ntt.usuario.infra.persistence.mapper.UsuarioJpaMapper;
-import br.com.ntt.usuario.infra.persistence.repository.RepositoryJpa;
+import br.com.ntt.usuario.infra.persistence.repository.UsuarioRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
@@ -14,12 +14,12 @@ import java.util.UUID;
 
 @Slf4j
 @Repository
-public class UsuarioRepositoryInfra implements UsuarioRepository {
+public class RepositorioDeRepositorioDeUsuarioJpa implements RepositorioDeUsuario {
 
-    private final RepositoryJpa repositoryJpa;
+    private final UsuarioRepository repositoryJpa;
     private final UsuarioJpaMapper mapper;
 
-    public UsuarioRepositoryInfra(RepositoryJpa repositoryJpa, UsuarioJpaMapper mapper) {
+    public RepositorioDeRepositorioDeUsuarioJpa(UsuarioRepository repositoryJpa, UsuarioJpaMapper mapper) {
         this.repositoryJpa = repositoryJpa;
         this.mapper = mapper;
     }

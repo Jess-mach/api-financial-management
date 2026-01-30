@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.UUID;
 
-public interface RepositoryJpa extends JpaRepository<UsuarioJpaEntity, UUID> {
+public interface UsuarioRepository extends JpaRepository<UsuarioJpaEntity, UUID> {
     boolean existsByEmail(String email);
     UserDetails findByLogin(String login);
 }

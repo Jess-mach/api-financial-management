@@ -3,7 +3,7 @@ package br.com.ntt.usuario.infra.controller;
 
 import br.com.ntt.usuario.infra.controller.dto.DadosCadastroUsuario;
 import br.com.ntt.usuario.infra.persistence.entity.UsuarioJpaEntity;
-import br.com.ntt.usuario.infra.persistence.repository.RepositoryJpa;
+import br.com.ntt.usuario.infra.persistence.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -53,7 +53,7 @@ class UsuarioControllerTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private RepositoryJpa repositoryJpa;
+    private UsuarioRepository repositoryJpa;
 
     private UUID usuarioId;
 
