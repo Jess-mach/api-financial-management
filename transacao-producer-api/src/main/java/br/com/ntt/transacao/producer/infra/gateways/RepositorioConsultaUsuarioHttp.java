@@ -53,7 +53,7 @@ public class RepositorioConsultaUsuarioHttp implements RepositorioConsultaUsuari
 
             return mapper.toDomain(dto);
         } catch (Exception e) {
-            log.error("falha na requisição", e.getMessage());
+            log.error("falha na requisição: {}", e.getMessage());
             throw new ResourceNotFoundException("Usuario não encontrado");
         }
     }
