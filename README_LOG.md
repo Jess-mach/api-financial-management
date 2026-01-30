@@ -15,11 +15,11 @@ docker compose logs -f transacao-producer-api
 
 Apenas novos logs:
 
-docker compose logs -f --tail 0 transacao-consumer-api
+clear && docker compose logs -f --tail 0 transacao-consumer-api
 
-docker compose logs -f --tail 0 usuarios-api
+clear && docker compose logs -f --tail 0 usuarios-api
 
-docker compose logs -f --tail 0 transacao-producer-api
+clear && docker compose logs -f --tail 0 transacao-producer-api
 
 
 http://localhost:8080/swagger-ui/index.html#/autenticacao-controller/efetuarLogin
