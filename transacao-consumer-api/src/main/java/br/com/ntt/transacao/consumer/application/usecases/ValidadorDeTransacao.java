@@ -14,7 +14,7 @@ public class ValidadorDeTransacao {
     public Transacao validarTransacao(Transacao transacao, SaldoConta saldoConta, ConversorMoeda conversorMoeda) {
         Double valorDoSaldo = saldoConta.getSaldo().doubleValue();
         Double valorDaTransacao = transacao.getValor().doubleValue();
-        Double valorTaxaDeCambio = conversorMoeda.getCotacoes().get(0).getCotacaoVenda().doubleValue();
+        Double valorTaxaDeCambio = getValorTaxaDeCambio(conversorMoeda);
         Double valorLimiteCartao =  saldoConta.getLimiteCartao().doubleValue();
 
         if (!transacao.getMoeda().equals("BRL")) {
@@ -56,10 +56,20 @@ public class ValidadorDeTransacao {
                     transacao.setStatus(StatusTransacao.REJEITADO);
                 break;
 
+            case SAIDA_EM_DINHEIRO:
+                transacao.setStatus(StatusTransacao.AUTORIZADO);
+
             default:
                 transacao.setStatus(StatusTransacao.REJEITADO);
                 break;
         }
         return transacao;
+    }
+
+    private static double getValorTaxaDeCambio(ConversorMoeda conversorMoeda) {
+        if(conversorMoeda.getCotacoes() == null || conversorMoeda.getCotacoes().isEmpty())
+            return 0;
+
+        return conversorMoeda.getCotacoes().get(0).getCotacaoVenda().doubleValue();
     }
 }

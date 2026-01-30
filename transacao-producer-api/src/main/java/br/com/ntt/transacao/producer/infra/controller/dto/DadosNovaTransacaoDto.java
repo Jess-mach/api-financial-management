@@ -1,9 +1,6 @@
 package br.com.ntt.transacao.producer.infra.controller.dto;
 
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -17,6 +14,10 @@ public record DadosNovaTransacaoDto(
         BigDecimal valor,
 
         @NotNull(message = "O tipo da transação é obrigatório ")
+        @Pattern(
+                regexp = "DEPOSITO|SAQUE|COMPRA|TRANSFERENCIA|SAIDA_EM_DINHEIRO",
+                message = "O tipo de transação deve ser DEPOSITO, SAQUE, COMPRA, TRANSFERENCIA ou SAIDA_EM_DINHEIRO"
+        )
         String tipo,
 
         @NotBlank(message = "A descricao é obrigatória para análise de despesas")

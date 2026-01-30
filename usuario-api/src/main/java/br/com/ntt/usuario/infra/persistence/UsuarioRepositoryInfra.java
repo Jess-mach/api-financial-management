@@ -6,11 +6,13 @@ import br.com.ntt.usuario.domain.exception.ResourceNotFoundException;
 import br.com.ntt.usuario.infra.persistence.entity.UsuarioJpaEntity;
 import br.com.ntt.usuario.infra.persistence.mapper.UsuarioJpaMapper;
 import br.com.ntt.usuario.infra.persistence.repository.RepositoryJpa;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Repository
 public class UsuarioRepositoryInfra implements UsuarioRepository {
 
@@ -24,13 +26,20 @@ public class UsuarioRepositoryInfra implements UsuarioRepository {
 
     @Override
     public Usuario save(Usuario usuario, String senhaHash) {
+        log.info("salvando usuario na base de dados - inicio");
+
         UsuarioJpaEntity entity = mapper.toEntity(usuario, senhaHash);
         UsuarioJpaEntity salva = repositoryJpa.save(entity);
+
+        log.info("salvando usuario na base de dados - fim");
+
         return mapper.toDomain(salva);
     }
 
     @Override
     public Usuario findById(UUID id) {
+        log.info("consultando usuario {}", id);
+
         UsuarioJpaEntity byId = repositoryJpa.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario não encontrado"));
 
@@ -39,11 +48,15 @@ public class UsuarioRepositoryInfra implements UsuarioRepository {
 
     @Override
     public boolean existsByEmail(String email) {
+        log.info("validação do email do usuario");
+
         return repositoryJpa.existsByEmail(email);
     }
 
     @Override
     public List<Usuario> findAll() {
+        log.info("carregando listagem de usuarios");
+
         return repositoryJpa.findAll()
                 .stream()
                 .map(mapper::toDomain)
@@ -52,6 +65,8 @@ public class UsuarioRepositoryInfra implements UsuarioRepository {
 
     @Override
     public void deleteById(UUID id) {
+        log.info("efetivando exclusão do usuario");
+
         if (repositoryJpa.existsById(id)) {
             repositoryJpa.deleteById(id);
         } else {

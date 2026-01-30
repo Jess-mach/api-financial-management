@@ -3,6 +3,7 @@ package br.com.ntt.transacao.producer.application.usecases;
 import br.com.ntt.common.transacao.domain.entity.Transacao;
 import br.com.ntt.common.transacao.domain.model.StatusTransacao;
 import br.com.ntt.common.transacao.domain.model.TipoTransacao;
+import br.com.ntt.transacao.producer.application.gateways.RepositorioConsultaUsuario;
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao;
 import br.com.ntt.transacao.producer.application.gateways.RepositorioProdutorDeTransacao;
 import org.junit.jupiter.api.DisplayName;
@@ -28,6 +29,9 @@ class CriarTransacaoTest {
 
     @Mock
     private RepositorioProdutorDeTransacao repositorioProdutorDeTransacao;
+
+    @Mock
+    private RepositorioConsultaUsuario repositorioConsultaUsuario;
 
     @InjectMocks
     private CriarTransacao criarTransacao;

@@ -1,5 +1,6 @@
 package br.com.ntt.transacao.producer.infra.controller;
 
+import br.com.ntt.transacao.producer.application.gateways.RepositorioConsultaUsuario;
 import br.com.ntt.transacao.producer.infra.controller.dto.DadosNovaTransacaoDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -7,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
@@ -39,6 +41,9 @@ class TransacaoControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @MockBean
+    private RepositorioConsultaUsuario repositorioConsultaUsuario;
+
     @Test
     @DisplayName("Deve criar transação com sucesso (Status 202) mesmo sem token real")
     void deveCriarTransacaoComSucesso() throws Exception {
@@ -46,13 +51,11 @@ class TransacaoControllerTest {
         DadosNovaTransacaoDto request = new DadosNovaTransacaoDto(
                 UUID.randomUUID(),
                 new BigDecimal("100.50"),
-                "DEPOSITO", // Use as Strings exatas do seu Enum
+                "DEPOSITO",
                 "Almoço de domingo",
                 "BRL",
                 1L
         );
-
-//        doNothing().when(publicadorTransacao).publicarSolicitacao(any(Transacao.class));
 
         mockMvc.perform(post("/transacoes")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -60,7 +63,7 @@ class TransacaoControllerTest {
 
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.valor").value(100.50))
-                .andExpect(jsonPath("$.status").value("PENDING"));
+                .andExpect(jsonPath("$.status").value("PENDENTE"));
     }
 
     @Test

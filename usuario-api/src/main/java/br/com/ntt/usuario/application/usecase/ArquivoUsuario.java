@@ -3,6 +3,7 @@ package br.com.ntt.usuario.application.usecase;
 import br.com.ntt.usuario.domain.PerfilUsuario;
 import br.com.ntt.usuario.domain.entity.Usuario;
 import br.com.ntt.usuario.infra.controller.mapper.UsuarioDtoMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -16,6 +17,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Component
 public class ArquivoUsuario {
 
@@ -23,10 +25,10 @@ public class ArquivoUsuario {
 
     public ArquivoUsuario(CriarUsuario criarUsuario) {
         this.criarUsuario = criarUsuario;
-
     }
 
     public List<Usuario> processarArquivo(MultipartFile file) throws Exception {
+        log.info("Iniciando processamento do arquivo:{} ", file.getOriginalFilename());
         String filename = file.getOriginalFilename();
         List<Usuario> usuarios;
 
@@ -40,11 +42,15 @@ public class ArquivoUsuario {
 
         List<Usuario> lote = criarUsuario.lote(usuarios);
 
+        log.info("Finalizando processamento do arquivo:{}", file.getOriginalFilename());
+
         return lote;
     }
 
     private List<Usuario> lerCsv(MultipartFile file) throws Exception {
         List<Usuario> usuarios = new ArrayList<>();
+
+        log.info("lendo arquivo csv - inicio");
 
         try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8));
              CSVParser csvParser = new CSVParser(fileReader, CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim())) {
@@ -62,12 +68,17 @@ public class ArquivoUsuario {
                 usuarios.add(usuario);
             }
         }
+
+        log.info("lendo arquivo csv - fim");
+
         return usuarios;
     }
 
     private List<Usuario> lerExcel(MultipartFile file) throws Exception {
         List<Usuario> usuarios = new ArrayList<>();
         DataFormatter dataFormatter = new DataFormatter();
+
+        log.info("lendo arquivo excel - inicio");
 
         try (Workbook workbook = WorkbookFactory.create(file.getInputStream())) {
             Sheet sheet = workbook.getSheetAt(0);
@@ -93,6 +104,9 @@ public class ArquivoUsuario {
                 usuarios.add(usuario);
             }
         }
+
+        log.info("lendo arquivo excel - fim");
+
         return usuarios;
     }
 }

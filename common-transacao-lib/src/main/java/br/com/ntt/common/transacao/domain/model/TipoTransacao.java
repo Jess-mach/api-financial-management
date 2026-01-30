@@ -5,7 +5,8 @@ public enum TipoTransacao {
     DEPOSITO,
     SAQUE,
     COMPRA,
-    TRANSFERENCIA;
+    TRANSFERENCIA,
+    SAIDA_EM_DINHEIRO;
 
     public static String getDoCodigo(String tipo) {
         switch (tipo ) {

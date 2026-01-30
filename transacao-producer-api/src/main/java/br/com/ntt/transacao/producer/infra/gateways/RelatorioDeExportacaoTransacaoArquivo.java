@@ -4,6 +4,7 @@ import br.com.ntt.common.transacao.domain.entity.Transacao;
 import br.com.ntt.common.transacao.domain.exception.BusinessException;
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeExportacao;
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Component
 public class RelatorioDeExportacaoTransacaoArquivo implements RepositorioDeExportacao {
 
@@ -28,9 +30,9 @@ public class RelatorioDeExportacaoTransacaoArquivo implements RepositorioDeExpor
 
     @Override
     public ByteArrayInputStream gerarExcel(UUID usuarioId) {
-
         List<Transacao> transacoes = repositorioDeTransacao.listarTodos(usuarioId);
 
+        log.info("gerando excel de transações");
 
         try (Workbook planilha = new XSSFWorkbook();
             ByteArrayOutputStream saida = new ByteArrayOutputStream()) {
@@ -42,6 +44,8 @@ public class RelatorioDeExportacaoTransacaoArquivo implements RepositorioDeExpor
                     "Solicitado em", "Finalizado em", "Moeda", "Taxa de Câmbio", "Descrição"
             };
 
+            log.info("gerando estrutura do excel");
+
             for (int i = 0; i < colunas.length; i++) {
                 Cell celula = linhaCabecalho.createCell(i);
                 celula.setCellValue(colunas[i]);
@@ -52,6 +56,8 @@ public class RelatorioDeExportacaoTransacaoArquivo implements RepositorioDeExpor
                 estilo.setFont(fonte);
                 celula.setCellStyle(estilo);
             }
+
+            log.info("carregando dados da tabela - total de registros={}", transacoes.size());
 
             int indiceLinha = 1;
             for (Transacao t : transacoes) {
@@ -77,6 +83,8 @@ public class RelatorioDeExportacaoTransacaoArquivo implements RepositorioDeExpor
             for (int i = 0; i < colunas.length; i++) {
                 aba.autoSizeColumn(i);
             }
+
+            log.info("excel gerado com sucesso");
 
             planilha.write(saida);
 

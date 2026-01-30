@@ -32,6 +32,7 @@ public class RepositorioConsultaUsuarioHttp implements RepositorioConsultaUsuari
 
     @Override
     public String buscarPorId(UUID id, String token) {
+        log.info("validação do usuario");
         URI uri = URI.create(endpointConsultaSaldo + id);
 
         try {
@@ -47,6 +48,8 @@ public class RepositorioConsultaUsuarioHttp implements RepositorioConsultaUsuari
                 throw new ResourceNotFoundException("Usuario não encontrado");
 
             UsuarioDto dto = objectMapper.readValue(response.body(), UsuarioDto.class);
+
+            log.info("usuario validado com sucesso");
 
             return mapper.toDomain(dto);
         } catch (Exception e) {

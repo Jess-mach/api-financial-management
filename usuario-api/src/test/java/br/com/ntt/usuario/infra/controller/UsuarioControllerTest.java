@@ -92,62 +92,6 @@ class UsuarioControllerTest {
         return novoUsuario;
     }
 
-    @Test
-    @DisplayName("GET /usuarios/{id} - Usuario por Id")
-    void deveRetornarUsuarioPorIdComSucesso() throws Exception {
-
-        mockMvc.perform(get("/usuarios/" + usuarioId)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id").value(usuarioId.toString()))
-                .andExpect(jsonPath("$.nome").value("Jessica Machado"))
-                .andExpect(jsonPath("$.login").value("jess.test"))
-                .andExpect(jsonPath("$.perfilUsuario").value("ADMINISTRADOR"));
-    }
-
-
-
-    @Test
-    @DisplayName("GET /usuarios/{id} - Usuario nao encontrado")
-    void deveRetornar404QuandoUsuarioNaoForEncontrado() throws Exception {
-
-        mockMvc.perform(get("/usuarios/" + UUID.randomUUID())
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isNotFound())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.message").value("Usuario não encontrado"));
-
-
-    }
-
-    @Test
-    @DisplayName("GET /usuarios/{id} - Usuario invalido")
-    void deveRetornar400QuandoIdForInvalido() throws Exception {
-
-        mockMvc.perform(get("/usuarios/0")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isBadRequest());
-
-    }
-
-    @Test
-    @DisplayName("GET /usuarios - Listagem de Usuarios")
-    void deveRetornarTodosOsUsuarios() throws Exception {
-
-        mockMvc.perform(get("/usuarios")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(greaterThan(0))))
-                .andExpect(jsonPath("$[0].nome").value(anything()))
-                .andExpect(jsonPath("$[0].login").value(anything()))
-                .andExpect(jsonPath("$[0].email").value(anything()));
-
-    }
 
     @Test
     @DisplayName("POST /usuarios - Sucesso ao criar usuario")
@@ -273,6 +217,65 @@ class UsuarioControllerTest {
                 .andExpect(jsonPath("$.message").value("Dados inválidos fornecidos"));
 
     }
+
+
+    @Test
+    @DisplayName("GET /usuarios/{id} - Usuario por Id")
+    void deveRetornarUsuarioPorIdComSucesso() throws Exception {
+
+        mockMvc.perform(get("/usuarios/" + usuarioId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(usuarioId.toString()))
+                .andExpect(jsonPath("$.nome").value("Jessica Machado"))
+                .andExpect(jsonPath("$.login").value("jess.test"))
+                .andExpect(jsonPath("$.perfilUsuario").value("ADMINISTRADOR"));
+    }
+
+
+
+    @Test
+    @DisplayName("GET /usuarios/{id} - Usuario nao encontrado")
+    void deveRetornar404QuandoUsuarioNaoForEncontrado() throws Exception {
+
+        mockMvc.perform(get("/usuarios/" + UUID.randomUUID())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message").value("Usuario não encontrado"));
+
+
+    }
+
+    @Test
+    @DisplayName("GET /usuarios/{id} - Usuario invalido")
+    void deveRetornar400QuandoIdForInvalido() throws Exception {
+
+        mockMvc.perform(get("/usuarios/0")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    @DisplayName("GET /usuarios - Listagem de Usuarios")
+    void deveRetornarTodosOsUsuarios() throws Exception {
+
+        mockMvc.perform(get("/usuarios")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(greaterThan(0))))
+                .andExpect(jsonPath("$[0].nome").value(anything()))
+                .andExpect(jsonPath("$[0].login").value(anything()))
+                .andExpect(jsonPath("$[0].email").value(anything()));
+
+    }
+
 
     @Test
     @DisplayName("DELETE /usuarios/{id} - Usuario Deletado com sucesso")

@@ -4,6 +4,7 @@ import br.com.ntt.usuario.infra.controller.dto.DadosAutenticacao;
 import br.com.ntt.usuario.infra.service.DadosToken;
 import br.com.ntt.usuario.infra.service.TokenService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequestMapping("/login")
 public class AutenticacaoController {
@@ -20,9 +22,15 @@ public class AutenticacaoController {
 
     @PostMapping
     public ResponseEntity<DadosToken> efetuarLogin(@RequestBody @Valid DadosAutenticacao dados) {
-        var tokenJWT = tokenService.gerarToken(dados.login(), dados.senha());
+        log.info("efetuando login - inicio");
 
-        return ResponseEntity.ok(new DadosToken(tokenJWT));
+        String tokenJWT = tokenService.gerarToken(dados.login(), dados.senha());
+
+        DadosToken body = new DadosToken(tokenJWT);
+
+        log.info("efetuando login - fim");
+
+        return ResponseEntity.ok(body);
     }
 
 }

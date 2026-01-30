@@ -1,0 +1,406 @@
+{
+	"info": {
+		"_postman_id": "d53364e9-94c6-4b7c-8b2b-a541c8b5bab4",
+		"name": "Becca - Finnancial",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "45003940"
+	},
+	"item": [
+		{
+			"name": "CRUD USUARIOS",
+			"item": [
+				{
+					"name": "Criar",
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"testandodenovo\",\n    \"email\": \"{{$randomUserName}}@email.com\",\n    \"login\": \"{{$randomUserName}}\",\n    \"senha\": \"Teste@12345\",\n    \"perfilUsuario\": \"ADMINISTRADOR\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/usuarios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/usuarios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Por Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/usuarios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/usuarios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/usuarios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"login\": \"Irving_Robel\",\r\n    \"senha\": \"Teste@12345\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CRUD TRANSACAO",
+			"item": [
+				{
+					"name": "Criar",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJBUEkgRmluYW5jaWFsLm1hbmFnZW1lbnQiLCJzdWIiOiJJcnZpbmdfUm9iZWwiLCJleHAiOjE3Njk3MTI4Njl9.BboBgkYjnV65Yz0JYaRF7-A3sChFKGewDxDcrDqvLQw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"usuarioId\": \"3f97e5fc-b446-40c7-9d75-ed649f4a8ac0\",\n    \"valor\": \"{{$randomInt}}.{{$randomInt}}\",\n    \"tipo\": \"DEPOSITO\",\n    \"moeda\": \"BRL\",\n    \"descricao\": \"Depósito em conta corrente\", \n    \"conta\": 5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/transacoes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"transacoes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJBUEkgRmluYW5jaWFsLm1hbmFnZW1lbnQiLCJzdWIiOiJFbGlhbjU1IiwiZXhwIjoxNzY5NjUxNzc2fQ.TB4Z_PZE9AVf5TT5KxHFf-NSOMVt39OGyFat58SSAYA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/transacoes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"transacoes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Analise",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/transacoes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"transacoes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar por id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"usuarioId\": \"3f97e5fc-b446-40c7-9d75-ed649f4a8ac0\",\n    \"valor\": \"{{$randomInt}}.{{$randomInt}}\",\n    \"tipo\": \"DEPOSITO\",\n    \"moeda\": \"BRL\",\n    \"descricao\": \"Depósito em conta corrente\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8081/transacoes/42eb3ba0-1658-4823-935b-5d3726d00a85",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"transacoes",
+								"42eb3ba0-1658-4823-935b-5d3726d00a85"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "MockApi",
+			"item": [
+				{
+					"name": "Todos os Saldos",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://6974ba31265838bbea95be42.mockapi.io/api/becca/v1/saldo",
+							"protocol": "https",
+							"host": [
+								"6974ba31265838bbea95be42",
+								"mockapi",
+								"io"
+							],
+							"path": [
+								"api",
+								"becca",
+								"v1",
+								"saldo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Saldo by ID (Até 50)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://6974ba31265838bbea95be42.mockapi.io/api/becca/v1/saldo/50",
+							"protocol": "https",
+							"host": [
+								"6974ba31265838bbea95be42",
+								"mockapi",
+								"io"
+							],
+							"path": [
+								"api",
+								"becca",
+								"v1",
+								"saldo",
+								"50"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Saldo by ID (Até 50)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"saldo\": 5000\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://6974ba31265838bbea95be42.mockapi.io/api/becca/v1/saldo/50",
+							"protocol": "https",
+							"host": [
+								"6974ba31265838bbea95be42",
+								"mockapi",
+								"io"
+							],
+							"path": [
+								"api",
+								"becca",
+								"v1",
+								"saldo",
+								"50"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cotação de Moeda",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Relatório Exel",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/transacoes/exportar/excel",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"transacoes",
+								"exportar",
+								"excel"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

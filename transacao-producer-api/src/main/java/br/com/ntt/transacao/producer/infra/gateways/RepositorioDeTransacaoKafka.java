@@ -2,11 +2,13 @@ package br.com.ntt.transacao.producer.infra.gateways;
 
 import br.com.ntt.common.transacao.domain.entity.Transacao;
 import br.com.ntt.transacao.producer.application.gateways.RepositorioProdutorDeTransacao;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
+@Slf4j
 @Component
 public class RepositorioDeTransacaoKafka implements RepositorioProdutorDeTransacao{
 
@@ -19,7 +21,10 @@ public class RepositorioDeTransacaoKafka implements RepositorioProdutorDeTransac
 
     @Override
     public void publicarTransacao(Transacao transacao){
+        log.info("publicando mensagem no topico TRANSACAO-TOPIC, transacaoId={}", transacao.getId());
+
         kafkaTemplate.send("TRANSACAO-TOPIC", transacao.getId(), transacao);
 
+        log.info("mensagem publicada com sucesso no topico TRANSACAO-TOPIC, transacaoId={}", transacao.getId());
     }
 }

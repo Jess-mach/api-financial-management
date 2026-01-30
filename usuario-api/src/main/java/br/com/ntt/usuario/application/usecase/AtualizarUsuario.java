@@ -3,8 +3,10 @@ package br.com.ntt.usuario.application.usecase;
 import br.com.ntt.usuario.application.gateways.UsuarioRepository;
 import br.com.ntt.usuario.config.PasswordService;
 import br.com.ntt.usuario.domain.entity.Usuario;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class AtualizarUsuario {
 
@@ -18,6 +20,7 @@ public class AtualizarUsuario {
     }
 
     public Usuario executar(Usuario usuarioAtualizacao) {
+
         Usuario usuarioEntidade = usuarioRepository.findById(usuarioAtualizacao.getId());
 
         String senhaHash = passwordService.encode(usuarioAtualizacao.getSenha());

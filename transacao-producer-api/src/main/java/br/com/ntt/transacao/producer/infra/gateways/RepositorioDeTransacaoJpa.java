@@ -8,6 +8,7 @@ import br.com.ntt.common.transacao.infra.persistence.TransacaoEntity;
 import br.com.ntt.common.transacao.infra.persistence.TransacaoRepository;
 import br.com.ntt.transacao.producer.application.gateways.RepositorioConsultaUsuario;
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -16,38 +17,44 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 public class RepositorioDeTransacaoJpa implements RepositorioDeTransacao {
 
     private final TransacaoRepository repositorio;
     private final TransacaoEntityMapper mapper;
-    private final RepositorioConsultaUsuario repositorioConsultaUsuario;
 
-    public RepositorioDeTransacaoJpa(TransacaoRepository repositorio, TransacaoEntityMapper mapper, RepositorioConsultaUsuario repositorioConsultaUsuario) {
+    public RepositorioDeTransacaoJpa(TransacaoRepository repositorio, TransacaoEntityMapper mapper) {
         this.repositorio = repositorio;
         this.mapper = mapper;
-        this.repositorioConsultaUsuario = repositorioConsultaUsuario;
     }
 
     @Override
     public Transacao cadastrarTransacao(Transacao transacao, String token) {
         TransacaoEntity entity = mapper.toEntity(transacao);
 
-        repositorioConsultaUsuario.buscarPorId(entity.getUsuarioId(), token);
-
         repositorio.save(entity);
+
+        log.info("transacao salva no banco de dados");
 
         return mapper.toDomain(entity);
     }
 
     @Override
     public List<Transacao> listarTodos(UUID usuarioId) {
-        List<TransacaoEntity> all = new ArrayList<>();
 
-        if (usuarioId != null)
+        List<TransacaoEntity> all;
+
+        if (usuarioId != null) {
+            log.info("listagem de transações - usuarioId={}", usuarioId);
+
             all = repositorio.findAllByUsuarioId(usuarioId);
-        else
+        }
+        else {
+            log.info("listagem de transações sem usuarioId");
+
             all = repositorio.findAll();
+        }
 
         return all.stream()
                 .map(mapper::toDomain)

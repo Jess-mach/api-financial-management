@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,9 +25,10 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestController
 @RequestMapping("/transacoes")
-@Tag(name = "Transação", description = "API de Gestão Finacera")
+@Tag(name = "Transação", description = "API de Gestão Financeira")
 class TransacaoController {
 
     private final CriarTransacao criarTransacao;
@@ -49,43 +51,59 @@ class TransacaoController {
     }
 
     @Operation(
-            summary = "Analise das Despesas",
-            description = "Retornando resumo por dia e Mês"
+            summary = "Criação de Transação",
+            description = "Salva e publica uma solicação de transação."
     )
     @PostMapping
     public ResponseEntity<TransacaoDto> executar(@RequestBody @Valid DadosNovaTransacaoDto dados,
                                                  @RequestHeader(value = "Authorization", required = false) String token) {
 
+        log.info("criação da transação dados={} - inicio", dados);
+
         Transacao novoTransacao = transacaoMapper.toDomain(dados);
 
         novoTransacao = criarTransacao.executar(novoTransacao, token);
 
-        return ResponseEntity.ok(commonTransacaoMapper.toDto(novoTransacao));
+        TransacaoDto dto = commonTransacaoMapper.toDto(novoTransacao);
+
+        log.info("criação da transação - fim");
+
+        return ResponseEntity.ok(dto);
     }
 
     @Operation(
-            summary = "Analise das Despesas",
-            description = "Retornando resumo por dia e Mês"
+            summary = "Listagem de Transação",
+            description = "Retorna lista de transações geral e por id do usuário."
     )
     @GetMapping
     public ResponseEntity<List<TransacaoDto>> listarTodos(@RequestParam(value = "usuarioId", required = false) UUID usuarioId) {
+
+        log.info("listagem de transações - inicio");
+
         List<TransacaoDto> lista = listarTransacao.listarTodos(usuarioId)
                 .stream()
                 .map(salvo -> commonTransacaoMapper.toDto(salvo))
                 .collect(Collectors.toList());
 
+        log.info("listagem de transações - fim");
+
         return ResponseEntity.ok(lista);
     }
 
     @Operation(
-            summary = "Analise das Despesas",
-            description = "Retornando resumo por dia e Mês"
+            summary = "Buscar transação por id",
+            description = "Retorna dados da transação por id."
     )
     @GetMapping("/{id}")
     public ResponseEntity<TransacaoDto> buscarPorId(@PathVariable UUID id) {
+
+        log.info("buscar transacao por id - inicio");
+
         Transacao transacao  = buscarTransacaoPorId.buscarPorId(id);
 
         TransacaoDto dto = commonTransacaoMapper.toDto(transacao);
+
+        log.info("buscar transacao por id - fim");
 
         return ResponseEntity.ok(dto);
     }
@@ -93,7 +111,7 @@ class TransacaoController {
 
     @Operation(
             summary = "Analise das Despesas",
-            description = "Retornando resumo por dia e Mês"
+            description = "Retornando resumo por dia e Mês por Usuário"
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "ok"),
@@ -101,9 +119,13 @@ class TransacaoController {
     })
     @GetMapping("/analise")
     public ResponseEntity<AnaliseDespesaDto> visualizarGastosDia(@RequestParam("usuarioId") @NotNull UUID usuarioId){
+        log.info("analise de despesas - inicio");
+
         AnaliseDeDespesa analiseDeDespesa = analiseDespesaTransacao.visualizarGastos(usuarioId);
 
         AnaliseDespesaDto dto = transacaoMapper.toDto(analiseDeDespesa);
+
+        log.info("analise de despesas - fim");
 
         return ResponseEntity.ok(dto);
     }
