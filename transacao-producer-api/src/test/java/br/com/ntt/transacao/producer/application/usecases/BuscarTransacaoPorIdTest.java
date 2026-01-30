@@ -4,6 +4,7 @@ import br.com.ntt.common.transacao.domain.entity.Transacao;
 import br.com.ntt.common.transacao.domain.model.StatusTransacao;
 import br.com.ntt.common.transacao.domain.model.TipoTransacao;
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao;
+import br.com.ntt.common.transacao.domain.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,7 +43,8 @@ class BuscarTransacaoPorIdTest {
                 "BRL",
                 BigDecimal.ONE,
                 "Teste de transação",
-                123456L
+                123456L,
+                new BigDecimal("150.00")
         );
         when(repositorio.buscarPorId(any(UUID.class))).thenReturn(transacao);
 
@@ -55,9 +57,9 @@ class BuscarTransacaoPorIdTest {
     @DisplayName("Transacao nao encontrado")
     void erroAoBuscarTransacao() {
 
-        when(repositorio.buscarPorId(any())).thenThrow(new RuntimeException("Erro ao conectar no Postgres"));
+        when(repositorio.buscarPorId(any())).thenThrow(new ResourceNotFoundException("Erro ao conectar no Postgres"));
 
-        assertThrows(RuntimeException.class, () -> buscarTransacaoPorId.buscarPorId(UUID.randomUUID()));
+        assertThrows(ResourceNotFoundException.class, () -> buscarTransacaoPorId.buscarPorId(UUID.randomUUID()));
 
 
     }

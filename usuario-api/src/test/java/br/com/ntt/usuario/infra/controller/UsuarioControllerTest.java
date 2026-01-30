@@ -1,6 +1,10 @@
 package br.com.ntt.usuario.infra.controller;
 
 
+import br.com.ntt.usuario.application.usecase.AuthenticaUsuario;
+import br.com.ntt.usuario.application.usecase.ValidadarUsuarioLogado;
+import br.com.ntt.usuario.domain.PerfilUsuario;
+import br.com.ntt.usuario.domain.entity.Usuario;
 import br.com.ntt.usuario.infra.controller.dto.DadosCadastroUsuario;
 import br.com.ntt.usuario.infra.persistence.entity.UsuarioJpaEntity;
 import br.com.ntt.usuario.infra.persistence.repository.UsuarioRepository;
@@ -19,6 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.io.IOException;
@@ -28,6 +33,8 @@ import java.util.UUID;
 
 import static br.com.ntt.usuario.domain.PerfilUsuario.ADMINISTRADOR;
 import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -60,6 +67,21 @@ class UsuarioControllerTest {
     @Value("classpath:payload/cadastro_massa.csv")
     private Resource sampleFile;
 
+    @MockitoBean
+    private ValidadarUsuarioLogado validadarUsuarioLogado;
+
+    @MockitoBean
+    private AuthenticaUsuario authenticaUsuario;
+
+    private Usuario usuarioLogado = new Usuario(
+            UUID.randomUUID(),
+            "Jessica",
+            "jessica@email.com",
+            "jess.login",
+            "Senha@123",
+            PerfilUsuario.ADMINISTRADOR);
+
+
     @BeforeEach
     void setUp() {
         objectMapper = new ObjectMapper();
@@ -75,6 +97,8 @@ class UsuarioControllerTest {
         entidade = repositoryJpa.save(entidade);
 
         usuarioId = entidade.getId();
+
+        when(authenticaUsuario.recuperaUsuarioLogado(anyBoolean())).thenReturn(usuarioLogado);
     }
 
     private DadosCadastroUsuario gerarNovoUsuario() throws IOException {

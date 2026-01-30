@@ -30,6 +30,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         var tokenJWT = recuperarToken(request);
 
+
         if (tokenJWT != null) {
             try {
                 var subject = getSubject(tokenJWT);
@@ -60,4 +61,15 @@ public class SecurityFilter extends OncePerRequestFilter {
         }
         return null;
     }
+
+//    private String recuperarDadosUsuario(String tokenJWT) {
+//        var algoritmo = Algorithm.HMAC256(secret);
+//        var verifier = JWT.require(algoritmo)
+//                .withIssuer("API Financial.management")
+//                .build();
+//
+//        var decodedJWT = verifier.verify(tokenJWT);
+//
+//        return decodedJWT.getClaim("usuarioId").asString();
+//    }
 }

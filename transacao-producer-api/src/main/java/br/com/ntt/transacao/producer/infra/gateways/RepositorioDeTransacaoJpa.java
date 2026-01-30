@@ -6,13 +6,11 @@ import br.com.ntt.common.transacao.infra.gateways.TransacaoEntityMapper;
 import br.com.ntt.common.transacao.infra.persistence.AnaliseDeDespesaCampos;
 import br.com.ntt.common.transacao.infra.persistence.TransacaoEntity;
 import br.com.ntt.common.transacao.infra.persistence.TransacaoRepository;
-import br.com.ntt.transacao.producer.application.gateways.RepositorioConsultaUsuario;
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.common.errors.ResourceNotFoundException;
+import br.com.ntt.common.transacao.domain.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;

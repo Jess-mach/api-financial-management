@@ -90,6 +90,7 @@ public class RelatorioDeExportacaoTransacaoArquivo implements RepositorioDeExpor
 
             return new ByteArrayInputStream(saida.toByteArray());
         } catch (Exception e){
+            log.info("Falha ao gerar o excel");
             throw new BusinessException("Falha ao gerar o excel");
         }
     }

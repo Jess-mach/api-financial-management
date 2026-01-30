@@ -30,11 +30,11 @@ public class UsuarioController {
     private final ArquivoUsuario arquivoUsuario;
     private final UsuarioDtoMapper usuarioDtoMapper;
     private final BuscarUsuarioPorId buscarTransacaoPorId;
-
+    private final AuthenticaUsuario authenticaUsuario;
 
     public UsuarioController(CriarUsuario criarUsuario, ListarUsuario listarUsuario,
                              AtualizarUsuario atualizarUsuario, DeletarUsuario deletarUsuario,
-                             ArquivoUsuario arquivoUsuario, UsuarioDtoMapper usuarioDtoMapper, BuscarUsuarioPorId buscarTransacaoPorId) {
+                             ArquivoUsuario arquivoUsuario, UsuarioDtoMapper usuarioDtoMapper, BuscarUsuarioPorId buscarTransacaoPorId, AuthenticaUsuario authenticaUsuario) {
         this.criarUsuario = criarUsuario;
         this.listarUsuario = listarUsuario;
         this.atualizarUsuario = atualizarUsuario;
@@ -42,6 +42,7 @@ public class UsuarioController {
         this.arquivoUsuario = arquivoUsuario;
         this.usuarioDtoMapper = usuarioDtoMapper;
         this.buscarTransacaoPorId = buscarTransacaoPorId;
+        this.authenticaUsuario = authenticaUsuario;
     }
 
     @Operation(
@@ -51,9 +52,11 @@ public class UsuarioController {
     public ResponseEntity<UsuarioDto> criar(@RequestBody @Valid DadosCadastroUsuario dados) {
         log.info("cadastro de usuario - inicio");
 
+        Usuario usuarioLogado = authenticaUsuario.recuperaUsuarioLogado(true);
+
         Usuario novoUsuario = usuarioDtoMapper.toDomain(dados);
 
-        novoUsuario = criarUsuario.executar(novoUsuario);
+        novoUsuario = criarUsuario.executar(novoUsuario, usuarioLogado);
 
         UsuarioDto dto = usuarioDtoMapper.toDto(novoUsuario);
 
@@ -69,7 +72,9 @@ public class UsuarioController {
     public ResponseEntity<List<UsuarioDto>> listar() {
         log.info("listagem de usuarios - inicio");
 
-        List<UsuarioDto> lista = listarUsuario.executar()
+        Usuario usuarioLogado = authenticaUsuario.recuperaUsuarioLogado(false);
+
+        List<UsuarioDto> lista = listarUsuario.executar(usuarioLogado)
                 .stream()
                 .map(salvo -> usuarioDtoMapper.toDto(salvo))
                 .toList();
@@ -86,7 +91,9 @@ public class UsuarioController {
     public ResponseEntity<UsuarioDto> buscarPorId(@PathVariable UUID id) {
         log.info("consultando usuario {}", id);
 
-        Usuario usuario = buscarTransacaoPorId.buscarPorId(id);
+        Usuario usuarioLogado = authenticaUsuario.recuperaUsuarioLogado(false);
+
+        Usuario usuario = buscarTransacaoPorId.buscarPorId(id, usuarioLogado);
         UsuarioDto dto = usuarioDtoMapper.toDto(usuario);
 
         log.info("consultando usuario {}", id);
@@ -101,9 +108,11 @@ public class UsuarioController {
     public ResponseEntity<UsuarioDto> atualizar(@PathVariable String id, @RequestBody @Valid DadosAtualizacaoUsuario dados) {
         log.info("atualização de usuario - inicio");
 
+        Usuario usuarioLogado = authenticaUsuario.recuperaUsuarioLogado(false);
+
         Usuario usuarioAtualizado = usuarioDtoMapper.toDomain(id, dados);
 
-        usuarioAtualizado = atualizarUsuario.executar(usuarioAtualizado);
+        usuarioAtualizado = atualizarUsuario.executar(usuarioAtualizado, usuarioLogado);
 
         UsuarioDto dto = usuarioDtoMapper.toDto(usuarioAtualizado);
 
@@ -119,7 +128,9 @@ public class UsuarioController {
     public ResponseEntity<Void> deletar(@PathVariable UUID id) {
         log.info("exclusão de usuario - inicio");
 
-        deletarUsuario.executar(id);
+        Usuario usuarioLogado = authenticaUsuario.recuperaUsuarioLogado(false);
+
+        deletarUsuario.executar(id, usuarioLogado);
 
         log.info("exclusão de usuario - fim");
 
@@ -134,7 +145,9 @@ public class UsuarioController {
     public ResponseEntity<List<UsuarioDto>> uploadArquivo(@RequestParam("file") MultipartFile file) throws Exception {
         log.info("upload de arquivo - inicio");
 
-        List<UsuarioDto> listaUsuarios = arquivoUsuario.processarArquivo(file)
+        Usuario usuarioLogado = authenticaUsuario.recuperaUsuarioLogado(false);
+
+        List<UsuarioDto> listaUsuarios = arquivoUsuario.processarArquivo(file, usuarioLogado)
                 .stream()
                 .map(salvo -> usuarioDtoMapper.toDto(salvo))
                 .toList();

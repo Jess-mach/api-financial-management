@@ -1,6 +1,7 @@
 package br.com.ntt.transacao.producer.application.usecases;
 
 import br.com.ntt.common.transacao.domain.entity.Transacao;
+import br.com.ntt.common.transacao.domain.exception.BusinessException;
 import br.com.ntt.common.transacao.domain.model.StatusTransacao;
 import br.com.ntt.common.transacao.domain.model.TipoTransacao;
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao;
@@ -43,7 +44,8 @@ class ListarTransacaoTest {
                 "BRL",
                 BigDecimal.ONE,
                 "Teste de transação",
-                123456L
+                123456L,
+                new BigDecimal("150.00")
         );
 
         when(repositorio.listarTodos(any())).thenReturn(List.of(transacao));
@@ -59,7 +61,7 @@ class ListarTransacaoTest {
     @DisplayName("Erro ao consultar no banco de dados")
     void erroConsultaTransacao() {
         when(repositorio.listarTodos(any()))
-                .thenThrow(new RuntimeException("Erro ao conectar no Postgres"));
+                .thenThrow(new BusinessException("Erro ao conectar no Postgres"));
 
         assertThrows(RuntimeException.class, () -> listarTransacao.listarTodos(UUID.randomUUID()));
 

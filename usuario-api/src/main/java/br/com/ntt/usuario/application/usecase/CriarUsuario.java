@@ -1,8 +1,10 @@
 package br.com.ntt.usuario.application.usecase;
 
 import br.com.ntt.usuario.application.gateways.RepositorioDeEncriptacao;
+import br.com.ntt.usuario.domain.PerfilUsuario;
 import br.com.ntt.usuario.domain.entity.Usuario;
 import br.com.ntt.usuario.application.gateways.RepositorioDeUsuario;
+import br.com.ntt.usuario.domain.exception.AccessDeniedException;
 import br.com.ntt.usuario.domain.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -19,13 +21,18 @@ public class CriarUsuario {
 
     private final RepositorioDeEncriptacao repositorioDeEncriptacao;
 
-    public CriarUsuario(RepositorioDeUsuario repositorioDeUsuario, RepositorioDeEncriptacao repositorioDeEncriptacao) {
+    private final ValidadarUsuarioLogado validadarUsuarioLogado;
+
+    public CriarUsuario(RepositorioDeUsuario repositorioDeUsuario, RepositorioDeEncriptacao repositorioDeEncriptacao, ValidadarUsuarioLogado validadarUsuarioLogado) {
         this.repositorioDeUsuario = repositorioDeUsuario;
         this.repositorioDeEncriptacao = repositorioDeEncriptacao;
+        this.validadarUsuarioLogado = validadarUsuarioLogado;
     }
 
-    public Usuario executar(Usuario novoUsuario) {
+    public Usuario executar(Usuario novoUsuario, Usuario usuarioLogado) {
         log.info("criação de usuario - inicio");
+
+        validadarUsuarioLogado.validaPermissaoDeCriarUsuarios(novoUsuario, usuarioLogado);
 
         if (repositorioDeUsuario.existsByEmail(novoUsuario.getEmail())) {
             log.info("cadastro de usuario - email ja cadastrado na base");
@@ -41,11 +48,11 @@ public class CriarUsuario {
     }
 
     @Transactional
-    public List<Usuario> lote(List<Usuario> usuarios) {
+    public List<Usuario> lote(List<Usuario> usuarios, Usuario usuarioLogado) {
         log.info("Iniciando lote de criação de usuários");
         List<Usuario> listaUsuariosSalvos = new ArrayList<>();
         for (Usuario user : usuarios) {
-            Usuario usuarioSalvo = executar(user);
+            Usuario usuarioSalvo = executar(user, usuarioLogado);
             listaUsuariosSalvos.add(usuarioSalvo);
         }
         log.info("finalizando lote de criação de usuários");

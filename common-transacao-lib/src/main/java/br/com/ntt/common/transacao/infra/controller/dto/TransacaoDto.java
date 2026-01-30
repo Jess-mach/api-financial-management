@@ -18,5 +18,6 @@ public record TransacaoDto(
         String moeda,
         BigDecimal taxaCambio,
         String descricao,
-        Long conta) {
+        Long conta,
+        BigDecimal valorAtualizado) {
 }

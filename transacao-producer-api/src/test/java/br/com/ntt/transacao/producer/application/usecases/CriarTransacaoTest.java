@@ -6,6 +6,7 @@ import br.com.ntt.common.transacao.domain.model.TipoTransacao;
 import br.com.ntt.transacao.producer.application.gateways.RepositorioConsultaUsuario;
 import br.com.ntt.transacao.producer.application.gateways.RepositorioDeTransacao;
 import br.com.ntt.transacao.producer.application.gateways.RepositorioProdutorDeTransacao;
+import br.com.ntt.common.transacao.domain.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -50,7 +51,8 @@ class CriarTransacaoTest {
                 "BRL",
                 BigDecimal.ONE,
                 "Teste de transação",
-                123456L
+                123456L,
+                new BigDecimal("150.00")
         );
         when(repositorio.cadastrarTransacao(any(Transacao.class), any(String.class))).thenReturn(transacao);
 
@@ -78,12 +80,13 @@ class CriarTransacaoTest {
                 "BRL",
                 BigDecimal.ONE,
                 "Teste de transação",
-                123456L
+                123456L,
+                new BigDecimal("150.00")
         );
         when(repositorio.cadastrarTransacao(any(Transacao.class), any(String.class)))
-                .thenThrow(new RuntimeException("Erro ao conectar no Postgres"));
+                .thenThrow(new ResourceNotFoundException("Erro ao conectar no Postgres"));
 
-        assertThrows(RuntimeException.class, () -> criarTransacao.executar(transacaoInput, "token"));
+        assertThrows(ResourceNotFoundException.class, () -> criarTransacao.executar(transacaoInput, "token"));
 
         verify(repositorioProdutorDeTransacao, never()).publicarTransacao(any());
     }

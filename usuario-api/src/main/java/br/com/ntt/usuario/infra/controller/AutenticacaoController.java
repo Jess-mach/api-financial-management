@@ -1,12 +1,11 @@
 package br.com.ntt.usuario.infra.controller;
 
-import br.com.ntt.usuario.application.gateways.RepositorioDeUsuarioToken;
-import br.com.ntt.usuario.infra.controller.dto.DadosAutenticacao;
+import br.com.ntt.usuario.application.usecase.AuthenticaUsuario;
 import br.com.ntt.usuario.domain.entity.DadosToken;
+import br.com.ntt.usuario.infra.controller.dto.DadosAutenticacao;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,8 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/login")
 public class AutenticacaoController {
 
-    @Autowired
-    private RepositorioDeUsuarioToken repositorioDeUsuarioToken;
+    private final AuthenticaUsuario authenticaUsuario;
+
+    public AutenticacaoController(AuthenticaUsuario authenticaUsuario) {
+        this.authenticaUsuario = authenticaUsuario;
+    }
 
     @Operation(
             summary = "Efetuar login na API e gerar o Token para Autenticação"
@@ -28,7 +30,7 @@ public class AutenticacaoController {
     public ResponseEntity<DadosToken> efetuarLogin(@RequestBody @Valid DadosAutenticacao dados) {
         log.info("efetuando login - inicio");
 
-        String tokenJWT = repositorioDeUsuarioToken.gerarToken(dados.login(), dados.senha());
+        String tokenJWT = authenticaUsuario.gerarToken(dados.login(), dados.senha());
 
         DadosToken body = new DadosToken(tokenJWT);
 

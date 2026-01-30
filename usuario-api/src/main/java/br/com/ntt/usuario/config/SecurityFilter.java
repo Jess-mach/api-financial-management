@@ -37,6 +37,8 @@ public class SecurityFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
 
+        log.info("validar token JWT");
+
         var tokenJWT = recuperarToken(request);
 
         if (tokenJWT != null) {
@@ -48,6 +50,8 @@ public class SecurityFilter extends OncePerRequestFilter {
                     var authentication = new UsernamePasswordAuthenticationToken(
                             usuario, null, usuario.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                    log.info("token validado com sucesso");
                 } else {
                     logger.warn("❌ Usuário não encontrado: " + subject);
                 }

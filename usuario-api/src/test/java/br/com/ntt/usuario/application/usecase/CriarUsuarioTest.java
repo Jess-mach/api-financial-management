@@ -1,8 +1,8 @@
 package br.com.ntt.usuario.application.usecase;
 
 
-import br.com.ntt.usuario.application.gateways.RepositorioDeUsuario;
 import br.com.ntt.usuario.application.gateways.RepositorioDeEncriptacao;
+import br.com.ntt.usuario.application.gateways.RepositorioDeUsuario;
 import br.com.ntt.usuario.domain.PerfilUsuario;
 import br.com.ntt.usuario.domain.entity.Usuario;
 import br.com.ntt.usuario.domain.exception.BusinessException;
@@ -23,15 +23,26 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CriarUsuarioTest {
-    
+
     @Mock
     private RepositorioDeUsuario repositorioDeUsuario;
 
     @Mock
     private RepositorioDeEncriptacao repositorioDeEncriptacao;
 
+    @Mock
+    private ValidadarUsuarioLogado validadarUsuarioLogado;
+
     @InjectMocks
     private CriarUsuario criarUsuario;
+
+    private Usuario usuarioLogado = new Usuario(
+            UUID.randomUUID(),
+            "Jessica",
+            "jessica@email.com",
+            "jess.login",
+            "Senha@123",
+            PerfilUsuario.ADMINISTRADOR);
 
     @Test
     @DisplayName("Deve salvar usuário quando o e-mail não existe")
@@ -47,7 +58,7 @@ class CriarUsuarioTest {
         when(repositorioDeUsuario.existsByEmail(usuario.getEmail())).thenReturn(false);
         when(repositorioDeEncriptacao.encode("Senha@123")).thenReturn("hash_seguro");
 
-        criarUsuario.executar(usuario);
+        criarUsuario.executar(usuario, usuarioLogado);
 
         verify(repositorioDeEncriptacao).encode("Senha@123");
         verify(repositorioDeUsuario).save(usuario, "hash_seguro");
@@ -65,7 +76,7 @@ class CriarUsuarioTest {
                 PerfilUsuario.USUARIO);
         when(repositorioDeUsuario.existsByEmail(anyString())).thenReturn(true);
 
-        assertThrows(BusinessException.class, () -> criarUsuario.executar(usuario));
+        assertThrows(BusinessException.class, () -> criarUsuario.executar(usuario, usuarioLogado));
         verify(repositorioDeUsuario, never()).save(any(), anyString());
     }
 }

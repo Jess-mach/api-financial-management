@@ -20,8 +20,9 @@ public class Transacao {
     private BigDecimal taxaCambio;
     private String descricao;
     private Long conta;
+    private BigDecimal valorAtualizado;
 
-    public Transacao(UUID id, UUID usuarioId, BigDecimal valor, TipoTransacao tipo, StatusTransacao status, LocalDateTime dataHoraSolicitacao, LocalDateTime dataHoraFinalizacao, String moeda, BigDecimal taxaCambio, String descricao, Long conta) {
+    public Transacao(UUID id, UUID usuarioId, BigDecimal valor, TipoTransacao tipo, StatusTransacao status, LocalDateTime dataHoraSolicitacao, LocalDateTime dataHoraFinalizacao, String moeda, BigDecimal taxaCambio, String descricao, Long conta, BigDecimal valorAtualizado) {
         this.id = id;
         this.usuarioId = usuarioId;
         this.valor = valor;
@@ -33,14 +34,7 @@ public class Transacao {
         this.taxaCambio = taxaCambio;
         this.descricao = descricao;
         this.conta = conta;
-    }
-
-    public Long getConta() {
-        return conta;
-    }
-
-    public void setConta(Long conta) {
-        this.conta = conta;
+        this.valorAtualizado = valorAtualizado;
     }
 
     public UUID getId() {
@@ -121,5 +115,21 @@ public class Transacao {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public Long getConta() {
+        return conta;
+    }
+
+    public void setConta(Long conta) {
+        this.conta = conta;
+    }
+
+    public BigDecimal getValorAtualizado() {
+        return valorAtualizado;
+    }
+
+    public void setValorAtualizado(BigDecimal valorAtualizado) {
+        this.valorAtualizado = valorAtualizado;
     }
 }

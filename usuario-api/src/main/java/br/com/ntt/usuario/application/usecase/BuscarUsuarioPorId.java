@@ -11,11 +11,16 @@ public class BuscarUsuarioPorId {
 
     private final RepositorioDeUsuario repositorio;
 
-    public BuscarUsuarioPorId(RepositorioDeUsuario repositorio) {
+    private final ValidadarUsuarioLogado validadarUsuarioLogado;
+
+    public BuscarUsuarioPorId(RepositorioDeUsuario repositorio, ValidadarUsuarioLogado validadarUsuarioLogado) {
         this.repositorio = repositorio;
+        this.validadarUsuarioLogado = validadarUsuarioLogado;
     }
 
-    public Usuario buscarPorId(UUID id){
+    public Usuario buscarPorId(UUID id, Usuario usuarioLogado){
+        validadarUsuarioLogado.validaSeEhProprioUsuarioLogadoOuUsuarioGerenteOuAdministrador(id, usuarioLogado);
+
         return this.repositorio.findById(id);
     }
 

@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public record RegistroDespesaDto(
-        LocalDate data,
+        String data,
         String tipo,
         BigDecimal valor,
         Long quantidade){

@@ -99,7 +99,7 @@ class TransacaoController {
 
         log.info("buscar transacao por id - inicio");
 
-        Transacao transacao  = buscarTransacaoPorId.buscarPorId(id);
+        Transacao transacao = buscarTransacaoPorId.buscarPorId(id);
 
         TransacaoDto dto = commonTransacaoMapper.toDto(transacao);
 
@@ -118,7 +118,7 @@ class TransacaoController {
             @ApiResponse(responseCode = "400", description = "Data invalida")
     })
     @GetMapping("/analise")
-    public ResponseEntity<AnaliseDespesaDto> visualizarGastosDia(@RequestParam("usuarioId") @NotNull UUID usuarioId){
+    public ResponseEntity<AnaliseDespesaDto> visualizarGastosDia(@RequestParam("usuarioId") @NotNull UUID usuarioId) {
         log.info("analise de despesas - inicio");
 
         AnaliseDeDespesa analiseDeDespesa = analiseDespesaTransacao.visualizarGastos(usuarioId);

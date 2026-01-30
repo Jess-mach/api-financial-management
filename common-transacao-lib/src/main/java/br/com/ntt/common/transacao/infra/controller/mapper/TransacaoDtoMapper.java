@@ -20,7 +20,8 @@ public class TransacaoDtoMapper {
                 salvo.getMoeda(),
                 salvo.getTaxaCambio(),
                 salvo.getDescricao(),
-                salvo.getConta());
+                salvo.getConta(),
+                salvo.getValorAtualizado());
     }
 
     public Transacao toDomain(TransacaoDto dto) {
@@ -35,6 +36,7 @@ public class TransacaoDtoMapper {
                 dto.moeda(),
                 dto.taxaCambio(),
                 dto.descricao(),
-                dto.conta());
+                dto.conta(),
+                dto.valorAtualizado());
     }
 }

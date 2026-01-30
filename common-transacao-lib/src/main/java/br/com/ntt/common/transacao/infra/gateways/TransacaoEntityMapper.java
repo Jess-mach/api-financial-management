@@ -30,6 +30,11 @@ public class TransacaoEntityMapper {
     }
 
     public Transacao toDomain(TransacaoEntity entity) {
+        BigDecimal valorAtualizado = entity.getValor();
+
+        if(entity.getTaxaCambio() != null && entity.getTaxaCambio().doubleValue() > 0)
+            valorAtualizado = entity.getValor().multiply(entity.getTaxaCambio());
+
         return new Transacao(
                 entity.getId(),
                 entity.getUsuarioId(),
@@ -41,7 +46,8 @@ public class TransacaoEntityMapper {
                 entity.getMoeda(),
                 entity.getTaxaCambio(),
                 entity.getDescricao(),
-                entity.getConta());
+                entity.getConta(),
+                valorAtualizado);
     }
 
     public RegistroDespesa toDomain(AnaliseDeDespesaCampos campos) {

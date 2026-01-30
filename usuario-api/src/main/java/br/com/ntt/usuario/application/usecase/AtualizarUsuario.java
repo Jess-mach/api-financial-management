@@ -14,12 +14,15 @@ public class AtualizarUsuario {
 
     private final RepositorioDeEncriptacao repositorioDeEncriptacao;
 
-    public AtualizarUsuario(RepositorioDeUsuario repositorioDeUsuario, RepositorioDeEncriptacao repositorioDeEncriptacao) {
+    private final ValidadarUsuarioLogado validadarUsuarioLogado;
+
+    public AtualizarUsuario(RepositorioDeUsuario repositorioDeUsuario, RepositorioDeEncriptacao repositorioDeEncriptacao, ValidadarUsuarioLogado validadarUsuarioLogado) {
         this.repositorioDeUsuario = repositorioDeUsuario;
         this.repositorioDeEncriptacao = repositorioDeEncriptacao;
+        this.validadarUsuarioLogado = validadarUsuarioLogado;
     }
 
-    public Usuario executar(Usuario usuarioAtualizacao) {
+    public Usuario executar(Usuario usuarioAtualizacao, Usuario usuarioLogado) {
 
         Usuario usuarioEntidade = repositorioDeUsuario.findById(usuarioAtualizacao.getId());
 

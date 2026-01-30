@@ -11,11 +11,16 @@ public class ListarUsuario {
 
     private final RepositorioDeUsuario repositorioDeUsuario;
 
-    public ListarUsuario(RepositorioDeUsuario repositorioDeUsuario) {
+    private final ValidadarUsuarioLogado validadarUsuarioLogado;
+
+    public ListarUsuario(RepositorioDeUsuario repositorioDeUsuario, ValidadarUsuarioLogado validadarUsuarioLogado) {
         this.repositorioDeUsuario = repositorioDeUsuario;
+        this.validadarUsuarioLogado = validadarUsuarioLogado;
     }
 
-    public List<Usuario> executar(){
+    public List<Usuario> executar(Usuario usuarioLogado){
+        validadarUsuarioLogado.validaUsuarioGerenteOuAdministrador(usuarioLogado);
+
         return repositorioDeUsuario.findAll();
     }
 }

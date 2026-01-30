@@ -3,7 +3,6 @@ package br.com.ntt.usuario.application.usecase;
 import br.com.ntt.usuario.domain.PerfilUsuario;
 import br.com.ntt.usuario.domain.entity.Usuario;
 import br.com.ntt.usuario.domain.exception.BusinessException;
-import br.com.ntt.usuario.infra.controller.mapper.UsuarioDtoMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -24,13 +23,30 @@ public class ArquivoUsuario {
 
     private final CriarUsuario criarUsuario;
 
-    public ArquivoUsuario(CriarUsuario criarUsuario) {
+    private final ValidadarUsuarioLogado validadarUsuarioLogado;
+
+
+    public ArquivoUsuario(CriarUsuario criarUsuario, ValidadarUsuarioLogado validadarUsuarioLogado) {
         this.criarUsuario = criarUsuario;
+        this.validadarUsuarioLogado = validadarUsuarioLogado;
     }
 
-    public List<Usuario> processarArquivo(MultipartFile file) throws Exception {
+    public List<Usuario> processarArquivo(MultipartFile file, Usuario usuarioLogado) throws Exception {
         log.info("Iniciando processamento do arquivo:{} ", file.getOriginalFilename());
         String filename = file.getOriginalFilename();
+
+        validadarUsuarioLogado.validaUsuarioGerenteOuAdministrador(usuarioLogado);
+
+        List<Usuario> usuarios = carregarUsuariosDoArquivo(file, filename);
+
+        List<Usuario> lote = criarUsuario.lote(usuarios, usuarioLogado);
+
+        log.info("Finalizando processamento do arquivo:{}", file.getOriginalFilename());
+
+        return lote;
+    }
+
+    private List<Usuario> carregarUsuariosDoArquivo(MultipartFile file, String filename) throws Exception {
         List<Usuario> usuarios;
 
         if (filename != null && filename.endsWith(".csv")) {
@@ -40,12 +56,7 @@ public class ArquivoUsuario {
         } else {
             throw new BusinessException("Formato de arquivo não suportado. Use CSV ou Excel.");
         }
-
-        List<Usuario> lote = criarUsuario.lote(usuarios);
-
-        log.info("Finalizando processamento do arquivo:{}", file.getOriginalFilename());
-
-        return lote;
+        return usuarios;
     }
 
     private List<Usuario> lerCsv(MultipartFile file) throws Exception {
@@ -90,7 +101,7 @@ public class ArquivoUsuario {
                 //0=nome, 1=email, 2=login, 3=senha, 4=perfil
                 String perfil = dataFormatter.formatCellValue(row.getCell(4));
 
-                if(perfil == null || perfil.isBlank())
+                if (perfil == null || perfil.isBlank())
                     break;
 
                 Usuario usuario = new Usuario(

@@ -52,9 +52,18 @@ Nova Transacao
     "conta": 5
 }
 
+{
+    "usuarioId": "bd3eccad-76c7-4aa3-bb92-673a686e962f",
+    "valor": "9999323.00",
+    "tipo": "SAQUE",
+    "moeda": "BRL",
+    "descricao": "Depósito em conta corrente", 
+    "conta": 5
+}
+
 usuarioId: 3f97e5fc-b446-40c7-9d75-ed649f4a8ac0
 
 
 
 
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJBUEkgRmluYW5jaWFsLm1hbmFnZW1lbnQiLCJzdWIiOiJJcnZpbmdfUm9iZWwiLCJleHAiOjE3Njk3NDk0Njd9.GZBdGNTC96N8eQuwrOY8hkeX9T466euDYtrqiEczXZ0
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJBUEkgRmluYW5jaWFsLm1hbmFnZW1lbnQiLCJzdWIiOiJJcnZpbmdfUm9iZWwiLCJleHAiOjE3Njk3Nzc0NTR9.NGB1GAKO2o1a6fyN4-3IwZ3BtDSAR6JXKCiMPrRzipY
