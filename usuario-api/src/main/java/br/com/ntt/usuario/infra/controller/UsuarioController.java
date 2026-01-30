@@ -6,9 +6,11 @@ import br.com.ntt.usuario.infra.controller.dto.DadosAtualizacaoUsuario;
 import br.com.ntt.usuario.infra.controller.dto.DadosCadastroUsuario;
 import br.com.ntt.usuario.infra.controller.dto.UsuarioDto;
 import br.com.ntt.usuario.infra.controller.mapper.UsuarioDtoMapper;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,6 +44,9 @@ public class UsuarioController {
         this.buscarTransacaoPorId = buscarTransacaoPorId;
     }
 
+    @Operation(
+            summary = "Criação de Usuario"
+    )
     @PostMapping
     public ResponseEntity<UsuarioDto> criar(@RequestBody @Valid DadosCadastroUsuario dados) {
         log.info("cadastro de usuario - inicio");
@@ -57,6 +62,9 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
+    @Operation(
+            summary = "Consulta de todos os usuarios"
+    )
     @GetMapping
     public ResponseEntity<List<UsuarioDto>> listar() {
         log.info("listagem de usuarios - inicio");
@@ -71,11 +79,14 @@ public class UsuarioController {
         return ResponseEntity.ok(lista);
     }
 
+    @Operation(
+            summary = "Consulta de usuarios por ID"
+    )
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioDto> buscarPorId(@PathVariable UUID id) {
         log.info("consultando usuario {}", id);
 
-        Usuario usuario  = buscarTransacaoPorId.buscarPorId(id);
+        Usuario usuario = buscarTransacaoPorId.buscarPorId(id);
         UsuarioDto dto = usuarioDtoMapper.toDto(usuario);
 
         log.info("consultando usuario {}", id);
@@ -83,7 +94,9 @@ public class UsuarioController {
         return ResponseEntity.ok(dto);
     }
 
-
+    @Operation(
+            summary = "Atualização de usuarios"
+    )
     @PutMapping("/{id}")
     public ResponseEntity<UsuarioDto> atualizar(@PathVariable String id, @RequestBody @Valid DadosAtualizacaoUsuario dados) {
         log.info("atualização de usuario - inicio");
@@ -99,6 +112,9 @@ public class UsuarioController {
         return ResponseEntity.ok(dto);
     }
 
+    @Operation(
+            summary = "Exclusão de usuarios"
+    )
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable UUID id) {
         log.info("exclusão de usuario - inicio");
@@ -110,11 +126,18 @@ public class UsuarioController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/upload")
-    public ResponseEntity<?> uploadArquivo(@RequestParam("file") MultipartFile file) throws Exception {
+    @Operation(
+            summary = "Upload de usuarios",
+            description = "Envio de usuarios por csv ou xlsx"
+    )
+    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<List<UsuarioDto>> uploadArquivo(@RequestParam("file") MultipartFile file) throws Exception {
         log.info("upload de arquivo - inicio");
 
-        List<Usuario> listaUsuarios = arquivoUsuario.processarArquivo(file);
+        List<UsuarioDto> listaUsuarios = arquivoUsuario.processarArquivo(file)
+                .stream()
+                .map(salvo -> usuarioDtoMapper.toDto(salvo))
+                .toList();
 
         log.info("upload de arquivo - fim");
 

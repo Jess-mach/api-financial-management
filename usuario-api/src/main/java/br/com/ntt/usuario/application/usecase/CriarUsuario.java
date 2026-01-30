@@ -48,6 +48,6 @@ public class CriarUsuario {
         }
         log.info("finalizando lote de criação de usuários");
 
-        return usuarios;
+        return listaUsuariosSalvos;
     }
 }

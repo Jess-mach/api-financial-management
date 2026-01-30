@@ -3,6 +3,7 @@ package br.com.ntt.usuario.infra.controller;
 import br.com.ntt.usuario.application.gateways.RepositorioDeUsuarioToken;
 import br.com.ntt.usuario.infra.controller.dto.DadosAutenticacao;
 import br.com.ntt.usuario.domain.entity.DadosToken;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class AutenticacaoController {
     @Autowired
     private RepositorioDeUsuarioToken repositorioDeUsuarioToken;
 
+    @Operation(
+            summary = "Efetuar login na API e gerar o Token para Autenticação"
+    )
     @PostMapping
     public ResponseEntity<DadosToken> efetuarLogin(@RequestBody @Valid DadosAutenticacao dados) {
         log.info("efetuando login - inicio");

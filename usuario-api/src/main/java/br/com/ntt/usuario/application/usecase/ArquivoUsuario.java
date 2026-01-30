@@ -84,7 +84,7 @@ public class ArquivoUsuario {
             Sheet sheet = workbook.getSheetAt(0);
 
             for (Row row : sheet) {
-                if (row.getRowNum() == 0) continue;
+                if (row.getRowNum() == 0 && dataFormatter.formatCellValue(row.getCell(0)).equals("nome")) continue;
 
                 //0=nome, 1=email, 2=login, 3=senha, 4=perfil
                 String perfil = dataFormatter.formatCellValue(row.getCell(4));
