@@ -2,6 +2,7 @@ package br.com.ntt.usuario.application.usecase;
 
 import br.com.ntt.usuario.domain.PerfilUsuario;
 import br.com.ntt.usuario.domain.entity.Usuario;
+import br.com.ntt.usuario.domain.exception.BusinessException;
 import br.com.ntt.usuario.infra.controller.mapper.UsuarioDtoMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
@@ -37,7 +38,7 @@ public class ArquivoUsuario {
         } else if (filename != null && (filename.endsWith(".xls") || filename.endsWith(".xlsx"))) {
             usuarios = lerExcel(file);
         } else {
-            throw new IllegalArgumentException("Formato de arquivo não suportado. Use CSV ou Excel.");
+            throw new BusinessException("Formato de arquivo não suportado. Use CSV ou Excel.");
         }
 
         List<Usuario> lote = criarUsuario.lote(usuarios);

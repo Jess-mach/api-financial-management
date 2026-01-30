@@ -1,6 +1,7 @@
 package br.com.ntt.transacao.consumer.infra.gateways;
 
 import br.com.ntt.common.transacao.domain.entity.Transacao;
+import br.com.ntt.common.transacao.domain.exception.BusinessException;
 import br.com.ntt.common.transacao.domain.model.TipoTransacao;
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioSaldoCliente;
 import br.com.ntt.transacao.consumer.domain.entity.conta.SaldoConta;
@@ -44,15 +45,15 @@ public class RepositorioSaldoClienteHttp implements RepositorioSaldoCliente {
             HttpResponse<String> response = client
                     .send(request, HttpResponse.BodyHandlers.ofString());
 
-            if(response.statusCode() != 200)
-                throw new IllegalArgumentException("Falha ao consultar saldo");
+            if (response.statusCode() != 200)
+                throw new IllegalArgumentException(response.body());
 
             SaldoContaDto dto = objectMapper.readValue(response.body(), SaldoContaDto.class);
 
             return mapper.toDomain(dto);
         } catch (Exception e) {
-            log.error("falha na requisição", e.getMessage());
-            throw new IllegalArgumentException("Falha ao consultar saldo");
+            log.error("falha na requisição={}", e.getMessage(), e);
+            throw new BusinessException("Falha ao consultar saldo");
         }
     }
 
@@ -63,7 +64,7 @@ public class RepositorioSaldoClienteHttp implements RepositorioSaldoCliente {
 
         BigDecimal valorAtualizado;
 
-        if(transacao.getTipo().equals(TipoTransacao.DEPOSITO))
+        if (transacao.getTipo().equals(TipoTransacao.DEPOSITO))
             valorAtualizado = saldoConta.getSaldo().add(transacao.getValor());
         else
             valorAtualizado = saldoConta.getSaldo().subtract(transacao.getValor());
@@ -84,13 +85,13 @@ public class RepositorioSaldoClienteHttp implements RepositorioSaldoCliente {
             HttpResponse<String> response = client
                     .send(request, HttpResponse.BodyHandlers.ofString());
 
-            if(response.statusCode() != 200)
-                throw new IllegalArgumentException("Falha ao consultar saldo");
+            if (response.statusCode() != 200)
+                throw new IllegalArgumentException(response.body());
 
 
         } catch (Exception e) {
-            log.error("falha na requisição", e.getMessage());
-            throw new IllegalArgumentException("Falha ao consultar saldo");
+            log.error("falha na requisição={}", e.getMessage());
+            throw new BusinessException("Falha ao consultar saldo");
         }
 
     }

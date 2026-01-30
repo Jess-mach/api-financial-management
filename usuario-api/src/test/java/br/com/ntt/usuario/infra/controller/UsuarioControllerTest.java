@@ -119,7 +119,7 @@ class UsuarioControllerTest {
                 "file",
                 "cadastro_massa.csv",
                 MediaType.APPLICATION_PDF_VALUE,
-                sampleFile.getInputStream() // Use the input stream directly
+                sampleFile.getInputStream()
         );
 
         repositoryJpa.deleteAll();

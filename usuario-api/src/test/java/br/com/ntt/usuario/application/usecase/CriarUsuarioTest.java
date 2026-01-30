@@ -5,6 +5,7 @@ import br.com.ntt.usuario.application.gateways.RepositorioDeUsuario;
 import br.com.ntt.usuario.application.gateways.RepositorioDeEncriptacao;
 import br.com.ntt.usuario.domain.PerfilUsuario;
 import br.com.ntt.usuario.domain.entity.Usuario;
+import br.com.ntt.usuario.domain.exception.BusinessException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -55,7 +56,6 @@ class CriarUsuarioTest {
     @Test
     @DisplayName("Deve lançar exceção quando o e-mail já está cadastrado")
     void deveLancarExcecaoEmailDuplicado() {
-        // Arrange
         Usuario usuario = new Usuario(
                 UUID.randomUUID(),
                 "Jessica",
@@ -65,8 +65,7 @@ class CriarUsuarioTest {
                 PerfilUsuario.USUARIO);
         when(repositorioDeUsuario.existsByEmail(anyString())).thenReturn(true);
 
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> criarUsuario.executar(usuario));
+        assertThrows(BusinessException.class, () -> criarUsuario.executar(usuario));
         verify(repositorioDeUsuario, never()).save(any(), anyString());
     }
 }

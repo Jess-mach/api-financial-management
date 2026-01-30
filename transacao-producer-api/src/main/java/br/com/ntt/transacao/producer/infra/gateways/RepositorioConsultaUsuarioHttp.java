@@ -45,7 +45,7 @@ public class RepositorioConsultaUsuarioHttp implements RepositorioConsultaUsuari
                     .send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() != 200)
-                throw new ResourceNotFoundException("Usuario não encontrado");
+                throw new IllegalArgumentException(response.body());
 
             UsuarioDto dto = objectMapper.readValue(response.body(), UsuarioDto.class);
 

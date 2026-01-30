@@ -1,5 +1,6 @@
 package br.com.ntt.transacao.consumer.infra.gateways;
 
+import br.com.ntt.common.transacao.domain.exception.BusinessException;
 import br.com.ntt.transacao.consumer.application.gateways.RepositorioConversaoMoeda;
 import br.com.ntt.transacao.consumer.domain.entity.cotacao.Cotacao;
 import br.com.ntt.transacao.consumer.domain.entity.moeda.ConversorMoeda;
@@ -40,7 +41,7 @@ public class RepositorioConversaoMoedaHttp implements RepositorioConversaoMoeda 
 
         if (moeda.equals("BRL"))
             return new ConversorMoeda(moeda, dataHoraSolicitacao.toLocalDate().toString(),
-                    List.of(new Cotacao(BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO,"", "")));
+                    List.of(new Cotacao(BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, "", "")));
 
         String str = endpointConversorMoeda + moeda + "/" + ajustarParaUltimoDiaUtil(dataHoraSolicitacao.toLocalDate());
         URI uri = URI.create(str);
@@ -53,20 +54,20 @@ public class RepositorioConversaoMoedaHttp implements RepositorioConversaoMoeda 
                     .send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() != 200)
-                throw new IllegalArgumentException("Falha ao converter moeda ="+ response.body());
+                throw new IllegalArgumentException(response.body());
 
             ConversorMoedaDto dto = objectMapper.readValue(response.body(), ConversorMoedaDto.class);
 
             return mapper.toDomain(dto);
 
         } catch (Exception e) {
-            log.error("falha na transação", e.getMessage());
-            throw new IllegalArgumentException("Falha ao converter moeda");
+            log.error("falha na transação={}", e.getMessage());
+            throw new BusinessException("Falha ao converter moeda");
         }
     }
 
     public static LocalDate ajustarParaUltimoDiaUtil(LocalDate data) {
-        if(data.equals(LocalDate.now()))
+        if (data.equals(LocalDate.now()))
             data = data.minusDays(1);
 
         DayOfWeek dia = data.getDayOfWeek();

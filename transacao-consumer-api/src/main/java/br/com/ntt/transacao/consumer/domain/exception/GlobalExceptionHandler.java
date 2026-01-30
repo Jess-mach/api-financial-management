@@ -114,14 +114,14 @@ public class GlobalExceptionHandler {
 
         ErrorResponse errorResponse = new ErrorResponse(
                 LocalDateTime.now(),
-                HttpStatus.UNPROCESSABLE_ENTITY.value(),
+                HttpStatus.BAD_REQUEST.value(),
                 "Erro de Negócio",
                 ex.getMessage(),
                 request.getDescription(false).replace("uri=", ""),
                 null
         );
 
-        return new ResponseEntity<>(errorResponse, HttpStatus.UNPROCESSABLE_ENTITY);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
