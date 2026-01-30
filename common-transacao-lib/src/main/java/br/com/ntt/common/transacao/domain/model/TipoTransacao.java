@@ -8,15 +8,15 @@ public enum TipoTransacao {
     TRANSFERENCIA,
     SAIDA_EM_DINHEIRO;
 
-    public static String getDoCodigo(String tipo) {
+    public static String getDoCodigo(Integer tipo) {
         switch (tipo ) {
-            case "0":
+            case 0:
                 return "DEPOSITO";
-            case "1":
+            case 1:
                 return "SAQUE";
-            case "2":
+            case 2:
                 return "COMPRA";
-            case "3":
+            case 3:
                 return "TRANSFERENCIA";
             default:
                 return null;

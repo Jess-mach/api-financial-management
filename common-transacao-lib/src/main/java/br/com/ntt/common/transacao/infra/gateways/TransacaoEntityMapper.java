@@ -1,20 +1,20 @@
 package br.com.ntt.common.transacao.infra.gateways;
 
 import br.com.ntt.common.transacao.domain.entity.RegistroDespesa;
-import br.com.ntt.common.transacao.domain.model.StatusTransacao;
 import br.com.ntt.common.transacao.domain.entity.Transacao;
+import br.com.ntt.common.transacao.domain.model.StatusTransacao;
 import br.com.ntt.common.transacao.domain.model.TipoTransacao;
 import br.com.ntt.common.transacao.infra.persistence.AnaliseDeDespesaCampos;
 import br.com.ntt.common.transacao.infra.persistence.TransacaoEntity;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Component
 public class TransacaoEntityMapper {
 
-    public TransacaoEntity toEntity(Transacao dados){
+    public TransacaoEntity toEntity(Transacao dados) {
         return new TransacaoEntity(
                 dados.getId(),
                 dados.getUsuarioId(),
@@ -29,7 +29,7 @@ public class TransacaoEntityMapper {
                 dados.getConta());
     }
 
-    public Transacao toDomain(TransacaoEntity entity){
+    public Transacao toDomain(TransacaoEntity entity) {
         return new Transacao(
                 entity.getId(),
                 entity.getUsuarioId(),
@@ -48,12 +48,12 @@ public class TransacaoEntityMapper {
         return new RegistroDespesa(
                 campos.getDataHoraSolicitacao(),
                 TipoTransacao.getDoCodigo(campos.getTipo()),
-                campos.getValor(),
-                campos.getQuantidade()
+                BigDecimal.valueOf(campos.getValor()),
+                campos.getQuantidade().longValue()
         );
     }
 
-    public TransacaoEntity toEntity(Transacao dadosAtualizados, TransacaoEntity entity){
+    public TransacaoEntity toEntity(Transacao dadosAtualizados, TransacaoEntity entity) {
         return new TransacaoEntity(
                 entity.getId(),
                 entity.getUsuarioId(),
