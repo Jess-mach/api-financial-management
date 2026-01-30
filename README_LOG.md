@@ -1,12 +1,25 @@
+
+cd ~/workspace/financial.management
+
+clear
+
 docker compose up -d --build
+
+Todos os logs:
 
 docker compose logs -f transacao-consumer-api
 
-docker compose logs -f usuario-api
+docker compose logs -f usuarios-api
 
 docker compose logs -f transacao-producer-api
 
+Apenas novos logs:
 
+docker compose logs -f --tail 0 transacao-consumer-api
+
+docker compose logs -f --tail 0 usuarios-api
+
+docker compose logs -f --tail 0 transacao-producer-api
 
 
 http://localhost:8080/swagger-ui/index.html#/autenticacao-controller/efetuarLogin

@@ -11,7 +11,7 @@
 	<groupId>com.api</groupId>
 	<artifactId>usuario-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>financial.management</name>
+	<name>usuarios-api</name>
 	<description>API de Gestão Usuarios</description>
 	<url/>
 	<licenses>
