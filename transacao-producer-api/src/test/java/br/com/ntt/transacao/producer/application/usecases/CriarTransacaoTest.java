@@ -62,7 +62,6 @@ class CriarTransacaoTest {
         assertEquals(transacao.getId(), resultado.getId());
 
         verify(repositorio, times(1)).cadastrarTransacao(transacao, "token");
-
         verify(repositorioProdutorDeTransacao, times(1)).publicarTransacao(transacao);
     }
 
@@ -89,5 +88,56 @@ class CriarTransacaoTest {
         assertThrows(ResourceNotFoundException.class, () -> criarTransacao.executar(transacaoInput, "token"));
 
         verify(repositorioProdutorDeTransacao, never()).publicarTransacao(any());
+    }
+
+    @Test
+    @DisplayName("Deve chamar dependências com os parâmetros corretos")
+    void deveChamarDependenciasComParametrosCorretos() {
+        Transacao transacao = new Transacao(
+                UUID.randomUUID(),
+                UUID.randomUUID(),
+                new BigDecimal("100.00"),
+                TipoTransacao.SAQUE,
+                StatusTransacao.PENDENTE,
+                LocalDateTime.now(),
+                null,
+                "USD",
+                BigDecimal.valueOf(5.0),
+                "Saque",
+                1L,
+                new BigDecimal("500.00")
+        );
+        when(repositorio.cadastrarTransacao(transacao, "token-123")).thenReturn(transacao);
+
+        criarTransacao.executar(transacao, "token-123");
+
+        verify(repositorioConsultaUsuario, times(1)).buscarPorId(transacao.getUsuarioId(), "token-123");
+        verify(repositorio, times(1)).cadastrarTransacao(transacao, "token-123");
+        verify(repositorioProdutorDeTransacao, times(1)).publicarTransacao(transacao);
+    }
+
+    @Test
+    @DisplayName("Não deve salvar ou publicar se o usuário for inválido")
+    void naoDeveSalvarOuPublicarSeUsuarioInvalido() {
+        Transacao transacao = new Transacao(
+                UUID.randomUUID(),
+                UUID.randomUUID(),
+                new BigDecimal("200.00"),
+                TipoTransacao.DEPOSITO,
+                StatusTransacao.PENDENTE,
+                LocalDateTime.now(),
+                null,
+                "EUR",
+                BigDecimal.valueOf(6.0),
+                "Depósito",
+                2L,
+                new BigDecimal("1200.00")
+        );
+        doThrow(new ResourceNotFoundException("Usuário não encontrado")).when(repositorioConsultaUsuario).buscarPorId(transacao.getUsuarioId(), "token-abc");
+
+        assertThrows(ResourceNotFoundException.class, () -> criarTransacao.executar(transacao, "token-abc"));
+
+        verify(repositorio, never()).cadastrarTransacao(any(Transacao.class), any(String.class));
+        verify(repositorioProdutorDeTransacao, never()).publicarTransacao(any(Transacao.class));
     }
 }
