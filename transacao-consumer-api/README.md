@@ -1,61 +1,122 @@
-### **Technical Documentation: `transacao-consumer-api`**
+# Documentação Técnica: `transacao-consumer-api`
 
-### **1. Architecture**
+Este documento fornece uma visão detalhada da arquitetura, funcionalidades e configuração do microsserviço `transacao-consumer-api`.
 
-The `transacao-consumer-api` is a Spring Boot-based microservice designed to consume and process financial transactions. It follows a layered architecture:
+## 1. Arquitetura
 
-*   **Presentation Layer:** A RESTful API built with Spring Web MVC, secured using JWT. OpenAPI documentation is provided through Springdoc.
-*   **Business Logic Layer:** Contains the core application logic for validating and processing transactions.
-*   **Data Access Layer:** Uses Spring Data JPA to interact with a PostgreSQL database.
-*   **Messaging:** Integrates with Apache Kafka to consume transaction messages.
+A `transacao-consumer-api` é projetada com base nos princípios da **Arquitetura Limpa (Clean Architecture)**, garantindo que o sistema seja desacoplado, testável e fácil de manter. O fluxo de dados e a interação entre as camadas são ilustrados abaixo.
 
-### **2. Functionalities**
+### Diagrama de Arquitetura
 
-*   **Transaction Consumption:** Consumes transaction messages from a Kafka topic.
-*   **Transaction Validation:** Implements business rules to validate incoming transactions.
-*   **Transaction Persistence:** Stores validated transactions in a PostgreSQL database.
-*   **REST API:** Exposes endpoints for monitoring and managing transactions.
-*   **Security:** Secures API endpoints using JWT-based authentication.
+```
++-----------------------+      +-------------------------+
+|  Produtor de Eventos  |----->|      Apache Kafka       |
+| (Sistema Externo)     |      |  (Tópico: TRANSACAO-TOPIC) |
++-----------------------+      +-------------------------+
+                                        |
+                                        v (Consome Mensagem)
++--------------------------------------------------------------------------+
+|                          transacao-consumer-api                          |
+|                                                                          |
+|   +------------------------------------------------------------------+   |
+|   | CAMADA DE INFRAESTRUTURA                                         |   |
+|   |  - Kafka Consumer (`@KafkaListener`)                             |   |
+|   |  - Repositório JPA -> [Banco de Dados (PostgreSQL)]              |   |
+|   |  - Cliente HTTP ----> [API Externa de Câmbio]                    |   |
+|   +------------------------------------------------------------------+   |
+|                              ^          | (Injeção de Dependência)       |
+|  (Implementa Interfaces)     |          v                              |
+|   +------------------------------------------------------------------+   |
+|   | CAMADA DE APLICAÇÃO (Use Cases & Gateways)                       |   |
+|   |  - `ProcessarTransacao` (Orquestrador)                           |   |
+|   |  - `ValidadorDeTransacao` (Regras de Negócio)                    |   |
+|   |  - Interfaces: `RepositorioDeDespesa`, `RepositorioConversao`    |   |
+|   +------------------------------------------------------------------+   |
+|                              ^                                         |
+|                              | (Depende de)                            |
+|   +------------------------------------------------------------------+   |
+|   | CAMADA DE DOMÍNIO (Fornecida pela `common-transacao-lib`)          |   |
+|   |  - Entidades: `RegistroDespesa`, `TransacaoDto`                  |   |
+|   +------------------------------------------------------------------+   |
+|                                                                          |
++--------------------------------------------------------------------------+
+```
 
-### **3. Configuration**
+## 2. Funcionalidades
 
-*   **Database:**
-    *   **URL:** `jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5433}/${DB_NAME:transacoes_db}`
-    *   **Username:** `${DATASOURCE_USERNAME:postgres}`
-    *   **Password:** `${DATASOURCE_PASSWORD:postgres}`
-*   **Kafka:**
-    *   Configuration is expected to be provided through environment variables or a separate configuration file, as it is not present in `application.properties`.
-*   **JWT Secret:**
-    *   The secret for signing JWT tokens is configured via the `api.security.token.secret` property, with a default value provided.
-*   **Containerization:**
-    *   The application is containerized using Docker. The `Dockerfile` defines a multi-stage build that first builds the application using Maven and then creates a lightweight final image with the JRE and the application JAR. The container exposes port 8080.
+*   **Consumo de Mensagens:** Escuta o tópico `TRANSACAO-TOPIC` no Kafka para receber novas transações em tempo real.
+*   **Processamento de Transações:** Orquestra a validação e persistência de cada transação recebida.
+*   **Validação de Negócio:** Aplica um conjunto de regras para garantir a integridade e validade de cada transação.
+*   **Conversão de Moeda:** Interage com uma API externa para obter cotações e realizar conversões de moeda quando necessário.
+*   **Persistência de Dados:** Salva as transações processadas em um banco de dados PostgreSQL.
+*   **Documentação de API:** Expõe uma interface Swagger UI para visualização e teste dos endpoints disponíveis.
 
-### **4. Dependencies**
+## 3. Biblioteca Compartilhada (`common-transacao-lib`)
 
-*   **Spring Boot:** Core framework for building the application.
-*   **Spring Web:** For creating the RESTful API.
-*   **Spring Data JPA:** For database interaction.
-*   **PostgreSQL Driver:** To connect to the PostgreSQL database.
-*   **Spring Kafka:** For Kafka integration.
-*   **Lombok:** To reduce boilerplate code.
-*   **Springdoc OpenAPI:** For API documentation.
-*   **java-jwt:** For JWT-based authentication.
-*   **common-transacao-lib:** A shared library containing common transaction-related classes.
+Para evitar a duplicação de código e manter um modelo de dados consistente entre diferentes microsserviços, foi criada a biblioteca `common-transacao-lib`.
 
+*   **Propósito:** Centralizar as entidades de domínio (`TransacaoDto`, `RegistroDespesa`, etc.) que são compartilhadas entre o produtor de transações e este consumidor.
+*   **Vantagens:**
+    *   **Fonte Única de Verdade:** Garante que todos os serviços utilizem a mesma estrutura de dados.
+    *   **Reutilização de Código:** Evita a reescrita das mesmas classes de modelo em múltiplos projetos.
+    *   **Manutenibilidade:** Facilita a atualização do modelo de domínio, pois a mudança precisa ser feita em um único local.
 
+A `transacao-consumer-api` inclui esta biblioteca como uma dependência Maven, utilizando suas classes na camada de domínio.
 
-´´´bash
+## 4. Como Executar o Projeto
 
-DATASOURCE_PASSWORD=db_password DATASOURCE_URL=jdbc:postgresql://localhost:5433/transacoes_db DATASOURCE_USERNAME=db_user JWT_SECRET=12345678 mvn spring-boot:run
+### Via IDE (IntelliJ, VSCode, etc.)
 
+1.  **Pré-requisitos:**
+    *   Java 17
+    *   Maven
+    *   Docker (para rodar Kafka e PostgreSQL)
 
-´´´
+2.  **Inicie a Infraestrutura (Kafka e Postgres):**
+    Use o `docker-compose.yml` para iniciar os serviços necessários.
 
-´´´shell
-docker exec -it kafka kafka-topics --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic TRANSACAO-TOPIC
-´´´
+    ```bash
+    docker-compose up -d kafka postgres
+    ```
 
-mvn clean install
+3.  **Crie o Tópico no Kafka:**
+    Execute o comando abaixo para criar o tópico que a aplicação irá consumir.
 
+    ```bash
+    docker exec -it kafka kafka-topics --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic TRANSACAO-TOPIC
+    ```
 
-http://localhost:8082/swagger-ui/index.html
+4.  **Configure as Variáveis de Ambiente na sua IDE:**
+    Crie uma configuração de execução (Run Configuration) para a aplicação Spring Boot e defina as seguintes variáveis de ambiente:
+
+    ```
+    DB_HOST=localhost
+    DB_PORT=5433
+    DB_NAME=transacoes_db
+    DATASOURCE_USERNAME=postgres
+    DATASOURCE_PASSWORD=postgres
+    JWT_SECRET=sua-chave-secreta-aqui
+    ```
+
+5.  **Execute a Aplicação:**
+    Inicie a aplicação através da sua IDE (geralmente clicando no botão "Run" na classe principal `TransacaoConsumerApiApplication`).
+
+### Via Docker
+
+1.  **Pré-requisitos:**
+    *   Docker e Docker Compose
+
+2.  **Inicie todos os serviços:**
+    O `docker-compose.yml` está configurado para orquestrar a aplicação e suas dependências. A partir da raiz do projeto, execute:
+
+    ```bash
+    docker-compose up --build
+    ```
+    *   O comando `--build` força a reconstrução da imagem da aplicação, garantindo que as últimas alterações no código sejam incluídas.
+    *   Para rodar em segundo plano, adicione o parâmetro `-d`.
+
+## 5. Acesso à Documentação da API (Swagger)
+
+Após iniciar a aplicação (seja via IDE ou Docker), a documentação da API estará disponível e pronta para testes no seguinte endereço:
+
+[http://localhost:8082/swagger-ui.html](http://localhost:8082/swagger-ui.html)

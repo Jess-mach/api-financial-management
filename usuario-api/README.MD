@@ -1,104 +1,95 @@
-# Documentação Técnica da API de Gestão de Usuários
 
-## Arquitetura
+# Documentação Técnica - API de Gestão de Usuários
 
-A API de Gestão de Usuários segue uma arquitetura limpa e orientada a casos de uso, promovendo uma clara separação de responsabilidades e alta coesão. As principais camadas são:
+## 1. Arquitetura
 
-- **Domínio (`domain`):** Contém as entidades de negócio (`Usuario`, `DadosToken`), enums (`PerfilUsuario`) e exceções de domínio. Esta camada é o coração da aplicação e não depende de nenhuma outra.
+A API de Gestão de Usuários é construída utilizando uma arquitetura em camadas, promovendo a separação de responsabilidades e a manutenibilidade do código.
 
-- **Aplicação (`application`):** Orquestra o fluxo de dados e executa a lógica de negócio através dos casos de uso (`usecase`). Define as interfaces dos gateways (`gateways`) que são implementadas pela camada de infraestrutura.
+- **Camada de Aplicação (`application`):** Contém a lógica de negócio da aplicação, orquestrando as operações entre as outras camadas. Inclui os `usecases` que definem as funcionalidades principais.
+- **Camada de Domínio (`domain`):** Representa o coração do negócio, com as entidades, modelos e exceções específicas do domínio de usuários.
+- **Camada de Infraestrutura (`infra`):** Responsável pela comunicação com o mundo exterior, como o banco de dados, e a exposição da API REST. Inclui `controllers`, `repositories` e configurações de `security`.
+- **Camada de Configuração (`config`):** Centraliza as configurações da aplicação, como a configuração de segurança e a documentação da API (OpenAPI/Swagger).
 
-- **Infraestrutura (`infra`):** Implementa os detalhes técnicos, como a exposição da API (controllers), a persistência de dados (JPA, repositórios) e a implementação dos gateways de aplicação.
-    - **`controller`:** Expondo os endpoints da API REST.
-    - **`persistence`:** Gerenciando a interação com o banco de dados.
-    - **`gateways`:** Implementações concretas das interfaces definidas na camada de aplicação.
+### Tecnologias Utilizadas:
 
-- **Configuração (`config`):** Responsável pela configuração do Spring, como segurança (Spring Security) e a documentação da API (Springdoc).
+- **Java 17:** Linguagem de programação principal.
+- **Spring Boot 3:** Framework para criação de aplicações web.
+- **Spring Data JPA:** Para persistência de dados em banco relacional.
+- **Spring Security:** Para autenticação e autorização.
+- **PostgreSQL:** Banco de dados relacional.
+- **Flyway:** Para versionamento e migração de banco de dados.
+- **Maven:** Gerenciador de dependências e build.
+- **Docker:** Para containerização da aplicação e do banco de dados.
+- **JWT (Java Web Token):** Para geração e validação de tokens de autenticação.
+- **SpringDoc (OpenAPI):** Para documentação da API.
+- **Apache POI & Commons CSV:** Para manipulação de arquivos Excel e CSV.
 
-## Funcionalidades
+## 2. Funcionalidades
 
 A API oferece as seguintes funcionalidades:
 
+- **CRUD de Usuários:**
+    - Cadastro de novos usuários.
+    - Listagem de todos os usuários.
+    - Busca de usuário por ID.
+    - Atualização de dados de um usuário.
+    - Exclusão de um usuário.
 - **Autenticação:**
-  - `POST /login`: Autentica um usuário e retorna um token JWT.
-
-- **Gerenciamento de Usuários:**
-  - `POST /usuarios`: Cria um novo usuário.
-  - `GET /usuarios`: Retorna uma lista de todos os usuários.
-  - `GET /usuarios/{id}`: Retorna os detalhes de um usuário específico.
-  - `PUT /usuarios/{id}`: Atualiza os dados de um usuário.
-  - `DELETE /usuarios/{id}`: Exclui um usuário.
-
+    - Endpoint de login que retorna um token JWT em caso de sucesso.
 - **Cadastro em Massa:**
-  - `POST /usuarios/cadastromassa`: Permite o cadastro de múltiplos usuários a partir de um arquivo CSV ou Excel.
+    - Funcionalidade para cadastrar múltiplos usuários a partir de um arquivo CSV.
+- **Documentação da API:**
+    - A API é autodocumentada utilizando OpenAPI (Swagger), acessível em `/swagger-ui.html`.
 
-## Tecnologias Utilizadas
+## 3. Configuração e Execução
 
-- **Java 17:** Linguagem de programação principal.
-- **Spring Boot 3.5.9:** Framework para o desenvolvimento de aplicações Java.
-- **Spring Security:** Para a implementação da autenticação e autorização.
-- **Spring Data JPA:** Para a persistência de dados.
-- **PostgreSQL:** Banco de dados relacional.
-- **Flyway:** Para o versionamento do banco de dados.
-- **Maven:** Para o gerenciamento de dependências e do build da aplicação.
-- **Lombok:** Para a redução de código boilerplate.
-- **JWT (Java JWT):** Para a geração e validação de tokens de autenticação.
-- **Springdoc OpenAPI:** Para a geração da documentação da API.
-- **Apache POI e Commons CSV:** Para o processamento de arquivos no cadastro em massa.
+### 3.1. Execução Local (via IDE)
 
-## Configuração
+1.  **Pré-requisitos:**
+    - JDK 17 ou superior.
+    - Maven.
+    - Uma instância do PostgreSQL em execução.
 
-A aplicação utiliza o `application.properties` para as configurações principais e perfis do Spring para configurações específicas de ambiente (ex: `application-prod.properties`).
+2.  **Configuração do Banco de Dados:**
+    - Crie um banco de dados no PostgreSQL (ex: `usuarios_db`).
+    - Atualize o arquivo `src/main/resources/application.properties` com as credenciais do seu banco:
+      ```properties
+      spring.datasource.url=jdbc:postgresql://localhost:5432/usuarios_db
+      spring.datasource.username=<seu_usuario>
+      spring.datasource.password=<sua_senha>
+      ```
 
-### Variáveis de Ambiente
+3.  **Execução:**
+    - Execute a classe `br.com.ntt.usuario.Application` a partir da sua IDE.
+    - A API estará disponível em `http://localhost:8080`.
 
-- `DATASOURCE_URL`: URL de conexão com o banco de dados PostgreSQL.
-- `DATASOURCE_USERNAME`: Nome de usuário do banco de dados.
-- `DATASOURCE_PASSWORD`: Senha do banco de dados.
-- `JWT_SECRET`: Chave secreta para a assinatura dos tokens JWT.
+### 3.2. Execução com Docker
 
-### Perfis
+1.  **Pré-requisitos:**
+    - Docker.
+    - Docker Compose.
 
-- **default:** Perfil padrão, utilizado para desenvolvimento.
-- **prod:** Perfil de produção. Desabilita a interface do Swagger.
-- **docker:** Perfil utilizado no ambiente Docker.
+2.  **Execução:**
+    - No diretório raiz do projeto, execute o comando:
+      ```bash
+      docker-compose up --build
+      ```
+    - O comando irá:
+        - Criar uma imagem Docker para a API.
+        - Subir um container para o banco de dados PostgreSQL (`usuarios-db`).
+        - Subir um container para a aplicação (`usuarios-api`).
+    - A API estará disponível em `http://localhost:8080`.
+    - O banco de dados estará acessível na porta `5432`.
 
-## Build e Execução
+### 3.3. Endpoints da API
 
-### Pré-requisitos
+- **Autenticação:** `POST /login`
+- **Usuários:**
+    - `GET /usuarios`
+    - `GET /usuarios/{id}`
+    - `POST /usuarios`
+    - `PUT /usuarios/{id}`
+    - `DELETE /usuarios/{id}`
+- **Cadastro em Massa:** `POST /usuarios/upload`
 
-- Java 17
-- Maven
-
-### Build
-
-Para construir a aplicação, execute o seguinte comando na raiz do projeto:
-
-```bash
-mvn clean install
-```
-
-### Execução
-
-Para executar a aplicação, utilize o seguinte comando:
-
-```bash
-java -jar target/usuario-api-0.0.1-SNAPSHOT.jar
-```
-
-Também é possível executar a aplicação utilizando o Docker:
-
-```bash
-docker-compose up -d
-```
-
-
-DATASOURCE_PASSWORD=password_usr DATASOURCE_URL=jdbc:postgresql://localhost:5432/usuarios_db DATASOURCE_USERNAME=user_usr mvn spring-boot:run
-
-
-
-DATASOURCE_PASSWORD=password_usr;DATASOURCE_URL=jdbc:postgresql://localhost:5432/usuarios_db;DATASOURCE_USERNAME=user_usr
-
-
-http://localhost:8080/swagger-ui/index.html
-http://localhost:8080/v3/api-docs.yaml
+Para mais detalhes sobre os endpoints e os dados esperados, acesse a documentação do Swagger em http://localhost:8080/swagger-ui.html após iniciar a aplicação.

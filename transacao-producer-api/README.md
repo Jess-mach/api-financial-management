@@ -1,93 +1,133 @@
-# transacao-producer-api
+# Documentação Técnica: `transacao-producer-api`
 
-API para produção e gerenciamento de transações financeiras.
+Este documento fornece uma visão detalhada da arquitetura, funcionalidades e configuração do microsserviço `transacao-producer-api`.
 
-## 📜 Descrição
+## 1. Arquitetura
 
-Esta aplicação é responsável por receber, processar, persistir e publicar transações financeiras. Ela é construída com uma arquitetura em camadas para garantir a separação de responsabilidades e a manutenibilidade do código.
+A `transacao-producer-api` é projetada com base nos princípios da **Arquitetura Limpa (Clean Architecture)**, também conhecida como Arquitetura Hexagonal. Essa abordagem visa isolar a lógica de negócio central de detalhes de infraestrutura, resultando em um sistema desacoplado, testável e de fácil manutenção.
 
-## ✨ Funcionalidades
+### Diagrama de Arquitetura
 
-*   **Criação de Transações**: Endpoint para criar novas transações financeiras.
-*   **Listagem e Busca**: Consulta de transações por usuário e por ID.
-*   **Exportação de Dados**: Geração de relatórios de transações em formato Excel.
-*   **Análise de Despesas**: Funcionalidade para analisar as despesas de um usuário.
-
-## 🛠️ Arquitetura e Tecnologias
-
-O projeto segue uma arquitetura em camadas (Application, Domain, Infra, Config) e utiliza as seguintes tecnologias:
-
-*   **Java 17** e **Spring Boot 3.2.5**
-*   **Spring Data JPA** com **PostgreSQL** para persistência de dados.
-*   **Flyway** para versionamento do banco de dados.
-*   **Spring Kafka** para mensageria assíncrona.
-*   **Spring Security** com **JWT** para autenticação e autorização.
-*   **Docker** e **Docker Compose** para containerização e orquestração do ambiente.
-*   **Springdoc (Swagger)** para documentação da API.
-*   **Apache POI** para geração de arquivos Excel.
-
-## 🚀 Como Executar
-
-### Pré-requisitos
-
-*   [Java 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
-*   [Maven 3.8+](https://maven.apache.org/download.cgi)
-*   [Docker](https://www.docker.com/get-started/) e [Docker Compose](https://docs.docker.com/compose/install/)
-
-### 1. Executando com Docker (Recomendado)
-
-O `docker-compose.yml` orquestra todo o ambiente necessário: banco de dados PostgreSQL, Zookeeper, Kafka e a própria API.
-
-**a. Crie a rede externa:**
-O docker-compose está configurado para usar uma rede externa chamada `rede-sistema`. Crie-a com o seguinte comando:
-```bash
-docker network create rede-sistema
+```
++-----------------------+      +----------------------------------+
+|      Cliente API      |----->|     transacao-producer-api       |
+| (Ex: Frontend, Postman)|      |      (Endpoints REST)            |
++-----------------------+      +----------------------------------+
+                                        |
+                                        v (Recebe Requisição HTTP)
++--------------------------------------------------------------------------+
+|                          transacao-producer-api                          |
+|                                                                          |
+|   +------------------------------------------------------------------+   |
+|   | CAMADA DE INFRAESTRUTURA (Adaptadores de Entrada)                |   |
+|   |  - `@RestController` (Recebe DTOs)                               |   |
+|   |  - `SecurityFilter` (Valida JWT)                                 |   |
+|   +------------------------------------------------------------------+   |
+|                              | (Chama Casos de Uso)                    |
+|                              v                                         |
+|   +------------------------------------------------------------------+   |
+|   | CAMADA DE APLICAÇÃO (Casos de Uso & Portas)                      |   |
+|   |  - `CriarTransacao`, `ListarTransacao`, `ExportarTransacao`      |   |
+|   |  - Interfaces (Portas): `RepositorioDeTransacao`, `ProdutorDeEventos` |   |
+|   +------------------------------------------------------------------+   |
+|                              ^          |                              |
+|  (Depende de)                |          v (Usa Portas para o exterior) |
+|   +--------------------------+---------------------------------------+   |
+|   | CAMADA DE DOMÍNIO (Entidades de Negócio)                         |   |
+|   |  - `Transacao`, `Usuario`                                        |   |
+|   |  - (Classes fornecidas pela `common-transacao-lib`)              |   |
+|   +------------------------------------------------------------------+   |
+|                              ^                                         |
+|                              | (Implementa Interfaces/Portas)          |
+|   +------------------------------------------------------------------+   |
+|   | CAMADA DE INFRAESTRUTURA (Adaptadores de Saída)                  |   |
+|   |  - Repositório JPA -> [Banco de Dados (PostgreSQL)]              |   |
+|   |  - Kafka Producer --> [Apache Kafka (Tópico: TRANSACAO-TOPIC)]   |   |
+|   |  - Gerador de Relatório (PDF/XLSX)                               |   |
+|   +------------------------------------------------------------------+   |
+|                                                                          |
++--------------------------------------------------------------------------+
 ```
 
-**b. Inicie os containers:**
-No diretório raiz do projeto, execute o comando:
-```bash
-docker-compose up -d --build
-```
-Este comando irá construir a imagem da API e iniciar todos os serviços em background. O serviço `kafka-setup` criará automaticamente o tópico `TRANSACAO-TOPIC` no Kafka.
+## 2. Funcionalidades
 
-### 2. Executando Localmente (Alternativo)
+*   **Criação de Transações:** Expõe um endpoint REST para receber, validar e registrar novas transações financeiras.
+*   **Autenticação e Autorização:** Protege os endpoints utilizando um filtro de segurança baseado em JSON Web Tokens (JWT).
+*   **Publicação de Eventos:** Após validar e persistir uma transação, publica uma mensagem no tópico `TRANSACAO-TOPIC` do Kafka para que outros serviços (como o `transacao-consumer-api`) possam processá-la.
+*   **Persistência de Dados:** Salva as transações em um banco de dados PostgreSQL, utilizando Flyway para controle de versionamento do schema.
+*   **Consulta e Exportação:** Permite a consulta de transações e a exportação dos dados em formatos de arquivo como PDF e XLSX.
+*   **Documentação de API:** Expõe uma interface Swagger UI para visualização e teste dos endpoints disponíveis.
 
-Se preferir não usar Docker, você pode executar a aplicação localmente. Para isso, você precisará de uma instância do PostgreSQL e do Kafka em execução.
+## 3. Biblioteca Compartilhada (`common-transacao-lib`)
 
-**a. Configure as variáveis de ambiente:**
-Exporte as seguintes variáveis de ambiente no seu terminal:
-```bash
-export DATASOURCE_URL=jdbc:postgresql://localhost:5433/transacoes_db
-export DATASOURCE_USERNAME=db_user
-export DATASOURCE_PASSWORD=db_password
-export JWT_SECRET=seu-segredo-jwt
-export SPRING_KAFKA_BOOTSTRAP_SERVERS=localhost:9092
-```
+Para evitar a duplicação de código e manter um modelo de dados consistente entre os microsserviços, foi criada a biblioteca `common-transacao-lib`.
 
-**b. Crie o tópico no Kafka:**
-Se o tópico `TRANSACAO-TOPIC` não existir, crie-o com o comando:
-```bash
-docker exec -it kafka kafka-topics --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic TRANSACAO-TOPIC
-```
-*(Este comando assume que você tem um container Kafka chamado `kafka` em execução)*
+*   **Propósito:** Centralizar as entidades de domínio e DTOs (Data Transfer Objects) que são compartilhados entre o produtor e o consumidor de transações.
+*   **Vantagens:**
+    *   **Fonte Única de Verdade:** Garante que todos os serviços utilizem a mesma estrutura de dados para representar uma transação.
+    *   **Reutilização de Código:** Evita a reescrita das mesmas classes de modelo em múltiplos projetos.
+    *   **Manutenibilidade:** Facilita a atualização do modelo de domínio, pois a mudança precisa ser feita em um único local.
 
-**c. Inicie a aplicação:**
-Execute o seguinte comando Maven:
-```bash
-mvn spring-boot:run
-```
+A `transacao-producer-api` inclui esta biblioteca como uma dependência Maven, utilizando suas classes nas camadas de domínio e infraestrutura (DTOs).
 
-## 📚 Documentação da API
+## 4. Como Executar o Projeto
 
-Com a aplicação em execução (via Docker ou localmente), a documentação da API, gerada com o Springdoc, estará disponível no seu navegador através do seguinte link:
+### Via IDE (IntelliJ, VSCode, etc.)
 
-[http://localhost:8081/swagger-ui/index.html](http://localhost:8081/swagger-ui/index.html)
+1.  **Pré-requisitos:**
+    *   Java 17
+    *   Maven
+    *   Docker (para rodar Kafka e PostgreSQL)
 
+2.  **Crie a rede Docker:**
+    Este projeto utiliza uma rede compartilhada para a comunicação entre os contêineres.
+    ```bash
+    docker network create rede-sistema
+    ```
 
-DATASOURCE_PASSWORD=db_password DATASOURCE_URL=jdbc:postgresql://localhost:5433/transacoes_db DATASOURCE_USERNAME=db_user JWT_SECRET=12345678 mvn spring-boot:run
+3.  **Inicie a Infraestrutura (Kafka e Postgres):**
+    Use o `docker-compose.yml` para iniciar os serviços de dependência.
+    ```bash
+    docker-compose up -d transacoes-db zookeeper kafka kafka-setup
+    ```
+    *O serviço `kafka-setup` criará automaticamente o tópico `TRANSACAO-TOPIC`.*
 
-docker exec -it kafka kafka-topics --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic TRANSACAO-TOPIC
+4.  **Configure as Variáveis de Ambiente na sua IDE:**
+    Crie uma configuração de execução (Run Configuration) para a aplicação Spring Boot e defina as seguintes variáveis de ambiente (ou altere o `application.properties`):
 
+    ```properties
+    # Configuração do Banco de Dados
+    spring.datasource.url=jdbc:postgresql://localhost:5433/transacoes_db
+    spring.datasource.username=db_user
+    spring.datasource.password=db_password
 
-http://localhost:8081/swagger-ui/index.html
+    # Configuração do Kafka
+    spring.kafka.bootstrap-servers=localhost:9092
+
+    # Segredo para assinatura do JWT (exemplo)
+    api.security.token.secret=4a6b8a3e6a2d9f1c8e7d6c5b4a3f2e1d0c9b8a7f6e5d4c3b2a1f0e9d8c7b6a5
+    ```
+
+5.  **Execute a Aplicação:**
+    Inicie a aplicação através da sua IDE (geralmente clicando no botão "Run" na classe principal `TransacaoProducerApiApplication`). A API estará disponível em `http://localhost:8080`.
+
+### Via Docker
+
+1.  **Pré-requisitos:**
+    *   Docker e Docker Compose
+    
+
+2.  **Inicie todos os serviços:**
+    O `docker-compose.yml` está configurado para orquestrar a aplicação e todas as suas dependências. A partir da raiz do projeto, execute:
+
+    ```bash
+    docker-compose up --build
+    ```
+    *   O comando `--build` força a reconstrução da imagem da aplicação, garantindo que as últimas alterações no código sejam incluídas.
+    *   Para rodar em segundo plano, adicione o parâmetro `-d`.
+
+## 5. Acesso à Documentação da API (Swagger)
+
+Após iniciar a aplicação, a documentação da API estará disponível e pronta para testes no seguinte endereço (considerando a execução via `docker-compose`):
+
+[http://localhost:8081/swagger-ui.html](http://localhost:8081/swagger-ui.html)
