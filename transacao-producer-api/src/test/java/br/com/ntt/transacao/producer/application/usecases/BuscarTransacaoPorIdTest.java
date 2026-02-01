@@ -67,13 +67,13 @@ class BuscarTransacaoPorIdTest {
     @Test
     @DisplayName("Transacao nao encontrado")
     void erroAoBuscarTransacao() {
+        UUID idBusca = UUID.randomUUID();
 
-
-        when(repositorio.buscarPorId(any(), usuarioLogado))
+        when(repositorio.buscarPorId(idBusca, usuarioLogado))
                 .thenThrow(new ResourceNotFoundException("Erro ao conectar no Postgres"));
 
         assertThrows(ResourceNotFoundException.class,
-                () -> buscarTransacaoPorId.buscarPorId(UUID.randomUUID() , usuarioLogado));
+                () -> buscarTransacaoPorId.buscarPorId(idBusca, usuarioLogado));
 
 
     }
