@@ -73,4 +73,11 @@ public class RepositorioDeRepositorioDeUsuarioJpa implements RepositorioDeUsuari
             throw new ResourceNotFoundException("Usuário não encontrado");
         }
     }
+
+    @Override
+    public boolean existsByLogin(String login) {
+        log.info("validação do login do usuario");
+
+        return repositoryJpa.existsByLogin(login);
+    }
 }

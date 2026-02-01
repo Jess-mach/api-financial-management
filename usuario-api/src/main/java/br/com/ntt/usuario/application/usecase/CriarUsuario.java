@@ -40,6 +40,12 @@ public class CriarUsuario {
             throw new BusinessException("E-mail inválido.");
         }
 
+        if (repositorioDeUsuario.existsByLogin(novoUsuario.getLogin())) {
+            log.info("cadastro de usuario - login ja cadastrado na base");
+
+            throw new BusinessException("Login inválido.");
+        }
+
         String senhaHash = repositorioDeEncriptacao.encode(novoUsuario.getSenha());
 
         log.info("criação de usuario - fim");

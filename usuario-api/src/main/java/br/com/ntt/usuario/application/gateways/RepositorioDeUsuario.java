@@ -12,6 +12,7 @@ public interface RepositorioDeUsuario {
     boolean existsByEmail(String email);
     List<Usuario> findAll();
     void deleteById(UUID id);
+    boolean existsByLogin(String login);
 
 }
 
