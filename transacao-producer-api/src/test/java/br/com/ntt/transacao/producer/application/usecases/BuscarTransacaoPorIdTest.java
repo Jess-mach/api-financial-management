@@ -20,6 +20,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -39,9 +40,11 @@ class BuscarTransacaoPorIdTest {
     );
 
     @Test
+    @DisplayName("Busca de Transacao por Id com sucesso")
     void deveRetornarTransacaoPorId() {
+        UUID idBusca = UUID.randomUUID();
         Transacao transacao = new Transacao(
-                UUID.randomUUID(),
+                idBusca,
                 UUID.randomUUID(),
                 new BigDecimal("150.00"),
                 TipoTransacao.DEPOSITO,
@@ -54,9 +57,9 @@ class BuscarTransacaoPorIdTest {
                 123456L,
                 new BigDecimal("150.00")
         );
-        when(repositorio.buscarPorId(any(UUID.class), usuarioLogado)).thenReturn(transacao);
+        when(repositorio.buscarPorId(eq(idBusca), eq(usuarioLogado))).thenReturn(transacao);
 
-        Transacao resultado = buscarTransacaoPorId.buscarPorId(usuarioId , usuarioLogado);
+        Transacao resultado = buscarTransacaoPorId.buscarPorId(idBusca, usuarioLogado);
 
         assertEquals(transacao, resultado);
     }
@@ -65,9 +68,12 @@ class BuscarTransacaoPorIdTest {
     @DisplayName("Transacao nao encontrado")
     void erroAoBuscarTransacao() {
 
-        when(repositorio.buscarPorId(any(), usuarioLogado)).thenThrow(new ResourceNotFoundException("Erro ao conectar no Postgres"));
 
-        assertThrows(ResourceNotFoundException.class, () -> buscarTransacaoPorId.buscarPorId(usuarioId , usuarioLogado));
+        when(repositorio.buscarPorId(any(), usuarioLogado))
+                .thenThrow(new ResourceNotFoundException("Erro ao conectar no Postgres"));
+
+        assertThrows(ResourceNotFoundException.class,
+                () -> buscarTransacaoPorId.buscarPorId(UUID.randomUUID() , usuarioLogado));
 
 
     }
