@@ -235,6 +235,52 @@ class ProcessarTransacaoTest {
         assertEquals(BigDecimal.valueOf(200.50), transacaoSalva.getValor());
     }
 
+    @Test
+    void validacaoDeSaidaEmDinheiroComSaldoInsuficienteDeveSerAutorizada() throws JsonProcessingException {
+        Transacao transacao = criarTransacao(2000.0, TipoTransacao.SAIDA_EM_DINHEIRO, "BRL");
+
+        when(repositorioSaldoCliente.buscarPorId(any()))
+                .thenReturn(criarsaldo(1500));
+
+        when(repositorioConversaoMoeda.conversaoMoeda(any(), any()))
+                .thenReturn(criarConversorDeMoeda("BRL"));
+
+        ArgumentCaptor<Transacao> capturaTransacaoJpa = ArgumentCaptor.forClass(Transacao.class);
+
+        processarTransacao.executar(transacao);
+
+        verify(repositorioJpa).atualizarTransacao(capturaTransacaoJpa.capture());
+
+        Transacao transacaoSalva = capturaTransacaoJpa.getValue();
+
+        verify(repositorioSaldoCliente, times(1)).atualizarSaldo(any(), any());
+
+        // Para SAIDA_EM_DINHEIRO, a transação é autorizada mesmo com saldo insuficiente para análise posterior.
+        assertEquals(StatusTransacao.AUTORIZADO, transacaoSalva.getStatus());
+        assertEquals(BigDecimal.valueOf(2000.0), transacaoSalva.getValor());
+    }
+
+    @Test
+    void validacaoTransferenciaRejeitadaComSaldoInsuficiente() throws JsonProcessingException {
+        Transacao transacao = criarTransacao(2000.0, TipoTransacao.TRANSFERENCIA, "BRL");
+
+        when(repositorioSaldoCliente.buscarPorId(any())).thenReturn(criarsaldo(1500));
+
+        when(repositorioConversaoMoeda.conversaoMoeda(any(), any())).thenReturn(criarConversorDeMoeda("BRL"));
+
+        ArgumentCaptor<Transacao> capturaTransacaoJpa = ArgumentCaptor.forClass(Transacao.class);
+
+        processarTransacao.executar(transacao);
+
+        verify(repositorioJpa).atualizarTransacao(capturaTransacaoJpa.capture());
+
+        Transacao transacaoSalva = capturaTransacaoJpa.getValue();
+
+        verify(repositorioSaldoCliente, times(1)).atualizarSaldo(any(), any());
+
+        assertEquals(StatusTransacao.REJEITADO, transacaoSalva.getStatus());
+        assertEquals(BigDecimal.valueOf(2000.0), transacaoSalva.getValor());
+    }
 
 
 
